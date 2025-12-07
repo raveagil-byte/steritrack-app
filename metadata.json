@@ -1,0 +1,7 @@
+{
+  "name": "SteriTrack - Simple CSSD",
+  "description": "A streamlined sterile instrument tracking system focusing on Unit-based QR codes and distribution workflows.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

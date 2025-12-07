@@ -1,0 +1,74 @@
+import { Instrument, Unit, Transaction, LogEntry, User, InstrumentSet, Request } from '../types';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+export const ApiService = {
+    async getRecources<T>(endpoint: string): Promise<T> {
+        try {
+            const res = await fetch(`${API_URL}/${endpoint}`);
+            if (!res.ok) throw new Error(`Failed to fetch ${endpoint}`);
+            return res.json();
+        } catch (e) {
+            console.error(e);
+            return [] as any;
+        }
+    },
+
+    getUnits: () => ApiService.getRecources<Unit[]>('units'),
+    getInstruments: () => ApiService.getRecources<Instrument[]>('instruments'),
+    getSets: () => ApiService.getRecources<InstrumentSet[]>('sets'),
+    getTransactions: () => ApiService.getRecources<Transaction[]>('transactions'),
+    getLogs: () => ApiService.getRecources<LogEntry[]>('logs'),
+    getUsers: () => ApiService.getRecources<User[]>('users'),
+    getRequests: () => ApiService.getRecources<Request[]>('requests'),
+    getStats: () => fetch(`${API_URL}/analytics`).then(res => res.json()),
+
+    login: (credentials: { username: string, password: string }) => ApiService.apiCall('users/login', 'POST', credentials),
+
+    async apiCall(endpoint: string, method: 'POST' | 'PUT' | 'DELETE', body?: any) {
+        const res = await fetch(`${API_URL}/${endpoint}`, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: body ? JSON.stringify(body) : undefined
+        });
+        return res.json();
+    },
+
+    createTransaction: (tx: Transaction) => ApiService.apiCall('transactions', 'POST', tx),
+    validateTransaction: (id: string, validatedBy: string) => ApiService.apiCall(`transactions/${id}/validate`, 'PUT', { validatedBy }),
+
+    createUser: (user: User) => ApiService.apiCall('users', 'POST', user),
+    updateUser: (id: string, user: Partial<User>) => ApiService.apiCall(`users/${id}`, 'PUT', user),
+    updateUserStatus: (id: string, is_active: boolean) => ApiService.apiCall(`users/${id}/status`, 'PUT', { is_active }),
+    updateUserProfile: (id: string, data: { name: string, password?: string }) => ApiService.apiCall(`users/${id}/profile`, 'PUT', data),
+    deleteUser: (id: string) => ApiService.apiCall(`users/${id}`, 'DELETE'),
+
+
+    createUnit: (unit: Unit) => ApiService.apiCall('units', 'POST', unit),
+    updateUnit: (id: string, unit: Partial<Unit>) => ApiService.apiCall(`units/${id}`, 'PUT', unit),
+    updateUnitStatus: (id: string, is_active: boolean) => ApiService.apiCall(`units/${id}/status`, 'PUT', { is_active }),
+    deleteUnit: (id: string) => ApiService.apiCall(`units/${id}`, 'DELETE'),
+
+    createInstrument: (inst: Instrument) => ApiService.apiCall('instruments', 'POST', inst),
+    updateInstrument: (id: string, inst: Partial<Instrument>) => ApiService.apiCall(`instruments/${id}`, 'PUT', inst),
+    updateInstrumentStatus: (id: string, is_active: boolean) => ApiService.apiCall(`instruments/${id}/status`, 'PUT', { is_active }),
+    deleteInstrument: (id: string) => ApiService.apiCall(`instruments/${id}`, 'DELETE'),
+
+    updateStock: (id: string, cssdStock: number, dirtyStock: number, unitStock: Record<string, number>) =>
+        ApiService.apiCall('instruments/update-stock', 'PUT', { id, cssdStock, dirtyStock, unitStock }),
+
+    createSet: (set: InstrumentSet) => ApiService.apiCall('sets', 'POST', set),
+    updateSet: (id: string, set: InstrumentSet) => ApiService.apiCall(`sets/${id}`, 'PUT', set),
+    updateSetStatus: (id: string, is_active: boolean) => ApiService.apiCall(`sets/${id}/status`, 'PUT', { is_active }),
+    deleteSet: (id: string) => ApiService.apiCall(`sets/${id}`, 'DELETE'),
+
+    addLog: (log: LogEntry) => ApiService.apiCall('logs', 'POST', log),
+
+    createRequest: (req: Request) => ApiService.apiCall('requests', 'POST', req),
+    updateRequestStatus: (id: string, status: string) => ApiService.apiCall(`requests/${id}/status`, 'PUT', { status }),
+
+    resetSystem: () => fetch(`${API_URL}/reset`, { method: 'POST' }),
+
+    washItems: (items: any[], operator: string) => ApiService.apiCall('sterilization/wash', 'POST', { items, operator }),
+    sterilizeItems: (items: any[], operator: string, machine: string, status: 'SUCCESS' | 'FAILED') => ApiService.apiCall('sterilization/sterilize', 'POST', { items, operator, machine, status })
+};
