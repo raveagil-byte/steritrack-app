@@ -1,118 +1,77 @@
-# Panduan Deployment Gratis (Free Tier)
+# Panduan Deployment Gratis (VERCEL ONLY - No Credit Card)
 
-Panduan ini akan membantu Anda men-deploy aplikasi SteriTrack ke server gratis.
-Kita akan menggunakan kombinasi layanan berikut agar tetap valid dalam "Free Tier":
+Panduan ini telah diperbarui untuk menggunakan **Vercel** sebagai "One-Stop Solution" (Frontend + Backend), karena layanan lain membutuhkan Kartu Kredit.
 
-1.  **Database**: **Aiven Cloud** (MySQL Free Tier) atau **TiDB Cloud** (Serverless MySQL).
-2.  **Backend**: **Render** (Web Service Free Tier).
-3.  **Frontend**: **Vercel** (Hobby Plan).
+1.  **Database**: **Aiven Cloud** (MySQL Free Tier) atau **TiDB Cloud**.
+2.  **App Hosting**: **Vercel** (Hobby Plan).
 
 ---
 
 ## Langkah 1: Persiapan Database (MySQL)
 
-Karena Render tidak menyediakan MySQL gratis, kita gunakan layanan pihak ketiga.
+Sama seperti sebelumnya, kita butuh database eksternal gratis.
 
 1.  Daftar di [Aiven](https://aiven.io/) atau [TiDB Cloud](https://tidbcloud.com/).
-2.  Buat **MySQL Database** baru (pilih opsi Free/Developer/Hobby).
-3.  Setelah aktif, cari **Connection Details**. Anda akan membutuhkan:
-    -   **Host** (misal: `mysql-service-account.aivencloud.com`)
-    -   **Port** (biasanya `3306` atau port khusus)
-    -   **User**
-    -   **Password**
-    -   **Database Name** (misal: `defaultdb` atau buat baru `steritrack`)
-
-> **Catatan**: Pastikan untuk menyalin *connection string* atau detail di atas.
+2.  Buat **MySQL Database** baru.
+3.  Simpan detail koneksi (Host, Port, User, Password, DB Name).
 
 ---
 
 ## Langkah 2: Persiapan Kode (GitHub)
 
-Pastikan kode Anda sudah ada di GitHub. Jika belum:
-1.  Login ke GitHub dan buat repository baru (misal: `steritrack-app`).
-2.  Push kode lokal Anda ke sana.
+Kode sudah saya sesuaikan agar kompatibel dengan Vercel Serverless.
+Pastikan Anda melakukan *Push* terakhir ke GitHub.
+
+1.  `git add .`
+2.  `git commit -m "Setup for Vercel Serverless Backend"`
+3.  `git push`
 
 ---
 
-## Langkah 3: Deploy Backend ke Render
+## Langkah 3: Deploy ke Vercel
 
-1.  Daftar/Login ke [Render.com](https://render.com/).
-2.  Klik **New +** -> **Web Service**.
-3.  Hubungkan akun GitHub Anda dan pilih repository `steritrack-app`.
-4.  Konfigurasi:
-    -   **Name**: `steritrack-backend` (bebas)
-    -   **Region**: Singapore (terdekat) atau sesuai preferensi.
-    -   **Branch**: `main` (atau branch aktif Anda).
-    -   **Root Directory**: `.` (biarkan kosong atau titik).
-    -   **Runtime**: `Node`.
-    -   **Build Command**: `npm install`
-    -   **Start Command**: `node backend/server.js`
-    -   **Instance Type**: Free.
-
-5.  **Environment Variables** (Wjib Diisi di menu Advanced):
-    Masukkan detail dari Langkah 1:
-    -   `DB_HOST`: (Host dari Aiven/TiDB)
-    -   `DB_USER`: (User database)
-    -   `DB_PASSWORD`: (Password database)
-    -   `DB_NAME`: (Nama database)
-    -   `DB_PORT`: (Port database, misal `3306` atau `port lain`)
-    -   `NODE_ENV`: `production`
-
-6.  Klik **Create Web Service**.
-    -   Render akan mulai membangun. Tunggu sampai status "Live".
-    -   Salin URL backend Anda (misal: `https://steritrack-backend.onrender.com`).
-
----
-
-## Langkah 4: Deploy Frontend ke Vercel
-
-1.  Daftar/Login ke [Vercel.com](https://vercel.com/).
+1.  Login ke [Vercel.com](https://vercel.com/).
 2.  Klik **Add New...** -> **Project**.
 3.  Import repository `steritrack-app` dari GitHub.
-4.  Konfigurasi Project:
-    -   **Framework Preset**: Vite (biasanya terdeteksi otomatis).
-    -   **Build Command**: `npm run build` (default).
-    -   **Output Directory**: `dist` (default).
-    
-5.  **Environment Variables**:
-    -   Tambahkan variabel baru agar Frontend bisa bicara ke Backend.
-    -   Nama: `VITE_API_URL`
-    -   Value: `https://steritrack-backend.onrender.com/api`
-        -   *(Ganti URL dengan URL backend Render Anda, jangan lupa tambahkan `/api` di ujungnya jika kode mengharapkannya, atau cek `apiService.ts`)*.
-        -   **PENTING**: Di `services/apiService.ts`, kode Anda menggunakan `VITE_API_URL || '/api'`.
-        -   Jika Anda set `VITE_API_URL` menjadi `https://.../api`, maka request ke 'units' akan menjadi `https://.../api/units`. Ini BENAR.
+4.  **Framework Preset**: Biarkan `Vite`.
+5.  **Root Directory**: Biarkan `./`.
 
-6.  Klik **Deploy**.
+6.  **Environment Variables**:
+    Masukkan semua variabel di sini (Gabungan Backend & Frontend):
+    
+    **Database (Dari Aiven/TiDB):**
+    -   `DB_HOST`: ...
+    -   `DB_PORT`: ...
+    -   `DB_USER`: ...
+    -   `DB_PASSWORD`: ...
+    -   `DB_NAME`: ...
+    -   `DB_SSL`: `true`
+    -   `NODE_ENV`: `production`
+
+    **Frontend:**
+    -   `VITE_API_URL`: `/api`
+        *(Catatan: Karena frontend dan backend di domain yang sama, kita cukup gunakan `/api`, tidak perlu URL lengkap).*
+
+7.  Klik **Deploy**.
 
 ---
 
-## Langkah 5: Finalisasi & Migrasi Database
+## Langkah 4: Verifikasi
 
-Karena database di Cloud masih kosong, Anda perlu menjalankan skrip migrasi atau import data.
-
-**Opsi A (Manual via Koneksi Lokal)**:
-1.  Di komputer lokal, ubah file `.env` sementara untuk mengarah ke Database Cloud (Host, User, Pass cloud).
-2.  Jalankan skrip inisialisasi tabel:
-    ```bash
-    node backend/schema.sql  # (Ini file SQL, jalankan via MySQL Client)
-    # ATAU jika ada script JS migration:
-    node backend/check_audit_schema.js
-    ```
-    *Saran: Gunakan tool seperti DBeaver atau HeidiSQL di laptop Anda, konek ke Database Cloud, lalu jalankan isi file `backend/schema.sql`.*
-
-**Opsi B (Via Backend Endpoint - Jika Ada)**:
--   Jika Anda memiliki endpoint setup, Anda bisa akses via Postman.
+Setelah deploy sukses (Status "Ready"):
+1.  Buka aplikasi Anda (klik thumbnail/link domain vercel.app).
+2.  Coba login atau daftar user baru.
+3.  Jika berhasil, maka backend (serverless function) sudah berjalan.
 
 ---
 
-## Troubleshooting Umum
+## Troubleshooting
 
-1.  **CORS Error**:
-    -   Jika Frontend gagal fetch data, pastikan di `backend/server.js` bagian `cors()` mengizinkan domain Vercel Anda.
-    -   Ubah `app.use(cors())` menjadi konfigurasi spesifik jika perlu, atau biarkan kosong (default allow all) untuk tes awal.
-    
-2.  **Database Error**:
-    -   Cek Logs di Dashboard Render. Pastikan koneksi sukses.
-    -   Free Tier MySQL (Aiven) kadang membutuhkan SSL (`ssl: { rejectUnauthorized: false }`) di konfigurasi `mysql2`. Jika gagal konek, cek `backend/db.js`.
+1.  **Error 500 saat Login/Register**:
+    -   Cek **Logs** di dashboard Vercel -> tab **Functions**.
+    -   Biasanya karena koneksi database gagal. Pastikan `DB_SSL` = `true`.
 
-Selamat mencoba!
+2.  **Git Permission Error**:
+    -   Lihat panduan sebelumnya jika mengalami masalah push.
+
+Selamat mencoba free deploy tanpa kartu kredit!

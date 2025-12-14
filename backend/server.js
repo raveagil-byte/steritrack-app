@@ -83,6 +83,10 @@ process.on('unhandledRejection', (reason, promise) => {
     console.error('CRITICAL: Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
-app.listen(PORT, () => {
-    console.log(`Backend server running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Backend server running on http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;
