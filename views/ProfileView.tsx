@@ -54,9 +54,10 @@ const ProfileView = () => {
             <header className="mb-8">
                 <button
                     onClick={() => navigate(-1)}
-                    className="flex items-center text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 mb-4 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200 rounded-xl shadow-sm transition-all mb-6 group"
                 >
-                    <ArrowLeft size={20} className="mr-1" /> Kembali
+                    <ArrowLeft size={18} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
+                    <span className="font-medium">Kembali</span>
                 </button>
                 <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                     <User className="text-blue-600" size={32} />

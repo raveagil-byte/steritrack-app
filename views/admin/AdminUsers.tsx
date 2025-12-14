@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash2, Pencil, X } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
+import { useConfirmation } from '../../context/ConfirmationContext';
 import { Role, User } from '../../types';
 import { toast } from 'sonner';
 import { ApiService } from '../../services/apiService';
@@ -21,6 +22,7 @@ type UserFormValues = z.infer<typeof userSchema>;
 
 export const AdminUsers = () => {
     const { users, units, addUser, updateUserStatus, deleteUser } = useAppContext();
+    const { confirm } = useConfirmation();
     const queryClient = useQueryClient();
     const [editingUser, setEditingUser] = useState<User | null>(null);
 
@@ -71,7 +73,14 @@ export const AdminUsers = () => {
     };
 
     const handleDelete = async (id: string, name: string) => {
-        if (confirm(`Hapus user ${name}?`)) {
+        const isConfirmed = await confirm({
+            title: "Hapus User",
+            message: `Apakah Anda yakin ingin menghapus user ${name}?`,
+            confirmText: "Hapus",
+            type: "danger"
+        });
+
+        if (isConfirmed) {
             try {
                 await deleteUser(id);
                 toast.success("User dihapus");

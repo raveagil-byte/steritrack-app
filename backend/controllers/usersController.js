@@ -1,5 +1,9 @@
 const db = require('../db');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.login = async (req, res) => {
     const { username, password } = req.body;
@@ -9,44 +13,80 @@ exports.login = async (req, res) => {
 
         const user = users[0];
 
-        // Check if password matches (handles both hashed and legacy plain text during migration)
-        // If password starts with $2, it's likely a hash. functionality to support plain text temporarily:
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        // fallback for plain text if migration hasn't run yet (for smoother dev exp)
-        if (!isMatch && password === user.password) {
-            // Auto-update to hash? checking length usually safer but let's just allow it for now
-            // Or better, just enforce hash. But for now, let's keep strict if possible. 
-            // Let's implement Strict bcrypt compare. If it fails, fail.
-            // BUT, user asked to "add auth hash", meaning existing are plain. I should probably handling the plain text case -> upgrade to hash?
+        // 1. Password Verification (with auto-hash upgrade)
+        let isMatch = false;
+        if (user.password.startsWith('$2')) {
+            isMatch = await bcrypt.compare(password, user.password);
+        } else if (user.password === password) {
+            // Legacy plain text match -> Upgrade to Hash
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            await db.query('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, user.id]);
+            isMatch = true;
         }
 
         if (!isMatch) {
-            // Fallback: Check if it's plain text (only if not hashed format)
-            if (!user.password.startsWith('$2')) {
-                if (user.password === password) {
-                    // It's a match on old system! Let's upgrade it!
-                    const salt = await bcrypt.genSalt(10);
-                    const hashedPassword = await bcrypt.hash(password, salt);
-                    await db.query('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, user.id]);
-                    // Return success
-                } else {
-                    return res.status(401).json({ error: 'Invalid credentials' });
-                }
-            } else {
-                return res.status(401).json({ error: 'Invalid credentials' });
-            }
+            return res.status(401).json({ error: 'Invalid credentials' });
         }
 
-        // Return user without password
+        if (!user.is_active) {
+            return res.status(403).json({ error: 'Akun Anda dinonaktifkan. Hubungi Admin.' });
+        }
+
+        // 2. Generate JWT Token
+        const token = jwt.sign(
+            { id: user.id, username: user.username, role: user.role, unitId: user.unitId },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Return user info + token
         const { password: _, ...userWithoutPassword } = user;
-        res.json(userWithoutPassword);
+        res.json({ ...userWithoutPassword, token });
+
     } catch (err) { res.status(500).json({ error: err.message }); }
+};
+
+// Public Registration (Sign Up)
+exports.registerPublic = async (req, res) => {
+    const { username, password, name, role, unitId } = req.body;
+
+    // Basic validation
+    if (!username || !password || !name || !role) {
+        return res.status(400).json({ error: 'Semua field wajib diisi' });
+    }
+
+    try {
+        // Check username uniqueness
+        const [existing] = await db.query('SELECT id FROM users WHERE username = ?', [username]);
+        if (existing.length > 0) {
+            return res.status(400).json({ error: 'Username sudah digunakan' });
+        }
+
+        const id = uuidv4();
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Security: Force role limitations if needed (e.g., prevent creating ADMIN via public API)
+        if (role === 'ADMIN') {
+            return res.status(403).json({ error: 'Role ADMIN tidak dapat didaftarkan secara publik.' });
+        }
+
+        await db.query(
+            'INSERT INTO users (id, username, password, name, role, unitId) VALUES (?, ?, ?, ?, ?, ?)',
+            [id, username, hashedPassword, name, role, unitId || null]
+        );
+
+        res.status(201).json({ message: 'Registrasi berhasil. Silakan login.', userId: id });
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const [users] = await db.query('SELECT id, username, name, role, unitId, is_active FROM users'); // Exclude password
+        const [users] = await db.query('SELECT id, username, name, role, unitId, is_active FROM users');
         res.json(users);
     } catch (err) { res.status(500).json({ error: err.message }); }
 };
@@ -111,4 +151,3 @@ exports.updateUserProfile = async (req, res) => {
         res.json({ message: 'Profile updated' });
     } catch (err) { res.status(500).json({ error: err.message }); }
 };
-

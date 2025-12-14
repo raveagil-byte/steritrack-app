@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Truck, Trash2, CheckCircle2, Mail } from 'lucide-react';
+import { Truck, Trash2, CheckCircle2, Mail, Flame, Package, ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAppContext } from '../context/AppContext';
 import { LogEntry, Transaction, TransactionItem, TransactionSetItem, TransactionType, Unit } from '../types';
 import QRScanner from '../components/QRScanner';
@@ -7,12 +8,13 @@ import TransactionForm from '../components/TransactionForm';
 import QRCodeGenerator from '../components/QRCodeGenerator';
 import { SterilizationView } from './cssd/SterilizationView';
 import { RequestInbox } from './cssd/RequestInbox';
+import { PackingStation } from './cssd/PackingStation';
 
 const BTN_PRIMARY_CLASSES = "bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2";
 
 const CSSDView = () => {
     const { units, createTransaction, logs, requests } = useAppContext();
-    const [mode, setMode] = useState<'HOME' | 'DISTRIBUTE_SCAN' | 'COLLECT_SCAN' | 'FORM' | 'SUCCESS' | 'INBOX' | 'STERILIZATION'>('HOME');
+    const [mode, setMode] = useState<'HOME' | 'DISTRIBUTE_SCAN' | 'COLLECT_SCAN' | 'FORM' | 'SUCCESS' | 'INBOX' | 'STERILIZATION' | 'PACKING'>('HOME');
     const [scannedUnit, setScannedUnit] = useState<Unit | null>(null);
     const [transactionType, setTransactionType] = useState<TransactionType>(TransactionType.DISTRIBUTE);
     const [generatedTx, setGeneratedTx] = useState<Transaction | null>(null);
@@ -25,13 +27,13 @@ const CSSDView = () => {
             setScannedUnit(unit);
             setMode('FORM');
         } else {
-            alert('QR Code Unit Tidak Dikenal: ' + code);
+            toast.error('QR Code Unit Tidak Dikenal: ' + code);
         }
     };
 
-    const handleCreateTx = async (items: TransactionItem[], setItems: TransactionSetItem[]) => {
+    const handleCreateTx = async (items: TransactionItem[], setItems: TransactionSetItem[], packIds?: string[]) => {
         if (!scannedUnit) return;
-        const tx = await createTransaction(transactionType, scannedUnit.id, items, setItems);
+        const tx = await createTransaction(transactionType, scannedUnit.id, items, setItems, packIds);
         if (tx) {
             setGeneratedTx(tx);
             setMode('SUCCESS');
@@ -52,51 +54,90 @@ const CSSDView = () => {
                     <p className="text-slate-500">Pilih tindakan untuk memulai alur kerja</p>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Request Inbox Button (Wide) */}
-                    <button
-                        onClick={() => setMode('INBOX')}
-                        className="md:col-span-2 flex items-center justify-between p-6 bg-white border-2 border-slate-100 rounded-2xl shadow-sm hover:border-blue-200 hover:shadow-md transition group"
-                    >
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center">
-                                <Mail size={24} />
-                            </div>
-                            <div className="text-left">
-                                <h3 className="font-bold text-lg text-slate-800 group-hover:text-blue-600 transition">Permintaan Masuk</h3>
-                                <p className="text-sm text-slate-400">Kelola request dari unit</p>
-                            </div>
-                        </div>
-                        {pendingCount > 0 && (
-                            <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse shadow-red-200 shadow-lg">
-                                {pendingCount} Pending
-                            </span>
-                        )}
-                    </button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Section: External Transactions */}
+                    <div className="space-y-4">
+                        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Transaksi Eksternal</h3>
+                        <div className="grid grid-cols-1 gap-4">
+                            <button
+                                onClick={() => { setTransactionType(TransactionType.DISTRIBUTE); setMode('DISTRIBUTE_SCAN'); }}
+                                className="flex items-center p-6 bg-blue-600 text-white rounded-2xl shadow-lg hover:bg-blue-700 hover:scale-[1.02] transition transform group"
+                            >
+                                <div className="p-3 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition">
+                                    <Truck size={28} />
+                                </div>
+                                <div className="text-left">
+                                    <span className="block text-xl font-bold">Distribusi Steril</span>
+                                    <span className="text-blue-100 text-sm">Kirim barang ke unit</span>
+                                </div>
+                            </button>
 
-                    <button
-                        onClick={() => { setTransactionType(TransactionType.DISTRIBUTE); setMode('DISTRIBUTE_SCAN'); }}
-                        className="flex flex-col items-center justify-center p-8 bg-blue-600 text-white rounded-2xl shadow-lg hover:bg-blue-700 hover:scale-[1.02] transition transform"
-                    >
-                        {/* ... existing button content ... */}
-                        <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4">
-                            <Truck size={32} />
+                            <button
+                                onClick={() => { setTransactionType(TransactionType.COLLECT); setMode('COLLECT_SCAN'); }}
+                                className="flex items-center p-6 bg-orange-500 text-white rounded-2xl shadow-lg hover:bg-orange-600 hover:scale-[1.02] transition transform group"
+                            >
+                                <div className="p-3 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition">
+                                    <Trash2 size={28} />
+                                </div>
+                                <div className="text-left">
+                                    <span className="block text-xl font-bold">Ambil Kotor</span>
+                                    <span className="text-orange-100 text-sm">Ambil barang dari unit</span>
+                                </div>
+                            </button>
                         </div>
-                        <span className="text-xl font-bold">Distribusi Steril</span>
-                        <span className="text-sm opacity-80 mt-1">Kirim ke Unit</span>
-                    </button>
+                    </div>
 
-                    <button
-                        onClick={() => { setTransactionType(TransactionType.COLLECT); setMode('COLLECT_SCAN'); }}
-                        className="flex flex-col items-center justify-center p-8 bg-orange-500 text-white rounded-2xl shadow-lg hover:bg-orange-600 hover:scale-[1.02] transition transform"
-                    >
-                        {/* ... existing button content ... */}
-                        <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4">
-                            <Trash2 size={32} />
+                    {/* Section: Internal Processing */}
+                    <div className="space-y-4">
+                        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Proses Internal</h3>
+                        <div className="grid grid-cols-1 gap-4">
+                            <button
+                                onClick={() => setMode('PACKING')}
+                                className="flex items-center p-6 bg-white border-2 border-purple-100 rounded-2xl shadow-sm hover:border-purple-500 hover:shadow-md transition group"
+                            >
+                                <div className="p-3 bg-purple-50 text-purple-600 rounded-xl mr-4 group-hover:scale-110 transition">
+                                    <Package size={28} />
+                                </div>
+                                <div className="text-left">
+                                    <span className="block text-xl font-bold text-slate-800">Packing Station</span>
+                                    <span className="text-slate-500 text-sm">Buat Set & Pouch</span>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => setMode('STERILIZATION')}
+                                className="flex items-center p-6 bg-white border-2 border-indigo-100 rounded-2xl shadow-sm hover:border-indigo-500 hover:shadow-md transition group"
+                            >
+                                <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl mr-4 group-hover:scale-110 transition">
+                                    <Flame size={28} />
+                                </div>
+                                <div className="text-left">
+                                    <span className="block text-xl font-bold text-slate-800">Sterilisasi Central</span>
+                                    <span className="text-slate-500 text-sm">Cuci, Packing & Autoclave</span>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => setMode('INBOX')}
+                                className="flex items-center p-6 bg-white border-2 border-slate-100 rounded-2xl shadow-sm hover:border-blue-400 hover:shadow-md transition group relative overflow-hidden"
+                            >
+                                <div className="p-3 bg-blue-50 text-blue-600 rounded-xl mr-4 group-hover:scale-110 transition">
+                                    <Mail size={28} />
+                                </div>
+                                <div className="text-left z-10">
+                                    <span className="block text-xl font-bold text-slate-800">Permintaan Masuk</span>
+                                    <span className="text-slate-500 text-sm">Cek request dari unit</span>
+                                </div>
+                                {pendingCount > 0 && (
+                                    <div className="absolute top-0 right-0 p-3">
+                                        <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse shadow-lg">
+                                            {pendingCount} Pending
+                                        </span>
+                                    </div>
+                                )}
+                            </button>
                         </div>
-                        <span className="text-xl font-bold">Ambil Kotor</span>
-                        <span className="text-sm opacity-80 mt-1">Ambil dari Unit</span>
-                    </button>
+                    </div>
                 </div>
                 {/* ... existing logs ... */}
 
@@ -116,11 +157,24 @@ const CSSDView = () => {
         );
     }
 
+    if (mode === 'PACKING') {
+        return (
+            <div>
+                <button onClick={() => setMode('HOME')} className="mb-6 flex items-center gap-2 px-4 py-2 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200 rounded-xl shadow-sm transition-all group">
+                    <ArrowLeft size={18} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
+                    <span className="font-medium">Kembali ke Beranda</span>
+                </button>
+                <PackingStation />
+            </div>
+        );
+    }
+
     if (mode === 'INBOX') {
         return (
             <div>
-                <button onClick={() => setMode('HOME')} className="mb-4 text-slate-500 hover:text-slate-800 flex items-center gap-2">
-                    &larr; Kembali ke Beranda
+                <button onClick={() => setMode('HOME')} className="mb-6 flex items-center gap-2 px-4 py-2 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200 rounded-xl shadow-sm transition-all group">
+                    <ArrowLeft size={18} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
+                    <span className="font-medium">Kembali ke Beranda</span>
                 </button>
                 <RequestInbox />
             </div>
@@ -152,8 +206,9 @@ const CSSDView = () => {
     if (mode === 'STERILIZATION') {
         return (
             <div>
-                <button onClick={() => setMode('HOME')} className="mb-4 text-slate-500 hover:text-slate-800 flex items-center gap-2">
-                    &larr; Kembali ke Beranda
+                <button onClick={() => setMode('HOME')} className="mb-6 flex items-center gap-2 px-4 py-2 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200 rounded-xl shadow-sm transition-all group">
+                    <ArrowLeft size={18} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
+                    <span className="font-medium">Kembali ke Beranda</span>
                 </button>
                 <SterilizationView />
             </div>

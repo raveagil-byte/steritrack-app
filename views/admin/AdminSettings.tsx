@@ -2,6 +2,7 @@ import React from 'react';
 import { Database, AlertTriangle, Download, Trash2 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { toast } from 'sonner';
+import { ApiService } from '../../services/apiService';
 
 export const AdminSettings = () => {
     const { resetSystem, users, units, instruments, sets, transactions, logs } = useAppContext();
@@ -29,15 +30,15 @@ export const AdminSettings = () => {
     };
 
     const handleReset = async () => {
-        // Double confirmation for safety
-        if (confirm("PERINGATAN KERAS:\n\nSemua data (Transaksi, User, Unit, Instrumen, Log) akan dihapus PERMANEN.\n\nDatabase akan kembali bersih seperti baru.\n\nApakah Anda yakin ingin melanjutkan?")) {
-            if (confirm("Apakah Anda benar-benar yakin? Tindakan ini tidak dapat dibatalkan.")) {
-                try {
-                    await resetSystem();
-                    toast.success("Sistem berhasil di-reset ke pengaturan pabrik");
-                } catch (e) {
-                    toast.error("Gagal melakukan reset sistem");
-                }
+        // High Risk Action - Using prompt for safety instead of simple native confirm
+        const confirmation = prompt("Peringatan: Reset Pabrik akan MENGHAPUS SEMUA DATA PERMANEN.\nKetik 'RESET' untuk melanjutkan:");
+
+        if (confirmation === 'RESET') {
+            try {
+                await resetSystem();
+                toast.success("Sistem berhasil di-reset ke pengaturan pabrik");
+            } catch (e) {
+                toast.error("Gagal melakukan reset sistem");
             }
         }
     };
@@ -62,21 +63,57 @@ export const AdminSettings = () => {
                     </button>
                 </div>
 
-                {/* Reset Factory Card */}
-                <div className="border border-red-100 bg-red-50/30 rounded-xl p-6 hover:shadow-md transition">
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="p-3 bg-red-100 text-red-600 rounded-full">
-                            <AlertTriangle size={24} />
+                {/* Reset Cards Column */}
+                <div className="space-y-6">
+                    {/* Activity Reset Card (Go-Live Prep) */}
+                    <div className="border border-orange-200 bg-orange-50 rounded-xl p-6 hover:shadow-md transition">
+                        <div className="flex items-center gap-4 mb-4">
+                            <div className="p-3 bg-orange-100 text-orange-600 rounded-full">
+                                <Trash2 size={24} />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-lg text-orange-800">Persiapan Go-Live</h3>
+                                <p className="text-orange-700 text-sm">Hapus aktivitas (transaksi & log), tapi <span className="font-bold underline">SIMPAN</span> data Instrumen, Unit & User.</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="font-bold text-lg text-red-700">Reset Pabrik</h3>
-                            <p className="text-red-500 text-sm">Hapus semua data secara permanen dan kosongkan database.</p>
-                        </div>
+                        <button
+                            onClick={async () => {
+                                const confirmation = prompt("Peringatan: Hapus Riwayat Transaksi untuk Go-Live??\nData Master (Instrumen/User) TETAP ADA.\n\nKetik 'SIAP' untuk konfirmasi:");
+                                if (confirmation === 'SIAP') {
+                                    try {
+                                        const res = await ApiService.resetActivityData();
+                                        if (!res.ok) throw new Error("Gagal reset data");
+
+                                        toast.success("Riwayat transaksi telah dibersihkan. Data Master aman.");
+                                        setTimeout(() => window.location.reload(), 1500);
+                                    } catch (e) {
+                                        toast.error("Gagal melakukan pembersihan data.");
+                                    }
+                                }
+                            }}
+                            className="w-full flex items-center justify-center gap-2 py-3 bg-white border-2 border-orange-200 rounded-lg font-bold text-orange-700 hover:bg-orange-500 hover:text-white hover:border-orange-500 transition"
+                        >
+                            <Trash2 size={18} />
+                            Hapus Riwayat Transaksi
+                        </button>
                     </div>
-                    <button onClick={handleReset} className="w-full flex items-center justify-center gap-2 py-3 bg-white border-2 border-red-200 rounded-lg font-bold text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 transition">
-                        <Trash2 size={18} />
-                        Reset Semua Data
-                    </button>
+
+                    {/* Full Factory Reset Card */}
+                    <div className="border border-red-200 bg-red-50 rounded-xl p-6 hover:shadow-md transition opacity-80 hover:opacity-100">
+                        <div className="flex items-center gap-4 mb-4">
+                            <div className="p-3 bg-red-100 text-red-600 rounded-full">
+                                <AlertTriangle size={24} />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-lg text-red-700">Reset Total (Pabrik)</h3>
+                                <p className="text-red-500 text-sm">Hapus SEMUA data termasuk Instrumen dan User secara permanen.</p>
+                            </div>
+                        </div>
+                        <button onClick={handleReset} className="w-full flex items-center justify-center gap-2 py-3 bg-white border-2 border-red-200 rounded-lg font-bold text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 transition">
+                            <Trash2 size={18} />
+                            Hapus Total (Factory Reset)
+                        </button>
+                    </div>
                 </div>
             </div>
 

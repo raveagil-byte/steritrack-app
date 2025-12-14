@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash2, Edit, Plus, X } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { Instrument, InstrumentSet, InstrumentSetItem } from '../../types';
+import { useConfirmation } from '../../context/ConfirmationContext';
 import { toast } from 'sonner';
 
 // Simplify form for basic Set details, items handled manually due to complexity or need specialized FieldArray
@@ -24,6 +25,13 @@ export const AdminSets = () => {
     // Item selection state
     const [selectedInstId, setSelectedInstId] = useState('');
     const [selectedQty, setSelectedQty] = useState(1);
+    const [itemSearchTerm, setItemSearchTerm] = useState('');
+
+    const filteredInstruments = instruments.filter(i =>
+        i.category !== 'Sets' &&
+        i.name.toLowerCase().includes(itemSearchTerm.toLowerCase()) &&
+        i.is_active
+    );
 
     const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<SetFormValues>({
         resolver: zodResolver(setSchema)
@@ -90,8 +98,17 @@ export const AdminSets = () => {
         setIsEditing(true);
     };
 
+    const { confirm } = useConfirmation();
+
     const handleDelete = async (id: string) => {
-        if (confirm("Hapus set ini?")) {
+        const isConfirmed = await confirm({
+            title: "Hapus Set",
+            message: "Hapus set ini? Definisi set akan hilang.",
+            confirmText: "Hapus",
+            type: "danger"
+        });
+
+        if (isConfirmed) {
             await deleteSet(id);
             toast.success("Set dihapus");
         }
@@ -117,14 +134,27 @@ export const AdminSets = () => {
 
                     <div className="border-t border-slate-200 pt-3">
                         <label className="text-xs font-bold text-slate-500 uppercase block mb-2">Editor Komposisi</label>
+
+                        <div className="mb-2">
+                            <input
+                                type="text"
+                                placeholder="Cari instrumen..."
+                                className="w-full p-2 border rounded text-xs bg-slate-50 focus:bg-white transition-colors outline-none focus:ring-2 focus:ring-blue-100"
+                                value={itemSearchTerm}
+                                onChange={e => setItemSearchTerm(e.target.value)}
+                            />
+                        </div>
+
                         <div className="flex gap-2 mb-3">
                             <select
                                 className="flex-1 p-2 border rounded text-sm w-full outline-none"
                                 value={selectedInstId}
                                 onChange={e => setSelectedInstId(e.target.value)}
                             >
-                                <option value="">+ Pilih...</option>
-                                {instruments.filter(i => i.category !== 'Sets').map(i => (
+                                <option value="">
+                                    {filteredInstruments.length === 0 ? "Tidak ditemukan" : "+ Pilih Instrumen..."}
+                                </option>
+                                {filteredInstruments.map(i => (
                                     <option key={i.id} value={i.id}>{i.name}</option>
                                 ))}
                             </select>
@@ -135,7 +165,7 @@ export const AdminSets = () => {
                                 value={selectedQty}
                                 onChange={e => setSelectedQty(Number(e.target.value))}
                             />
-                            <button onClick={handleAddItem} className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition">
+                            <button onClick={handleAddItem} className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition shadow-sm">
                                 <Plus size={16} />
                             </button>
                         </div>

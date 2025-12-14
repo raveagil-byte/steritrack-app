@@ -1,6 +1,6 @@
-import { Instrument, Unit, Transaction, LogEntry, User, InstrumentSet, Request } from '../types';
+import { Instrument, Unit, Transaction, LogEntry, User, InstrumentSet, Request, Asset, SterilePack } from '../types';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export const ApiService = {
     async getRecources<T>(endpoint: string): Promise<T> {
@@ -16,6 +16,7 @@ export const ApiService = {
 
     getUnits: () => ApiService.getRecources<Unit[]>('units'),
     getInstruments: () => ApiService.getRecources<Instrument[]>('instruments'),
+    getUnassignedInstruments: () => ApiService.getRecources<Instrument[]>('instruments/unassigned'),
     getSets: () => ApiService.getRecources<InstrumentSet[]>('sets'),
     getTransactions: () => ApiService.getRecources<Transaction[]>('transactions'),
     getLogs: () => ApiService.getRecources<LogEntry[]>('logs'),
@@ -24,6 +25,7 @@ export const ApiService = {
     getStats: () => fetch(`${API_URL}/analytics`).then(res => res.json()),
 
     login: (credentials: { username: string, password: string }) => ApiService.apiCall('users/login', 'POST', credentials),
+    register: (data: any) => ApiService.apiCall('users/register', 'POST', data),
 
     async apiCall(endpoint: string, method: 'POST' | 'PUT' | 'DELETE', body?: any) {
         const res = await fetch(`${API_URL}/${endpoint}`, {
@@ -57,6 +59,9 @@ export const ApiService = {
     updateStock: (id: string, cssdStock: number, dirtyStock: number, unitStock: Record<string, number>) =>
         ApiService.apiCall('instruments/update-stock', 'PUT', { id, cssdStock, dirtyStock, unitStock }),
 
+    getAssetsByInstrument: (instrumentId: string) => ApiService.getRecources<Asset[]>(`assets/instrument/${instrumentId}`),
+    updateAsset: (id: string, data: Partial<Asset>) => ApiService.apiCall(`assets/${id}`, 'PUT', data),
+
     createSet: (set: InstrumentSet) => ApiService.apiCall('sets', 'POST', set),
     updateSet: (id: string, set: InstrumentSet) => ApiService.apiCall(`sets/${id}`, 'PUT', set),
     updateSetStatus: (id: string, is_active: boolean) => ApiService.apiCall(`sets/${id}/status`, 'PUT', { is_active }),
@@ -68,7 +73,13 @@ export const ApiService = {
     updateRequestStatus: (id: string, status: string) => ApiService.apiCall(`requests/${id}/status`, 'PUT', { status }),
 
     resetSystem: () => fetch(`${API_URL}/reset`, { method: 'POST' }),
+    resetActivityData: () => fetch(`${API_URL}/reset-activity-data`, { method: 'POST' }),
 
     washItems: (items: any[], operator: string) => ApiService.apiCall('sterilization/wash', 'POST', { items, operator }),
-    sterilizeItems: (items: any[], operator: string, machine: string, status: 'SUCCESS' | 'FAILED') => ApiService.apiCall('sterilization/sterilize', 'POST', { items, operator, machine, status })
+    sterilizeItems: (items: any[], operator: string, machine: string, status: 'SUCCESS' | 'FAILED') => ApiService.apiCall('sterilization/sterilize', 'POST', { items, operator, machine, status }),
+
+    getPacks: () => ApiService.getRecources<SterilePack[]>('packs'),
+    getPack: (id: string) => ApiService.getRecources<SterilePack>(`packs/${id}`),
+    createPack: (pack: { name: string, type: string, packedBy: string, items: any[] }) => ApiService.apiCall('packs', 'POST', pack),
+    sterilizePack: (id: string) => ApiService.apiCall(`packs/${id}/sterilize`, 'POST')
 };

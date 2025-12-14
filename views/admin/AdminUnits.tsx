@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash2, QrCode, Printer, Pencil, X } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
+import { useConfirmation } from '../../context/ConfirmationContext';
 import { Unit } from '../../types';
 import { toast } from 'sonner';
 import QRScanner from '../../components/QRScanner';
@@ -66,8 +67,17 @@ export const AdminUnits = () => {
         }
     };
 
+    const { confirm } = useConfirmation();
+
     const handleDelete = async (id: string) => {
-        if (confirm("Hapus unit ini?")) {
+        const isConfirmed = await confirm({
+            title: "Hapus Unit",
+            message: "Hapus unit ini? Data yang terkait mungkin akan error.",
+            confirmText: "Hapus",
+            type: "danger"
+        });
+
+        if (isConfirmed) {
             await deleteUnit(id);
             toast.success("Unit dihapus");
         }

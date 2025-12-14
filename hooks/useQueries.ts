@@ -127,6 +127,11 @@ export const useAppMutations = () => {
         onSuccess: () => queryClient.invalidateQueries({ queryKey: KEYS.INSTRUMENTS }),
     });
 
+    const updateInstrument = useMutation({
+        mutationFn: (data: Partial<Instrument>) => ApiService.updateInstrument(data.id!, data),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: KEYS.INSTRUMENTS }),
+    });
+
     const updateInstrumentStatus = useMutation({
         mutationFn: (data: { id: string, is_active: boolean }) => ApiService.updateInstrumentStatus(data.id, data.is_active),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: KEYS.INSTRUMENTS }),
@@ -194,7 +199,8 @@ export const useAppMutations = () => {
             type: TransactionType,
             unitId: string,
             items: { instrumentId: string, count: number }[],
-            setItems?: { setId: string, quantity: number }[]
+            setItems?: { setId: string, quantity: number }[],
+            packIds?: string[]
         }) => {
             const tx: Transaction = {
                 id: crypto.randomUUID(),
@@ -204,6 +210,7 @@ export const useAppMutations = () => {
                 unitId: data.unitId,
                 items: data.items,
                 setItems: data.setItems,
+                packIds: data.packIds,
                 qrCode: `TX-${Date.now()}`,
                 createdBy: currentUser?.name || 'System',
             };
@@ -263,6 +270,7 @@ export const useAppMutations = () => {
         updateUserStatus,
         addInstrument,
         deleteInstrument,
+        updateInstrument,
         updateInstrumentStatus,
         addUnit,
         deleteUnit,

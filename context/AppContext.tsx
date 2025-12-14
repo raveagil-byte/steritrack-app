@@ -13,6 +13,7 @@ import {
     useAppMutations,
     useStats
 } from '../hooks/useQueries';
+import { useConfirmation } from './ConfirmationContext';
 
 interface AppContextType {
     currentUser: User | null;
@@ -33,7 +34,7 @@ interface AppContextType {
 
 
     // Actions (Wrapped mutations)
-    createTransaction: (type: TransactionType, unitId: string, items: TransactionItem[], setItems?: TransactionSetItem[]) => Promise<Transaction | null>;
+    createTransaction: (type: TransactionType, unitId: string, items: TransactionItem[], setItems?: TransactionSetItem[], packIds?: string[]) => Promise<Transaction | null>;
     validateTransaction: (txId: string, validatorName: string) => Promise<boolean>;
     washItems: (items: { instrumentId: string, quantity: number }[]) => Promise<void>;
     sterilizeItems: (items: { instrumentId: string, quantity: number }[], machine: string, status: 'SUCCESS' | 'FAILED') => Promise<any>;
@@ -42,6 +43,7 @@ interface AppContextType {
     updateUserStatus: (id: string, is_active: boolean) => Promise<void>;
     deleteUser: (id: string) => Promise<void>;
     addInstrument: (inst: Instrument) => Promise<void>;
+    updateInstrument: (inst: { id: string, name: string, category: string, is_serialized?: boolean, totalStock?: number, cssdStock?: number, dirtyStock?: number, packingStock?: number }) => Promise<void>;
     updateInstrumentStatus: (id: string, is_active: boolean) => Promise<void>;
     deleteInstrument: (id: string) => Promise<void>;
     addUnit: (unit: Unit) => Promise<void>;
@@ -60,6 +62,8 @@ interface AppContextType {
 
     // Refresh function is now moot as Query handles it, but kept for compatibility if called explicitly
     refreshData: () => Promise<void>;
+
+    sterilizeDirtyStock: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -67,6 +71,7 @@ const AppContext = createContext<AppContextType | null>(null);
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const queryClient = useQueryClient();
+    const { confirm, showAlert } = useConfirmation();
 
     // Data Hooks
     const usersQuery = useUsers();
@@ -110,6 +115,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const deleteUser = async (id: string) => { await appMutations.deleteUser.mutateAsync(id); };
 
     const addInstrument = async (inst: Instrument) => { await appMutations.addInstrument.mutateAsync(inst); };
+    const updateInstrument = async (inst: { id: string, name: string, category: string, is_serialized?: boolean, totalStock?: number, cssdStock?: number, dirtyStock?: number, packingStock?: number }) => { await appMutations.updateInstrument.mutateAsync({ id: inst.id, ...inst }); };
     const updateInstrumentStatus = async (id: string, is_active: boolean) => { await appMutations.updateInstrumentStatus.mutateAsync({ id, is_active }); };
     const deleteInstrument = async (id: string) => { await appMutations.deleteInstrument.mutateAsync(id); };
 
@@ -122,10 +128,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const updateSetStatus = async (id: string, is_active: boolean) => { await appMutations.updateSetStatus.mutateAsync({ id, is_active }); };
     const deleteSet = async (id: string) => { await appMutations.deleteSet.mutateAsync(id); };
 
-    const createTransaction = async (type: TransactionType, unitId: string, items: TransactionItem[], setItems?: TransactionSetItem[]) => {
+    const createTransaction = async (type: TransactionType, unitId: string, items: TransactionItem[], setItems?: TransactionSetItem[], packIds?: string[]) => {
         if (items.length === 0 && (!setItems || setItems.length === 0)) return null;
-        const res = await appMutations.createTransaction.mutateAsync({ type, unitId, items, setItems: setItems || [] });
-        // The mutation invalidates queries, so fresh data will propagate
+        const res = await appMutations.createTransaction.mutateAsync({ type, unitId, items, setItems: setItems || [], packIds: packIds || [] });
         return res;
     };
 
@@ -145,8 +150,20 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const resetSystem = async () => {
-        if (window.confirm("ANDA YAKIN? Ini akan menghapus semua data.")) {
+        const isConfirmed = await confirm({
+            title: "Reset Sistem",
+            message: "ANDA YAKIN? Ini akan menghapus semua data transaksi dan stok.\nData master (Instrumen, Unit, Set) TIDAK akan dihapus.",
+            confirmText: "Ya, Hapus Semua",
+            type: "danger"
+        });
+
+        if (isConfirmed) {
             await appMutations.resetSystem.mutateAsync();
+            await showAlert({
+                title: "Sistem Direset",
+                message: "Semua data transaksi dan stok telah dihapus.",
+                type: "success"
+            });
         }
     };
 
@@ -159,13 +176,45 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const addLog = (message: string) => {
-        // Logging is now mostly handled by server, but we can do optimistic client side log if needed
-        // or just let the server log actions. 
-        // For compatibility, we'll ignore or maybe send a manual log if API supports it.
-        // It seems the API has an addLog endpoint.
-        // We actually didn't expose addLog mutation in useQueries but let's check...
-        // Wait, for now let's just console log as frontend shouldn't really spam backend logs manually unless critical.
         console.log("AppLog:", message);
+    };
+
+    const sterilizeDirtyStock = async () => {
+        if (!currentUser) return;
+
+        // 1. Identify dirty items
+        const dirtyItems = instrumentsQuery.data
+            ?.filter(i => i.dirtyStock > 0)
+            .map(i => ({ instrumentId: i.id, quantity: i.dirtyStock })) || [];
+
+        if (dirtyItems.length === 0) return;
+
+        const isConfirmed = await confirm({
+            title: "Konfirmasi Sterilisasi",
+            message: `Akan mensterilkan ${dirtyItems.reduce((a, b) => a + b.quantity, 0)} item kotor. Lanjutkan?`,
+            confirmText: "Sterilkan Sekarang",
+            type: "info"
+        });
+
+        if (!isConfirmed) return;
+
+        try {
+            await washItems(dirtyItems);
+            await sterilizeItems(dirtyItems);
+
+            await showAlert({
+                title: "Sterilisasi Berhasil",
+                message: `${dirtyItems.length} jenis instrumen telah disterilkan.`,
+                type: "success"
+            });
+        } catch (error) {
+            console.error("Error during bulk sterilization:", error);
+            await showAlert({
+                title: "Gagal Sterilisasi",
+                message: "Terjadi kesalahan saat melakukan sterilisasi otomatis.",
+                type: "warning"
+            });
+        }
     };
 
     const refreshData = async () => {
@@ -177,7 +226,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
             currentUser,
             login, logout, updateCurrentUser,
 
-            // Expose the raw data arrays. Fallback to [] if loading/error
             users: usersQuery.data || [],
             units: unitsQuery.data || [],
             instruments: instrumentsQuery.data || [],
@@ -188,7 +236,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
             stats: statsQuery.data || null,
 
             addUser, updateUserStatus, deleteUser,
-            addInstrument, updateInstrumentStatus, deleteInstrument,
+            addInstrument, updateInstrument, updateInstrumentStatus, deleteInstrument,
             addUnit, updateUnitStatus, deleteUnit,
             addSet, updateSet, updateSetStatus, deleteSet,
             createTransaction, validateTransaction, washItems, sterilizeItems,
@@ -196,7 +244,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
             addLog,
             refreshData,
             createRequest,
-            updateRequestStatus
+            updateRequestStatus,
+            sterilizeDirtyStock
         }}>
             {children}
         </AppContext.Provider>

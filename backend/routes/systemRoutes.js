@@ -4,5 +4,6 @@ const systemController = require('../controllers/systemController');
 
 router.get('/init-db', systemController.initDb); // keeping as get for ease of browser access
 router.post('/api/reset', systemController.resetSystem);
+router.post('/api/reset-activity-data', systemController.resetActivityData);
 
 module.exports = router;

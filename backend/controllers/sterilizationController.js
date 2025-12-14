@@ -1,5 +1,14 @@
 const db = require('../db');
 
+// Helper to chunk arrays
+const chunkArray = (array, size) => {
+    const result = [];
+    for (let i = 0; i < array.length; i += size) {
+        result.push(array.slice(i, i + size));
+    }
+    return result;
+};
+
 // Process 1: Wash/Decontaminate (Dirty -> Packing)
 exports.washItems = async (req, res) => {
     const { items, operator } = req.body;
@@ -8,16 +17,44 @@ exports.washItems = async (req, res) => {
     try {
         await connection.beginTransaction();
 
-        for (let item of items) {
-            const [rows] = await connection.query('SELECT dirtyStock FROM instruments WHERE id = ?', [item.instrumentId]);
-            if (rows.length === 0 || rows[0].dirtyStock < item.quantity) {
-                throw new Error(`Stok kotor tidak cukup untuk item ${item.instrumentId}`);
+        // Process in chunks of 50 to avoid query size limits
+        const chunks = chunkArray(items, 50);
+
+        for (const chunk of chunks) {
+            const ids = chunk.map(i => i.instrumentId);
+
+            // 1. Bulk Check Stock
+            const [stocks] = await connection.query('SELECT id, dirtyStock FROM instruments WHERE id IN (?)', [ids]);
+            const stockMap = stocks.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.dirtyStock }), {});
+
+            for (const item of chunk) {
+                if ((stockMap[item.instrumentId] || 0) < item.quantity) {
+                    throw new Error(`Stok kotor tidak cukup untuk item ID ${item.instrumentId}`);
+                }
             }
 
-            await connection.query(
-                'UPDATE instruments SET dirtyStock = dirtyStock - ?, packingStock = packingStock + ? WHERE id = ?',
-                [item.quantity, item.quantity, item.instrumentId]
-            );
+            // 2. Bulk Update
+            let query = 'UPDATE instruments SET dirtyStock = dirtyStock - CASE id ';
+            const params = [];
+
+            // Build DirtyStock CASE
+            chunk.forEach(item => {
+                query += 'WHEN ? THEN ? ';
+                params.push(item.instrumentId, item.quantity);
+            });
+
+            query += 'END, packingStock = packingStock + CASE id ';
+
+            // Build PackingStock CASE
+            chunk.forEach(item => {
+                query += 'WHEN ? THEN ? ';
+                params.push(item.instrumentId, item.quantity);
+            });
+
+            query += 'END WHERE id IN (?)';
+            params.push(ids);
+
+            await connection.query(query, params);
         }
 
         await connection.query('INSERT INTO logs (id, timestamp, message, type) VALUES (UUID(), ?, ?, ?)',
@@ -27,6 +64,7 @@ exports.washItems = async (req, res) => {
         res.json({ message: 'Pencucian selesai.' });
     } catch (err) {
         await connection.rollback();
+        console.error('Wash Error:', err);
         res.status(500).json({ error: err.message });
     } finally {
         connection.release();
@@ -51,31 +89,51 @@ exports.sterilizeItems = async (req, res) => {
             [batchId, Date.now(), operator, batchStatus, machine || 'Autoclave 1', expiryDate]
         );
 
-        for (let item of items) {
-            // Verify stock
-            const [rows] = await connection.query('SELECT packingStock FROM instruments WHERE id = ?', [item.instrumentId]);
-            if (rows.length === 0 || rows[0].packingStock < item.quantity) {
-                throw new Error(`Stok packing tidak cukup untuk item ${item.instrumentId}`);
+        // Process in chunks
+        const chunks = chunkArray(items, 50);
+
+        for (const chunk of chunks) {
+            const ids = chunk.map(i => i.instrumentId);
+
+            // 1. Bulk Check Stock
+            const [stocks] = await connection.query('SELECT id, packingStock FROM instruments WHERE id IN (?)', [ids]);
+            const stockMap = stocks.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.packingStock }), {});
+
+            for (const item of chunk) {
+                if ((stockMap[item.instrumentId] || 0) < item.quantity) {
+                    throw new Error(`Stok packing tidak cukup untuk item ID ${item.instrumentId}`);
+                }
             }
+
+            // 2. Bulk Update Logic
+            let query = '';
+            const params = [];
 
             if (status === 'FAILED') {
-                // If failed, move back to dirtyStock (Assume re-wash/re-pack needed)
-                await connection.query(
-                    'UPDATE instruments SET packingStock = packingStock - ?, dirtyStock = dirtyStock + ? WHERE id = ?',
-                    [item.quantity, item.quantity, item.instrumentId]
-                );
+                // Return to Dirty
+                query = 'UPDATE instruments SET packingStock = packingStock - CASE id ';
+                chunk.forEach(item => { query += 'WHEN ? THEN ? '; params.push(item.instrumentId, item.quantity); });
+                query += 'END, dirtyStock = dirtyStock + CASE id ';
+                chunk.forEach(item => { query += 'WHEN ? THEN ? '; params.push(item.instrumentId, item.quantity); });
+                query += 'END WHERE id IN (?)';
+                params.push(ids);
             } else {
-                // If success, move to cssdStock
-                await connection.query(
-                    'UPDATE instruments SET packingStock = packingStock - ?, cssdStock = cssdStock + ? WHERE id = ?',
-                    [item.quantity, item.quantity, item.instrumentId]
-                );
+                // Move to CSSD
+                query = 'UPDATE instruments SET packingStock = packingStock - CASE id ';
+                chunk.forEach(item => { query += 'WHEN ? THEN ? '; params.push(item.instrumentId, item.quantity); });
+                query += 'END, cssdStock = cssdStock + CASE id ';
+                chunk.forEach(item => { query += 'WHEN ? THEN ? '; params.push(item.instrumentId, item.quantity); });
+                query += 'END WHERE id IN (?)';
+                params.push(ids);
             }
 
-            // Log Batch Item
+            await connection.query(query, params);
+
+            // 3. Bulk Insert Batch Items
+            const batchItemsValues = chunk.map(item => [batchId, item.instrumentId, item.quantity]);
             await connection.query(
-                'INSERT INTO sterilization_batch_items (batchId, instrumentId, quantity) VALUES (?, ?, ?)',
-                [batchId, item.instrumentId, item.quantity]
+                'INSERT INTO sterilization_batch_items (batchId, instrumentId, quantity) VALUES ?',
+                [batchItemsValues]
             );
         }
 
@@ -90,6 +148,7 @@ exports.sterilizeItems = async (req, res) => {
         res.json({ message: 'Proses sterilisasi tercatat.', batchId, status: batchStatus, expiryDate });
     } catch (err) {
         await connection.rollback();
+        console.error('Sterilize Error:', err);
         res.status(500).json({ error: err.message });
     } finally {
         connection.release();

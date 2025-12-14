@@ -3,22 +3,30 @@ import { Instrument, InstrumentSet, TransactionItem, TransactionSetItem, Transac
 import { useAppContext } from '../context/AppContext';
 import QRScanner from './QRScanner';
 import { Minus, Plus, QrCode, X, Package, Layers } from 'lucide-react';
+import { ApiService } from '../services/apiService';
+import { toast } from 'sonner';
 
 const BTN_PRIMARY_CLASSES = "bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2";
 
 interface TransactionFormProps {
     unit: Unit;
     type: TransactionType;
-    onSubmit: (items: TransactionItem[], setItems: TransactionSetItem[]) => void;
+    onSubmit: (items: TransactionItem[], setItems: TransactionSetItem[], packIds?: string[]) => void;
     onCancel: () => void;
 }
 
 const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProps) => {
-    const { instruments, sets } = useAppContext();
+    const { instruments, sets, units } = useAppContext();
     const [quantities, setQuantities] = useState<Record<string, number>>({});
     const [selectedSets, setSelectedSets] = useState<Record<string, number>>({});
     const [discrepancies, setDiscrepancies] = useState<Record<string, { broken: number; missing: number }>>({});
     const [setItemsDiscrepancies, setSetItemsDiscrepancies] = useState<Record<string, { broken: number; missing: number }>>({});
+    const [serialNumbers, setSerialNumbers] = useState<Record<string, string[]>>({}); // instrumentId -> [sn1, sn2]
+    const [scannedPackIds, setScannedPackIds] = useState<string[]>([]); // Track distinct packs scanned
+
+    // UI States for replacing native dialogs
+    const [confirmModal, setConfirmModal] = useState<{ title: string; message: string; onConfirm: () => void; onCancel: () => void } | null>(null);
+    const [inputModal, setInputModal] = useState<{ title: string; message?: string; value: string; onConfirm: (val: string) => void; onCancel: () => void } | null>(null);
 
     const [isScanning, setIsScanning] = useState(false);
 
@@ -56,7 +64,42 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
         });
     }, [sets, instruments, type, unit.id]);
 
+    const addSerialNumber = (instrumentId: string, sn: string, max: number) => {
+        if (!sn.trim()) return;
+        setSerialNumbers(prev => {
+            const currentList = prev[instrumentId] || [];
+            if (currentList.includes(sn)) {
+                toast.warning("Serial Number sudah ada dalam daftar ini.");
+                return prev;
+            }
+            if (currentList.length >= max) {
+                toast.warning("Jumlah melebihi stok tersedia.");
+                return prev;
+            }
+            const newList = [...currentList, sn];
+            // Sync quantity
+            setQuantities(q => ({ ...q, [instrumentId]: newList.length }));
+            return { ...prev, [instrumentId]: newList };
+        });
+    };
+
+    const removeSerialNumber = (instrumentId: string, snToRemove: string) => {
+        setSerialNumbers(prev => {
+            const currentList = prev[instrumentId] || [];
+            const newList = currentList.filter(sn => sn !== snToRemove);
+            // Sync quantity
+            setQuantities(q => ({ ...q, [instrumentId]: newList.length }));
+            return { ...prev, [instrumentId]: newList };
+        });
+    };
+
     const updateQuantity = (id: string, delta: number, field: 'ok' | 'broken' | 'missing', max: number) => {
+        // Prevent manual quantity update for serialized items (except implied by SN addition)
+        const inst = instruments.find(i => i.id === id);
+        if (inst?.is_serialized && field === 'ok') {
+            return; // Managed by addSerialNumber/removeSerialNumber
+        }
+
         if (field === 'ok') {
             setQuantities(prev => {
                 const current = prev[id] || 0;
@@ -108,19 +151,128 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
     // ...
 
 
-    const handleScan = (code: string) => {
+
+    const handleScan = async (code: string) => {
+        // 1. Check if it's a PACK
+        if (code.startsWith('PCK-')) {
+            try {
+                const pack = await ApiService.getPack(code);
+                if (pack && pack.items) {
+                    // Prevent duplicate scan of same pack (physical impossibility)
+                    if (scannedPackIds.includes(pack.id)) {
+                        toast.warning(`Paket ${pack.id} sudah ditambahkan dalam transaksi ini.`);
+                        return;
+                    }
+
+                    const processPackAddition = () => {
+                        let addedCount = 0;
+                        pack.items.forEach((pItem: any) => {
+                            const inst = instruments.find(i => i.id === pItem.instrumentId);
+                            if (inst) {
+                                const max = type === TransactionType.DISTRIBUTE ? inst.cssdStock : (inst.unitStock[unit.id] || 0);
+                                const current = quantities[inst.id] || 0;
+                                if (current + pItem.quantity <= max) {
+                                    updateQuantity(inst.id, pItem.quantity, 'ok', max);
+                                    addedCount++;
+                                }
+                            }
+                        });
+                        if (addedCount > 0) {
+                            setScannedPackIds(prev => [...prev, pack.id]);
+                            toast.success(`Paket "${pack.name}" ditambahkan (${addedCount} jenis items).`);
+                            setIsScanning(false);
+                            return;
+                        }
+                    };
+
+                    // UNIT TARGET CHECK (New!)
+                    if (pack.targetUnitId && type === TransactionType.DISTRIBUTE) {
+                        if (pack.targetUnitId !== unit.id) {
+                            const targetUnit = units.find(u => u.id === pack.targetUnitId);
+                            const targetName = targetUnit ? targetUnit.name : 'Unit Lain';
+
+                            setConfirmModal({
+                                title: "⚠️ SALAH TUJUAN UNIT?",
+                                message: `Paket ini ditandai (Booking) untuk unit: "${targetName}".\nSedangkan Anda sedang distribusi ke unit: "${unit.name}".\n\nApakah Anda yakin ingin memberikan paket ini ke ${unit.name}?`,
+                                onConfirm: () => {
+                                    setConfirmModal(null);
+                                    // Check FIFO next
+                                    checkFifoAndProcess(pack, processPackAddition);
+                                },
+                                onCancel: () => {
+                                    setConfirmModal(null);
+                                    setIsScanning(false);
+                                }
+                            });
+                            return; // Wait for user interaction
+                        }
+                    }
+
+                    checkFifoAndProcess(pack, processPackAddition);
+                    return;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
         const inst = instruments.find((i: Instrument) => i.id === code);
         if (inst) {
             const max = type === TransactionType.DISTRIBUTE ? inst.cssdStock : (inst.unitStock[unit.id] || 0);
             if (max <= 0) {
-                alert(type === TransactionType.DISTRIBUTE ? "Item habis di CSSD" : "Item tidak ditemukan di unit ini");
+                toast.error(type === TransactionType.DISTRIBUTE ? "Item habis di CSSD" : "Item tidak ditemukan di unit ini");
                 return;
             }
-            updateQuantity(inst.id, 1, 'ok', max);
-            setIsScanning(false);
+
+            if (inst.is_serialized) {
+                setInputModal({
+                    title: `Input Serial Number`,
+                    message: `Masukkan Serial Number untuk ${inst.name}:`,
+                    value: '',
+                    onConfirm: (sn) => {
+                        addSerialNumber(inst.id, sn, max);
+                        setInputModal(null);
+                        setIsScanning(false);
+                    },
+                    onCancel: () => {
+                        setInputModal(null);
+                        // setIsScanning(false); // Maybe keep scanning open?
+                    }
+                });
+            } else {
+                updateQuantity(inst.id, 1, 'ok', max);
+                setIsScanning(false);
+            }
         } else {
-            alert(`QR Instrumen Tidak Dikenal: ${code}`);
-            setIsScanning(false);
+            // Keep existing alert only if not PCK (which we handled or failed silently above, maybe show alert if pack fail too?)
+            if (!code.startsWith('PCK-')) {
+                toast.error(`QR Instrumen Tidak Dikenal: ${code}`);
+                setIsScanning(false);
+            } else {
+                toast.error(`QR Paket Tidak Dikenal atau Gagal Memuat: ${code}`);
+                setIsScanning(false);
+            }
+        }
+    };
+
+    const checkFifoAndProcess = (pack: any, callback: () => void) => {
+        // FIFO CHECK
+        if (pack.fifoWarning && pack.fifoWarning.hasOlder) {
+            const olderDate = new Date(pack.fifoWarning.olderPack.createdAt).toLocaleDateString();
+            setConfirmModal({
+                title: "⚠️ PERINGATAN FIFO",
+                message: `Ada stok paket yang lebih lama ("${pack.fifoWarning.olderPack.name}") dari tanggal ${olderDate}.\nID: ${pack.fifoWarning.olderPack.id}\n\nDisarankan menggunakan stok lama terlebih dahulu (First-In First-Out).\nApakah Anda yakin ingin tetap menggunakan paket ini?`,
+                onConfirm: () => {
+                    setConfirmModal(null);
+                    callback();
+                },
+                onCancel: () => {
+                    setConfirmModal(null);
+                    setIsScanning(false);
+                }
+            });
+        } else {
+            callback();
         }
     };
 
@@ -185,7 +337,8 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                     count, // This is OK count
                     itemType: 'SINGLE',
                     brokenCount: broken,
-                    missingCount: missing
+                    missingCount: missing,
+                    serialNumbers: serialNumbers[id] || []
                 });
             }
         });
@@ -210,7 +363,7 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
         });
 
 
-        onSubmit(items, setItems);
+        onSubmit(items, setItems, scannedPackIds);
     };
 
     const totalItems = Object.values(quantities).reduce((a, b) => a + b, 0) +
@@ -297,24 +450,61 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                                         </div>
                                         {/* Standard / OK Counter */}
                                         <div className="flex items-center gap-3">
-                                            <span className="text-xs text-slate-400 font-bold uppercase mr-2">{type === TransactionType.COLLECT ? 'Baik' : 'Jml'}</span>
-                                            <button
-                                                onClick={() => updateQuantity(inst.id, -1, 'ok', max)}
-                                                className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 active:scale-95 disabled:opacity-50"
-                                                disabled={current === 0}
-                                            >
-                                                <Minus size={16} />
-                                            </button>
-                                            <span className="w-8 text-center font-bold text-lg">{current}</span>
-                                            <button
-                                                onClick={() => updateQuantity(inst.id, 1, 'ok', max)}
-                                                className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 active:scale-95 disabled:opacity-50"
-                                                disabled={current + (discrepancies[inst.id]?.broken || 0) + (discrepancies[inst.id]?.missing || 0) >= max}
-                                            >
-                                                <Plus size={16} />
-                                            </button>
+                                            {inst.is_serialized ? (
+                                                <div className="flex flex-col items-end gap-2">
+                                                    <button
+                                                        onClick={() => {
+                                                            setInputModal({
+                                                                title: "Input Serial Number",
+                                                                message: "Masukkan/Scan Serial Number:",
+                                                                value: "",
+                                                                onConfirm: (sn) => {
+                                                                    addSerialNumber(inst.id, sn, max);
+                                                                    setInputModal(null);
+                                                                },
+                                                                onCancel: () => setInputModal(null)
+                                                            });
+                                                        }}
+                                                        className="bg-indigo-600 text-white px-3 py-1 rounded-lg text-xs font-bold shadow hover:bg-indigo-700 active:scale-95 disabled:opacity-50"
+                                                        disabled={current >= max}
+                                                    >
+                                                        + Add Asset
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <span className="text-xs text-slate-400 font-bold uppercase mr-2">{type === TransactionType.COLLECT ? 'Baik' : 'Jml'}</span>
+                                                    <button
+                                                        onClick={() => updateQuantity(inst.id, -1, 'ok', max)}
+                                                        className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 active:scale-95 disabled:opacity-50"
+                                                        disabled={current === 0}
+                                                    >
+                                                        <Minus size={16} />
+                                                    </button>
+                                                    <span className="w-8 text-center font-bold text-lg">{current}</span>
+                                                    <button
+                                                        onClick={() => updateQuantity(inst.id, 1, 'ok', max)}
+                                                        className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 active:scale-95 disabled:opacity-50"
+                                                        disabled={current + (discrepancies[inst.id]?.broken || 0) + (discrepancies[inst.id]?.missing || 0) >= max}
+                                                    >
+                                                        <Plus size={16} />
+                                                    </button>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
+
+                                    {/* Serial Number List */}
+                                    {inst.is_serialized && (serialNumbers[inst.id]?.length || 0) > 0 && (
+                                        <div className="flex flex-wrap gap-2 mt-2 p-2 bg-slate-50 rounded-lg">
+                                            {serialNumbers[inst.id].map(sn => (
+                                                <span key={sn} className="bg-white border border-indigo-200 text-indigo-700 px-2 py-1 rounded text-xs font-mono flex items-center gap-1">
+                                                    {sn}
+                                                    <button onClick={() => removeSerialNumber(inst.id, sn)} className="text-red-400 hover:text-red-600"><X size={12} /></button>
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
 
                                     {/* Discrepancy Inputs for COLLECT */}
                                     {type === TransactionType.COLLECT && (
@@ -452,6 +642,65 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                     {totalItems > 0 && ` (${totalItems} item)`}
                 </button>
             </div>
+            {/* Modal Dialogs */}
+            {confirmModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+                    <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4">
+                        <h3 className="font-bold text-lg text-slate-800">{confirmModal.title}</h3>
+                        <p className="text-slate-600 whitespace-pre-line">{confirmModal.message}</p>
+                        <div className="flex justify-end gap-2 pt-2">
+                            <button
+                                onClick={confirmModal.onCancel}
+                                className="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 font-bold hover:bg-slate-50 transition"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                onClick={confirmModal.onConfirm}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200"
+                            >
+                                Ya, Lanjutkan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {inputModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+                    <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4">
+                        <h3 className="font-bold text-lg text-slate-800">{inputModal.title}</h3>
+                        {inputModal.message && <p className="text-slate-600">{inputModal.message}</p>}
+                        <input
+                            autoFocus
+                            type="text"
+                            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-center text-lg"
+                            placeholder="Ketik disini..."
+                            value={inputModal.value}
+                            onChange={(e) => setInputModal({ ...inputModal, value: e.target.value })}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    inputModal.onConfirm(inputModal.value);
+                                }
+                            }}
+                        />
+                        <div className="flex justify-end gap-2 pt-2">
+                            <button
+                                onClick={inputModal.onCancel}
+                                className="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 font-bold hover:bg-slate-50 transition"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                onClick={() => inputModal.onConfirm(inputModal.value)}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200"
+                            >
+                                Simpan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

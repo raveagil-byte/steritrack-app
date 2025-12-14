@@ -31,6 +31,22 @@ const InventoryView = () => {
         });
     }, [instruments, selectedUnitId]);
 
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    // Reset to page 1 when filter changes
+    React.useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedUnitId]);
+
+    const paginatedInstruments = useMemo(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        return filteredInstruments.slice(start, start + itemsPerPage);
+    }, [filteredInstruments, currentPage]);
+
+    const totalPages = Math.ceil(filteredInstruments.length / itemsPerPage);
+
     // Get selected unit info
     const selectedUnit = useMemo(() => {
         if (selectedUnitId === 'ALL' || selectedUnitId === 'CSSD') return null;
@@ -128,14 +144,14 @@ const InventoryView = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {filteredInstruments.length === 0 ? (
+                            {paginatedInstruments.length === 0 ? (
                                 <tr>
                                     <td colSpan={5} className="p-8 text-center text-slate-400">
                                         Tidak ada instrumen ditemukan di lokasi ini
                                     </td>
                                 </tr>
                             ) : (
-                                filteredInstruments.map((inst: Instrument) => {
+                                paginatedInstruments.map((inst: Instrument) => {
                                     const unitStock = inst.unitStock || {};
                                     const values = Object.values(unitStock) as number[];
                                     const totalInUnits: number = values.reduce((a, b) => a + b, 0);
@@ -212,6 +228,44 @@ const InventoryView = () => {
                         </tbody>
                     </table>
                 </div>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                    <div className="p-4 border-t border-slate-200 flex items-center justify-between bg-slate-50">
+                        <div className="text-sm text-slate-500">
+                            Menampilkan <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> sampai <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredInstruments.length)}</span> dari <span className="font-medium">{filteredInstruments.length}</span> data
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={currentPage === 1}
+                                className="px-3 py-1 border rounded bg-white text-slate-600 disabled:opacity-50 hover:bg-slate-50"
+                            >
+                                Sebelumnya
+                            </button>
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1)
+                                .map((page, i, arr) => (
+                                    <React.Fragment key={page}>
+                                        {i > 0 && arr[i - 1] !== page - 1 && <span className="px-2 self-center">...</span>}
+                                        <button
+                                            onClick={() => setCurrentPage(page)}
+                                            className={`px-3 py-1 border rounded ${currentPage === page ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 hover:bg-slate-50'}`}
+                                        >
+                                            {page}
+                                        </button>
+                                    </React.Fragment>
+                                ))}
+                            <button
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                disabled={currentPage === totalPages}
+                                className="px-3 py-1 border rounded bg-white text-slate-600 disabled:opacity-50 hover:bg-slate-50"
+                            >
+                                Berikutnya
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

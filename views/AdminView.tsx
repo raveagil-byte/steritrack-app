@@ -7,6 +7,8 @@ import { AdminUnits } from './admin/AdminUnits';
 import { AdminSets } from './admin/AdminSets';
 import { AdminSettings } from './admin/AdminSettings';
 import { AdminDashboard } from './admin/AdminDashboard';
+import { StockAudit } from './admin/StockAudit';
+import { AuditLogView } from './admin/AuditLogView';
 import { cn } from '../lib/utils';
 
 const AdminNavBtn = ({ to, label }: { to: string, label: string }) => (
@@ -40,6 +42,8 @@ const AdminView = () => {
                 <AdminNavBtn to="/admin/instruments" label="Master Instrumen" />
                 <AdminNavBtn to="/admin/sets" label="Set Instrumen" />
                 <AdminNavBtn to="/admin/units" label="Master Unit" />
+                <AdminNavBtn to="/admin/audit" label="Audit Stok" />
+                <AdminNavBtn to="/admin/audit-logs" label="Audit Log" />
                 <AdminNavBtn to="/admin/settings" label="Pengaturan" />
             </div>
 
@@ -51,6 +55,8 @@ const AdminView = () => {
                     <Route path="instruments" element={<AdminInstruments />} />
                     <Route path="sets" element={<AdminSets />} />
                     <Route path="units" element={<AdminUnits />} />
+                    <Route path="audit" element={<StockAudit />} />
+                    <Route path="audit-logs" element={<AuditLogView />} />
                     <Route path="settings" element={<AdminSettings />} />
                 </Routes>
             </div>

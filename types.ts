@@ -44,6 +44,9 @@ export interface Instrument {
   packingStock: number; // Washed/Decontaminated, waiting for Sterilization
   brokenStock?: number; // Damaged items
   unitStock: Record<string, number>; // Maps unitId to count
+  usedInSets?: number;
+  remainingLoose?: number;
+  is_serialized?: boolean;
 
   is_active?: boolean;
 }
@@ -67,6 +70,7 @@ export interface TransactionItem {
   itemType?: 'SINGLE' | 'SET';
   brokenCount?: number;
   missingCount?: number;
+  serialNumbers?: string[];
 }
 
 export interface TransactionSetItem {
@@ -84,7 +88,8 @@ export interface Transaction {
   status: TransactionStatus;
   unitId: string; // The target unit (for distribute) or source unit (for collect)
   items: TransactionItem[];
-  setItems?: TransactionSetItem[]; // NEW: for tracking sets
+  setItems?: TransactionSetItem[];
+  packIds?: string[]; // New: Track which packs were part of this transaction
   qrCode: string; // Generated QR for the transaction itself
   createdBy: string; // 'CSSD Staff'
   validatedBy?: string; // 'Nurse X'
@@ -116,4 +121,39 @@ export interface Request {
   status: RequestStatus;
   requestedBy: string;
   items: RequestItem[];
+}
+
+export interface Asset {
+  id: string;
+  instrumentId: string;
+  serialNumber: string;
+  status: 'READY' | 'IN_USE' | 'MAINTENANCE' | 'BROKEN' | 'LOST';
+  location: string;
+  notes?: string;
+  usageCount?: number;
+  lastMaintenance?: number;
+  createdAt?: number;
+}
+
+export interface SterilePackItem {
+  instrumentId: string;
+  itemType: 'SINGLE' | 'SET';
+  quantity: number;
+}
+
+export interface SterilePack {
+  id: string;
+  name: string;
+  type: 'SINGLE_ITEMS' | 'SET' | 'MIXED';
+  status: 'PACKED' | 'STERILIZED' | 'DISTRIBUTED' | 'EXPIRED';
+  createdAt: number;
+  packedBy: string;
+  expiresAt: number;
+  qrCode: string;
+  items?: SterilePackItem[];
+  targetUnitId?: string;
+  fifoWarning?: {
+    hasOlder: boolean;
+    olderPack: { id: string, name: string, createdAt: number };
+  };
 }

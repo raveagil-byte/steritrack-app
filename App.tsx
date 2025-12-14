@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider, useAppContext } from './context/AppContext';
 import { ThemeProvider } from './context/ThemeContext';
 import LoginView from './views/LoginView';
+import RegisterView from './views/RegisterView';
 import CSSDView from './views/CSSDView';
 import NurseView from './views/NurseView';
 import InventoryView from './views/InventoryView';
@@ -31,6 +32,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginView />} />
+      <Route path="/register" element={<RegisterView />} />
 
       <Route element={<Layout />}>
         <Route path="/" element={<Navigate to="/inventory" replace />} />
@@ -68,14 +70,18 @@ const AppRoutes = () => {
   );
 };
 
+import { ConfirmationProvider } from './context/ConfirmationContext';
+
 const App = () => {
   return (
-    <AppProvider>
-      <ThemeProvider>
-        <AppRoutes />
-        <Toaster />
-      </ThemeProvider>
-    </AppProvider>
+    <ConfirmationProvider>
+      <AppProvider>
+        <ThemeProvider>
+          <AppRoutes />
+          <Toaster />
+        </ThemeProvider>
+      </AppProvider>
+    </ConfirmationProvider>
   );
 };
 

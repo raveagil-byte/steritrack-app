@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Activity, Key, Users } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { ApiService } from '../services/apiService';
 import { Role, User } from '../types';
@@ -128,6 +128,15 @@ const LoginView = () => {
                         <button onClick={() => quickLogin(Role.CSSD)} className="text-xs py-2 bg-slate-100 hover:bg-slate-200 rounded text-slate-700 font-medium">CSSD</button>
                         <button onClick={() => quickLogin(Role.NURSE)} className="text-xs py-2 bg-slate-100 hover:bg-slate-200 rounded text-slate-700 font-medium">Perawat</button>
                     </div>
+                </div>
+
+                <div className="mt-6 text-center pt-4 border-t border-slate-100">
+                    <p className="text-sm text-slate-500">
+                        Belum punya akun?{' '}
+                        <Link to="/register" className="text-blue-600 font-bold hover:underline">
+                            Daftar disini
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

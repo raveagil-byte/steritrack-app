@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import * as XLSX from 'xlsx';
 import { useAppContext } from '../context/AppContext';
 import { Transaction, TransactionType, TransactionStatus, Unit, Role } from '../types';
 import { Calendar, Filter, Search, Download, Truck, Trash2, CheckCircle, Clock, User, MapPin } from 'lucide-react';
@@ -68,28 +69,24 @@ const ActivityLogView = () => {
         return { total, completed, pending, distributed, collected };
     }, [filteredTransactions]);
 
-    const exportToCSV = () => {
-        const headers = ['Waktu', 'ID', 'Tipe', 'Unit', 'Status', 'Dibuat Oleh', 'Divalidasi Oleh'];
-        const rows = filteredTransactions.map(tx => {
+    const exportToExcel = () => {
+        const data = filteredTransactions.map(tx => {
             const unit = units.find(u => u.id === tx.unitId);
-            return [
-                new Date(tx.timestamp).toLocaleString('id-ID'),
-                tx.id,
-                tx.type === TransactionType.DISTRIBUTE ? 'Distribusi' : 'Pengambilan',
-                unit?.name || 'Unknown',
-                tx.status,
-                tx.createdBy,
-                tx.validatedBy || '-'
-            ];
+            return {
+                'Waktu': new Date(tx.timestamp).toLocaleString('id-ID'),
+                'ID Transaksi': tx.id,
+                'Tipe': tx.type === TransactionType.DISTRIBUTE ? 'Distribusi' : 'Pengambilan',
+                'Unit': unit?.name || 'Unknown',
+                'Status': tx.status,
+                'Dibuat Oleh': tx.createdBy,
+                'Divalidasi Oleh': tx.validatedBy || '-'
+            };
         });
 
-        const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `activity-log-${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Activity Logs");
+        XLSX.writeFile(wb, `activity-log-${new Date().toISOString().split('T')[0]}.xlsx`);
     };
 
     return (
@@ -106,11 +103,11 @@ const ActivityLogView = () => {
                     </p>
                 </div>
                 <button
-                    onClick={exportToCSV}
+                    onClick={exportToExcel}
                     className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow-lg shadow-green-200 transition"
                 >
                     <Download size={18} />
-                    Export CSV
+                    Export Excel
                 </button>
             </div>
 

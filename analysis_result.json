@@ -1,0 +1,508 @@
+{
+  "timestamp": "2025-12-14T01:02:06.931Z",
+  "negativeStocks": [],
+  "stockMismatches": [
+    {
+      "id": "005c610c-4adc-4bf9-9194-c23f1c53d876",
+      "name": "Hfnc",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 806,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1606"
+    },
+    {
+      "id": "02f41e78-5d93-4d5f-a52b-0968884923e8",
+      "name": "Finger Retractor",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 809,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1609"
+    },
+    {
+      "id": "0cf10a23-d4df-4b76-9c19-6bee6537525c",
+      "name": "Tutup Kom",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 812,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1612"
+    },
+    {
+      "id": "0dac2df9-64f3-4ecd-9209-6177ab35ddfa",
+      "name": "Klem Setengah Kocher",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 810,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1610"
+    },
+    {
+      "id": "110c960f-d313-4572-ac9b-9e11ab96bf4c",
+      "name": "Oral Hygiene Ped",
+      "totalStock": 100,
+      "cssdStock": 100,
+      "dirtyStock": 107,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "207"
+    },
+    {
+      "id": "18eaf4a0-cf43-4d70-bb36-cd69a39d83fb",
+      "name": "Reservoir Hijau",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "1c4a3b89-959b-4fc1-b176-e935acaf4592",
+      "name": "Jas Operasi",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "1ee2e727-4516-4c26-b8db-3eaa962c15ad",
+      "name": "Reservoir Valves",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "211f60b1-70fd-49f9-af5a-a9d184f10a40",
+      "name": "Bengkok Kecil",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "22c1cb2d-436c-4f60-a7d9-195e36bc4b23",
+      "name": "Laryngoscope Blade",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "22fbbfaa-f991-4302-9638-998780c2e49b",
+      "name": "Sungkup",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "34bfc52d-bc52-4259-bdd4-a20511874908",
+      "name": "Head Strap",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "3cb9f981-19ba-4f47-9c5b-6a06bf394e82",
+      "name": "Gunting Perban",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "43b12ff0-3ae0-4ace-b525-fa3af39d4940",
+      "name": "Kapas Lidi",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "4c9f95dc-d975-4905-b6db-3754c3d6daf3",
+      "name": "Sponge Holder",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "4d565fbe-32a8-4295-9018-abbd0f3b0807",
+      "name": "Gunting Mayo",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "50a1af9f-3762-452a-ba7b-f09ea337e097",
+      "name": "Kasa Pendek",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "5117ff30-9024-4450-92d0-645c50048fea",
+      "name": "Kabel Pacemaker",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "5449b3c6-16f4-4da8-ad86-cda3a7cc5fad",
+      "name": "Tee",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "594bb0df-e93e-47e2-9055-eef37f4fc14d",
+      "name": "Pean Bengkok",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "5a4a8903-847a-4cfc-bfc9-b8313e433324",
+      "name": "Selang Suction",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "5a989817-36b5-418c-bc23-608dde975f96",
+      "name": "Tabung Suction",
+      "totalStock": 100,
+      "cssdStock": 100,
+      "dirtyStock": 100,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "200"
+    },
+    {
+      "id": "5c272d48-3f6f-45df-be23-49be2e641aa3",
+      "name": "Pean Lurus",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "5d945962-6cec-4be4-b8b5-a0d88ee81020",
+      "name": "Klem Satuan",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "6269323c-61c3-4e9c-ba6a-96d5b7034989",
+      "name": "Iv Line Set",
+      "totalStock": 100,
+      "cssdStock": 100,
+      "dirtyStock": 100,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "200"
+    },
+    {
+      "id": "628d1d05-e55b-46f2-b8ad-2f04197ebee1",
+      "name": "Cpap",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "65923a76-617e-4b97-9c22-67ebf7f6216a",
+      "name": "Bougie",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "6ea2fa41-b78b-4fff-a7eb-0fa3189d8e23",
+      "name": "Kom Obat",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "720692fe-c77f-4f93-87c6-dcbbe714fbe6",
+      "name": "Tutup Tabung",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "73c6693c-a436-4d17-ae0e-0394499f2645",
+      "name": "Corong Otoscope",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "7561768a-d206-4f71-a10b-d6c8c96b707c",
+      "name": "Laryngoscope Handle",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "76e1c566-89e4-49dc-b4b7-adefd619da1a",
+      "name": "Flow Sensor",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "79ec799f-3e38-4691-85a3-f35e98e67120",
+      "name": "Bak Instrumen",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "7a98ba38-a72d-4ce9-804f-af02925c2d39",
+      "name": "Cvp Set",
+      "totalStock": 100,
+      "cssdStock": 100,
+      "dirtyStock": 100,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "200"
+    },
+    {
+      "id": "804930fa-6c96-4e9a-a8aa-743064dc1f64",
+      "name": "Gunting Metzenbaum",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "83ffe044-a60a-4916-9f13-e0e36785073d",
+      "name": "Depper Oral Hygiene",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "855e20c9-8b00-44dd-9df2-29fd48a31818",
+      "name": "Klem Panjang",
+      "totalStock": 800,
+      "cssdStock": 800,
+      "dirtyStock": 800,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "1600"
+    },
+    {
+      "id": "8f708da6-66ca-4ace-9d61-8060caf7fc6c",
+      "name": "Tutup Bak Instrumen",
+      "totalStock": 800,
+      "cssdStock": 797,
+      "dirtyStock": 0,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "797"
+    },
+    {
+      "id": "d24fdb80-546d-4f5f-a4f9-c910d8179619",
+      "name": "Bengkok Sedang",
+      "totalStock": 800,
+      "cssdStock": 799,
+      "dirtyStock": 0,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "799"
+    },
+    {
+      "id": "e100bd9f-5949-45cb-a2cf-a3fc5ac52424",
+      "name": "Tongue Spatel",
+      "totalStock": 800,
+      "cssdStock": 799,
+      "dirtyStock": 0,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "799"
+    },
+    {
+      "id": "i-1765098720503",
+      "name": "Bak Instrumen Sedang",
+      "totalStock": 800,
+      "cssdStock": 795,
+      "dirtyStock": 2,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "797"
+    },
+    {
+      "id": "i-1765099564028",
+      "name": "Gunting Littauer",
+      "totalStock": 800,
+      "cssdStock": 793,
+      "dirtyStock": 3,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "796"
+    },
+    {
+      "id": "i-1765099605586",
+      "name": "Kom Kecil",
+      "totalStock": 800,
+      "cssdStock": 789,
+      "dirtyStock": 4,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "793"
+    },
+    {
+      "id": "i-1765099669780",
+      "name": "Pinset Anatomis",
+      "totalStock": 800,
+      "cssdStock": 793,
+      "dirtyStock": 3,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "796"
+    },
+    {
+      "id": "i-1765099695300",
+      "name": "Pinset Cirurgis",
+      "totalStock": 800,
+      "cssdStock": 793,
+      "dirtyStock": 3,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "796"
+    },
+    {
+      "id": "i-1765100125689",
+      "name": "Bak Instrumen Kecil",
+      "totalStock": 800,
+      "cssdStock": 799,
+      "dirtyStock": 0,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "799"
+    },
+    {
+      "id": "i-1765100161519",
+      "name": "Pinset",
+      "totalStock": 800,
+      "cssdStock": 799,
+      "dirtyStock": 0,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "799"
+    },
+    {
+      "id": "i-1765100496475",
+      "name": "Bak Instrumen Besar",
+      "totalStock": 800,
+      "cssdStock": 798,
+      "dirtyStock": 1,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "799"
+    },
+    {
+      "id": "i-1765100525066",
+      "name": "Kom Sedang",
+      "totalStock": 800,
+      "cssdStock": 794,
+      "dirtyStock": 2,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "796"
+    },
+    {
+      "id": "i-1765100544827",
+      "name": "Needle Holder",
+      "totalStock": 800,
+      "cssdStock": 798,
+      "dirtyStock": 1,
+      "packingStock": 0,
+      "unitStockTotal": "0",
+      "calculatedTotal": "799"
+    }
+  ],
+  "orphanSetItems": [],
+  "emptySets": []
+}

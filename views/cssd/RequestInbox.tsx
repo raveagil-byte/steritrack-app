@@ -15,19 +15,19 @@ export const RequestInbox = () => {
     }).sort((a, b) => b.timestamp - a.timestamp);
 
     const handleApprove = async (req: Request) => {
-        if (!confirm('Setujui permintaan ini dan buat transaksi distribusi?')) return;
+        // Removed native confirm. 
+        // Improvement: We could add a small inline "Are you sure?" or just process it. 
+        // For streamlined CSSD workflow, on-click processing is faster. 
+        // We will show a toast loading state if needed, or just success.
 
         try {
-            // 1. Update status
             await updateRequestStatus(req.id, RequestStatus.APPROVED);
 
-            // 2. Create Distribution Transaction
             const txItems = req.items.map(i => ({
                 instrumentId: i.itemId,
                 count: i.quantity
             }));
 
-            // Note: Ideally we check stock availability here first!
             await createTransaction(TransactionType.DISTRIBUTE, req.unitId, txItems);
 
             toast.success("Permintaan disetujui & Transaksi distribusi dibuat");
@@ -37,7 +37,7 @@ export const RequestInbox = () => {
     };
 
     const handleReject = async (id: string) => {
-        if (!confirm('Tolak permintaan ini?')) return;
+        // Removed native confirm
         try {
             await updateRequestStatus(id, RequestStatus.REJECTED);
             toast.success("Permintaan ditolak");
@@ -86,7 +86,7 @@ export const RequestInbox = () => {
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
                                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${req.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
-                                                req.status === 'APPROVED' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                            req.status === 'APPROVED' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                                             }`}>
                                             {req.status}
                                         </span>

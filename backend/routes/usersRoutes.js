@@ -4,6 +4,7 @@ const usersController = require('../controllers/usersController');
 
 router.get('/', usersController.getAllUsers);
 router.post('/login', usersController.login);
+router.post('/register', usersController.registerPublic);
 router.post('/', usersController.createUser);
 router.put('/:id', usersController.updateUser);
 router.put('/:id/status', usersController.updateUserStatus);
