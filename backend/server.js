@@ -45,34 +45,35 @@ app.use('/api/', limiter); // Apply to all API routes
 const PORT = process.env.PORT || 3000;
 
 app.get('/api/debug-db', async (req, res) => {
+    const status = {
+        uptime: process.uptime(),
+        node: process.version,
+        env_check: {
+            host_exists: !!process.env.DB_HOST,
+            user_exists: !!process.env.DB_USER,
+            pass_len: process.env.DB_PASSWORD ? process.env.DB_PASSWORD.length : 0
+        },
+        db_status: 'NOT_ATTEMPTED'
+    };
+
     try {
+        // Try require db
         const db = require('./db');
-        const [rows] = await db.query('SELECT 1 + 1 AS result');
-        res.json({
-            status: 'OK',
-            message: 'Database connection successful',
-            result: rows[0],
-            env: {
-                host: process.env.DB_HOST,
-                user: process.env.DB_USER,
-                db: process.env.DB_NAME,
-                port: process.env.DB_PORT,
-                ssl_setting: process.env.DB_SSL
-            }
-        });
-    } catch (err) {
-        res.status(500).json({
-            status: 'ERROR',
-            message: err.message,
-            stack: err.stack,
-            env_check: {
-                host_exists: !!process.env.DB_HOST,
-                user_exists: !!process.env.DB_USER,
-                pass_exists: !!process.env.DB_PASSWORD,
-                ssl: process.env.DB_SSL
-            }
-        });
+        try {
+            const [rows] = await db.query('SELECT 1 + 1 AS result');
+            status.db_status = 'CONNECTED';
+            status.db_result = rows[0];
+        } catch (dbErr) {
+            status.db_status = 'CONNECTION_FAILED';
+            status.db_error = dbErr.message;
+            status.db_code = dbErr.code;
+        }
+    } catch (reqErr) {
+        status.db_status = 'REQUIRE_FAILED';
+        status.req_error = reqErr.message;
     }
+
+    res.json(status);
 });
 
 // Application Routes
