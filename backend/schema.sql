@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS units (
     id VARCHAR(50) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     type VARCHAR(20) NOT NULL,
+    qrCode VARCHAR(100),
     is_active BOOLEAN DEFAULT TRUE
 );
 
