@@ -89,7 +89,7 @@ export const Layout = () => {
                         </>
                     )}
 
-                    <SidebarBtn icon={<Sparkles />} label="Asisten Lokal" to="/analytics" />
+                    {/* <SidebarBtn icon={<Sparkles />} label="Asisten Lokal" to="/analytics" /> */}
 
                     <SidebarBtn icon={<User />} label="Profil Saya" to="/profile" />
                 </nav>
