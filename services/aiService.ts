@@ -8,9 +8,18 @@ export const analyzeSystemState = async (
 ): Promise<string> => {
 
   // 1. Prepare Context Summary
-  const stockSummary = instruments.map(i =>
-    `- ${i.name}: Steril(${i.cssdStock}), Kotor(${i.dirtyStock}), Terdistribusi(${Object.values(i.unitStock).reduce((a: any, b: any) => a + b, 0)})`
-  ).join('\n');
+  // 1. Prepare Context Summary (Defensive)
+  let stockSummary = 'Data inventaris tidak tersedia';
+  try {
+    if (instruments && Array.isArray(instruments)) {
+      stockSummary = instruments.map(i => {
+        const distrib = i.unitStock ? Object.values(i.unitStock).reduce((a: any, b: any) => a + b, 0) : 0;
+        return `- ${i.name}: Steril(${i.cssdStock || 0}), Kotor(${i.dirtyStock || 0}), Terdistribusi(${distrib})`;
+      }).join('\n');
+    }
+  } catch (e) {
+    console.error("Error formatting context:", e);
+  }
 
   const recentLogs = logs.slice(0, 10).map(l =>
     `[${new Date(l.timestamp).toLocaleTimeString()}] ${l.message}`
