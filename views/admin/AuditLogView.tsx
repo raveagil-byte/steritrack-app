@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import { Shield, Filter, Download, Search, Calendar, User, Activity, AlertTriangle } from 'lucide-react';
+import { ApiService } from '../../services/apiService';
 
 interface AuditLog {
     id: string;
@@ -62,9 +63,9 @@ export const AuditLogView = () => {
             params.append('limit', filters.limit.toString());
             params.append('page', currentPage.toString());
 
-            const response = await fetch(`/api/audit-logs?${params}`);
-            if (response.ok) {
-                const result = await response.json();
+            const result: any = await ApiService.getRecources(`audit-logs?${params.toString()}`);
+            if (result) {
+                // Handle both old array format and new pagination format for backward compat if needed
                 // Handle both old array format and new pagination format for backward compat if needed
                 if (Array.isArray(result)) {
                     setLogs(result);
