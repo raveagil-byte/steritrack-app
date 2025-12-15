@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS instruments (
     totalStock INT NOT NULL DEFAULT 0,
     cssdStock INT NOT NULL DEFAULT 0,
     dirtyStock INT NOT NULL DEFAULT 0,
+    packingStock INT NOT NULL DEFAULT 0,
     brokenStock INT NOT NULL DEFAULT 0,
     is_active BOOLEAN DEFAULT TRUE
 );
