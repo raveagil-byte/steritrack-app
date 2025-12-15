@@ -134,9 +134,9 @@ INSERT IGNORE INTO units (id, name, qrCode, type) VALUES
 ('u3', 'ICU Sentral', 'UNIT-ICU-001', 'ICU');
 
 INSERT IGNORE INTO users (id, username, password, name, role, unitId) VALUES
-('user1', 'admin', '123', 'Kepala Instalasi', 'ADMIN', NULL),
-('user2', 'staff', '123', 'Budi (CSSD)', 'CSSD', NULL),
-('user3', 'nurse', '123', 'Siti (Perawat)', 'NURSE', 'u2');
+('user1', 'admin', '4dm1n123', 'Kepala Instalasi', 'ADMIN', NULL),
+('user2', 'staff', '4dm1n123', 'Budi (CSSD)', 'CSSD', NULL),
+('user3', 'nurse', '4dm1n123', 'Siti (Perawat)', 'NURSE', 'u2');
 
 INSERT IGNORE INTO instruments (id, name, category, totalStock, cssdStock, dirtyStock) VALUES
 ('i1', 'Set Bedah Mayor', 'Sets', 20, 15, 0),
