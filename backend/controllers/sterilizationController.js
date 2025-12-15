@@ -85,8 +85,8 @@ exports.sterilizeItems = async (req, res) => {
 
         // Create Batch Record
         await connection.query(
-            'INSERT INTO sterilization_batches (id, timestamp, operator, status, machineNumber, expiryDate) VALUES (?, ?, ?, ?, ?, ?)',
-            [batchId, Date.now(), operator, batchStatus, machine || 'Autoclave 1', expiryDate]
+            'INSERT INTO sterilization_batches (id, timestamp, operator, status, machine, startTime, endTime) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [batchId, Date.now(), operator, batchStatus, machine || 'Autoclave 1', Date.now(), Date.now()]
         );
 
         // Process in chunks
@@ -132,7 +132,7 @@ exports.sterilizeItems = async (req, res) => {
             // 3. Bulk Insert Batch Items
             const batchItemsValues = chunk.map(item => [batchId, item.instrumentId, item.quantity]);
             await connection.query(
-                'INSERT INTO sterilization_batch_items (batchId, instrumentId, quantity) VALUES ?',
+                'INSERT INTO sterilization_batch_items (batchId, itemId, quantity) VALUES ?',
                 [batchItemsValues]
             );
         }
