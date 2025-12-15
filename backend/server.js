@@ -26,6 +26,7 @@ const logsRoutes = require('./routes/logsRoutes');
 const auditLogsRoutes = require('./routes/auditLogsRoutes');
 
 const app = express();
+app.set('trust proxy', 1); // Required for Vercel/Heroku logic to get real IP
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
