@@ -78,6 +78,9 @@ export const ApiService = {
 
     createTransaction: (tx: Transaction) => ApiService.apiCall('transactions', 'POST', tx),
     validateTransaction: (id: string, validatedBy: string) => ApiService.apiCall(`transactions/${id}/validate`, 'PUT', { validatedBy }),
+    validateTransactionWithVerification: (id: string, data: any) => ApiService.apiCall(`transactions/${id}/validate-with-verification`, 'POST', data),
+
+    auditStockConsistency: () => ApiService.apiCall('audit/stock-consistency', 'POST', {}),
 
     createUser: (user: User) => ApiService.apiCall('users', 'POST', user),
     updateUser: (id: string, user: Partial<User>) => ApiService.apiCall(`users/${id}`, 'PUT', user),

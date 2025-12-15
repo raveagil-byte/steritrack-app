@@ -5,6 +5,7 @@ import { Transaction, TransactionItem, TransactionStatus, TransactionType, Instr
 import { toast } from 'sonner';
 import QRScanner from '../components/QRScanner';
 import QRCodeGenerator from '../components/QRCodeGenerator';
+import { ApiService } from '../services/apiService';
 import { NurseRequest } from './nurse/NurseRequest';
 import { ValidationForm } from './nurse/ValidationForm';
 import { NurseReturn } from './nurse/NurseReturn';
@@ -74,41 +75,32 @@ const NurseView = () => {
         if (!scannedTxId) return;
 
         try {
-            const response = await fetch(`/api/transactions/${scannedTxId}/validate-with-verification`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    validatedBy: currentUser?.name || 'Perawat',
-                    items: verifications
-                        .filter((v: any) => v.type === 'SINGLE')
-                        .map((v: any) => ({
-                            instrumentId: v.id,
-                            expectedCount: v.expectedCount,
-                            receivedCount: v.receivedCount,
-                            brokenCount: v.brokenCount,
-                            missingCount: v.missingCount,
-                            notes: v.notes
-                        })),
-                    setItems: verifications
-                        .filter((v: any) => v.type === 'SET')
-                        .map((v: any) => ({
-                            setId: v.id,
-                            expectedQuantity: v.expectedCount,
-                            receivedQuantity: v.receivedCount,
-                            brokenCount: v.brokenCount,
-                            missingCount: v.missingCount,
-                            notes: v.notes
-                        })),
-                    notes: generalNotes
-                })
-            });
+            const data = {
+                validatedBy: currentUser?.name || 'Perawat',
+                items: verifications
+                    .filter((v: any) => v.type === 'SINGLE')
+                    .map((v: any) => ({
+                        instrumentId: v.id,
+                        expectedCount: v.expectedCount,
+                        receivedCount: v.receivedCount,
+                        brokenCount: v.brokenCount,
+                        missingCount: v.missingCount,
+                        notes: v.notes
+                    })),
+                setItems: verifications
+                    .filter((v: any) => v.type === 'SET')
+                    .map((v: any) => ({
+                        setId: v.id,
+                        expectedQuantity: v.expectedCount,
+                        receivedQuantity: v.receivedCount,
+                        brokenCount: v.brokenCount,
+                        missingCount: v.missingCount,
+                        notes: v.notes
+                    })),
+                notes: generalNotes
+            };
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Validation failed');
-            }
-
-            const result = await response.json();
+            const result: any = await ApiService.validateTransactionWithVerification(scannedTxId, data);
 
             // Show success message with discrepancy info
             if (result.hasDiscrepancy) {
