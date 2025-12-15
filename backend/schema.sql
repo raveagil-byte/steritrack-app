@@ -184,3 +184,22 @@ CREATE TABLE IF NOT EXISTS transaction_packs (
     FOREIGN KEY (transactionId) REFERENCES transactions(id) ON DELETE CASCADE,
     FOREIGN KEY (packId) REFERENCES sterile_packs(id) ON DELETE CASCADE
 );
+
+-- Sterilization Batches (Logs machine usage)
+CREATE TABLE IF NOT EXISTS sterilization_batches (
+    id VARCHAR(50) PRIMARY KEY,
+    timestamp BIGINT NOT NULL,
+    machine VARCHAR(50) NOT NULL,
+    operator VARCHAR(100),
+    status VARCHAR(20) DEFAULT 'SUCCESS',
+    startTime BIGINT,
+    endTime BIGINT
+);
+
+CREATE TABLE IF NOT EXISTS sterilization_batch_items (
+    batchId VARCHAR(50),
+    itemId VARCHAR(50),
+    quantity INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (batchId, itemId),
+    FOREIGN KEY (batchId) REFERENCES sterilization_batches(id) ON DELETE CASCADE
+);
