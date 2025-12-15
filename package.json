@@ -1,6 +1,7 @@
 {
   "name": "steritrack---simple-cssd",
   "private": true,
+  "type": "commonjs",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
