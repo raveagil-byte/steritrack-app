@@ -86,7 +86,38 @@ exports.analyze = async (req, res) => {
         }
     }
 
-    // Priority 3: Fallback to Ollama (Local Only - Fails on Vercel)
+    // Priority 3: Pollinations.ai (Free, No Auth Key Required)
+    try {
+        console.log("Attempting Pollinations.ai (No Auth)...");
+        const POLLINATIONS_URL = "https://text.pollinations.ai/";
+
+        const response = await fetch(POLLINATIONS_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                messages: [
+                    { role: "system", content: context + "\n\nInstruksi: Jawab ringkas dalam Bahasa Indonesia." },
+                    { role: "user", content: query }
+                ],
+                model: "openai", // Pollinations default
+                seed: 42,
+                jsonMode: false
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.text(); // Pollinations usually returns raw text
+            if (data) return res.json({ response: data, source: 'pollinations (free)' });
+        } else {
+            console.warn(`Pollinations Error: ${response.status}`);
+        }
+    } catch (error) {
+        console.error("Pollinations attempt failed:", error.message);
+    }
+
+    // Priority 4: Fallback to Ollama (Local Only - Fails on Vercel)
     try {
         console.log("Attempting Ollama...");
         const prompt = `${context}\n\nPertanyaan Pengguna: "${query}"\n\nInstruksi: Jawab dengan ringkas (Bahasa Indonesia).`;
