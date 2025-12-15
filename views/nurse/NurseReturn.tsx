@@ -3,6 +3,7 @@ import { Package, Send, Plus, Minus, User, FileText, Search, AlertCircle } from 
 import { useAppContext } from '../../context/AppContext';
 import { Instrument } from '../../types';
 import { toast } from 'sonner';
+import { ApiService } from '../../services/apiService';
 
 interface NurseReturnProps {
     unitId: string;
@@ -65,22 +66,19 @@ export const NurseReturn: React.FC<NurseReturnProps> = ({ unitId, onSuccess }) =
                 count: qty
             }));
 
-            const response = await fetch('/api/transactions', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'RETURN_DIRTY',
-                    unitId: unitId,
-                    items: items,
-                    setItems: [],
-                    createdBy: currentUser?.name || 'Perawat',
-                    patientName: patientName,
-                    notes: notes
-                })
+            // Use ApiService used to ensure Auth Token is attached
+            await ApiService.apiCall('transactions', 'POST', {
+                type: 'RETURN_DIRTY',
+                unitId: unitId,
+                items: items,
+                setItems: [],
+                createdBy: currentUser?.name || 'Perawat',
+                // Assuming backend accepts these fields in body or user context
+                patientName: patientName,
+                notes: notes
             });
 
-            if (!response.ok) throw new Error('Gagal membuat transaksi');
-
+            // If success (no error thrown), show toast
             toast.success('Pengembalian alat berhasil dilaporkan. CSSD akan segera mengambil.');
             setSelectedItems({});
             setPatientName('');

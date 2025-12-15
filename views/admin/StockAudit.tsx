@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AlertTriangle, CheckCircle, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
+import { ApiService } from '../../services/apiService';
 
 interface StockIssue {
     SetName: string;
@@ -25,8 +26,7 @@ export const StockAudit = () => {
     const runAudit = async () => {
         setLoading(true);
         try {
-            const response = await fetch('/api/audit/stock-consistency');
-            const data = await response.json();
+            const data: any = await ApiService.auditStockConsistency();
             setResult(data);
 
             if (data.issuesCount === 0) {
