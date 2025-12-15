@@ -5,13 +5,37 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
 export const ApiService = {
     async getRecources<T>(endpoint: string): Promise<T> {
         try {
-            const res = await fetch(`${API_URL}/${endpoint}`);
+            const token = ApiService.getToken();
+            const headers: any = {};
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const res = await fetch(`${API_URL}/${endpoint}`, { headers });
+
+            if (res.status === 401) {
+                // If token expired/invalid, logout (optional: trigger app wide logout)
+                localStorage.removeItem('steritrack_current_user');
+                window.location.href = '/login';
+                throw new Error("Unauthorized");
+            }
+
             if (!res.ok) throw new Error(`Failed to fetch ${endpoint}`);
             return res.json();
         } catch (e) {
             console.error(e);
             return [] as any;
         }
+    },
+
+    // Helper to get token
+    getToken: () => {
+        try {
+            const userStr = localStorage.getItem('steritrack_current_user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                return user.token;
+            }
+        } catch (e) { return null; }
+        return null;
     },
 
     getUnits: () => ApiService.getRecources<Unit[]>('units'),
@@ -22,17 +46,33 @@ export const ApiService = {
     getLogs: () => ApiService.getRecources<LogEntry[]>('logs'),
     getUsers: () => ApiService.getRecources<User[]>('users'),
     getRequests: () => ApiService.getRecources<Request[]>('requests'),
-    getStats: () => fetch(`${API_URL}/analytics`).then(res => res.json()),
+    getStats: () => {
+        const token = ApiService.getToken();
+        return fetch(`${API_URL}/analytics`, {
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        }).then(res => res.json());
+    },
 
     login: (credentials: { username: string, password: string }) => ApiService.apiCall('users/login', 'POST', credentials),
     register: (data: any) => ApiService.apiCall('users/register', 'POST', data),
 
     async apiCall(endpoint: string, method: 'POST' | 'PUT' | 'DELETE', body?: any) {
+        const token = ApiService.getToken();
+        const headers: any = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
         const res = await fetch(`${API_URL}/${endpoint}`, {
             method,
-            headers: { 'Content-Type': 'application/json' },
+            headers,
             body: body ? JSON.stringify(body) : undefined
         });
+
+        if (res.status === 401) {
+            localStorage.removeItem('steritrack_current_user');
+            window.location.href = '/login';
+            throw new Error("Unauthorized");
+        }
+
         return res.json();
     },
 

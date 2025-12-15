@@ -1,45 +1,52 @@
-# Laporan Audit Keamanan dan Performa Aplikasi SteriTrack
+# Security Audit Report for SteriTrack App (Post-Deployment)
 
-## Ringkasan
-Aplikasi SteriTrack telah diaudit untuk potensi kebocoran data (*data leaks*) dan kebocoran memori (*memory leaks*). Secara umum, arsitektur aplikasi (Node.js/Express + React/Vite) dibangun dengan praktik modern yang baik. Namun, ditemukan satu kerentanan keamanan kritis yang perlu segera diperbaiki.
+**Date:** 2025-12-15
+**Status:** ⚠️ **NEEDS IMPROVEMENT** (Critical Vulnerability Found in API)
+
+## 1. Executive Summary
+The application has successfully deployed with basic protections (Helmet, Rate Limiting). However, the **Backend API endpoints are currently "Public"**, meaning anyone with the URL can access data without logging in. While the Frontend hides these pages, the Backend does not enforce the check.
+
+## 2. Security Strengths (Implemented)
+- ✅ **Helmet Security Headers**: Protects against XSS, clickjacking, and sniffing.
+- ✅ **Rate Limiting**: Limits IP requests (100 req/15min) to prevent abuse.
+- ✅ **Database Security**:
+    - Connection uses SSL (AVN requirement).
+    - Passwords are securely hashed using `bcrypt` (auto-upgraded from plain text).
+    - SQL Injection protection via parameterized queries (`mysql2`).
+- ✅ **Environment Variables**: Sensitive credentials (DB host, passwords) are kept out of source code.
+
+## 3. Critical Vulnerabilities (Missing)
+### 🔴 3.1. API Authentication Middleware (Critical)
+- **Issue:** The API routes (e.g., `/api/transactions`, `/api/instruments`) do not verify if the request comes from a logged-in user.
+- **Risk:** An attacker could send a `curl` request to your API and download your entire database or inject fake data without logging in.
+- **Root Cause:** 
+    1. **Frontend (`ApiService.ts`)** does not send the `Authorization: Bearer <token>` header.
+    2. **Backend (`server.js`)** does not check for this header.
+
+### 🔴 3.2. CORS Configuration (Moderate)
+- **Issue:** `cors()` allows all origins (`*`) by default.
+- **Risk:** Other malicious websites could theoretically make requests to your API if a user visits them (CSRF-like behavior, though limited by JSON content type).
+- **Recommendation:** Restrict `origin` to your Vercel frontend domain.
+
+## 4. Recommendations & Roadmap
+
+### Step 1: Secure the API (Priority: High)
+To fix the authentication hole, we must:
+1.  **Update Frontend**: Modify `services/apiService.ts` to attempt reading the JWT token from `localStorage` and attach it to every request header.
+    ```javascript
+    headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('token')}` 
+    }
+    ```
+2.  **Update Backend**: Create a `middleware/authMiddleware.js` that verifies this token and rejects requests if invalid.
+3.  **Apply Middleware**: Protect all `/api/*` routes (except login/register).
+
+### Step 2: Restrict Access
+- Update `server.js` to whitelist only your Vercel domain in CORS settings.
+
+### Step 3: Regular Maintenance
+- Rotate API Keys (Gemini, Database) periodically.
+- Ensure `npm audit` is run to check for dependency vulnerabilities.
 
 ---
-
-## 1. Analisis Keamanan (Data Leak)
-
-### Temuan Kritis (High Severity) - [RESOLVED]
-- **JWT Secret Fallback**: Telah diperbaiki. Aplikasi sekarang menggunakan `process.env.JWT_SECRET` secara eksklusif dan akan gagal start jika tidak ada. File `.env` telah diperbarui dengan secret yang aman.
-
-
-### Temuan Menengah (Medium Severity)
-- **Penyimpanan Token di LocalStorage**: Token JWT disimpan di `localStorage` browser (via `StorageService`).
-  **Risiko**: Jika terdapat kerentanan XSS (Cross-Site Scripting) di aplikasi, penyerang dapat mencuri token ini.
-  **Mitigasi**: Pastikan sanitasi input yang ketat. Untuk keamanan lebih tinggi di masa depan, pertimbangkan menggunakan `HttpOnly Cookies`.
-
-### Praktik Baik (Security Wins)
-- **Password Hashing**: Menggunakan `bcryptjs` untuk menyandikan password. Tidak ada password yang disimpan sebagai *plain text*.
-- **Parameterisasi SQL**: Kode menggunakan `mysql2` dengan *parameterized queries* (tanda tanya `?`), yang melindungi dari SQL Injection.
-- **Helmet**: Middleware `helmet` aktif, memberikan header keamanan HTTP standar.
-- **Rate Limiting**: Terdapat pembatasan jumlah request (100 request/15 menit) untuk mencegah serangan brute-force.
-- **Filtered Responses**: Password user dihapus dari respons API sebelum dikirim ke frontend.
-
----
-
-## 2. Analisis Performa (Memory Leak)
-
-### Frontend (React)
-- **Manajemen State**: Aplikasi menggunakan `@tanstack/react-query` (`useQuery`, `useMutation`).
-  **Status**: **Sangat Baik**. Library ini menangani *caching*, *garbage collection* data lama, dan *deduplication* request secara otomatis. Ini menghilangkan sumber kebocoran memori paling umum di aplikasi React (seperti `useEffect` yang tidak dibersihkan saat fetch data manual).
-- **Event Listeners**: Tidak ditemukan penggunaan event listener global yang berisiko (seperti `window.addEventListener` tanpa `removeEventListener`) dalam komponen utama.
-
-### Backend (Node.js)
-- **Koneksi Database**: Menggunakan `mysql2.createPool`. Koneksi dikelola secara otomatis dan efisien. Koneksi `initPool` di `db.js` ditutup dengan benar (`initPool.end()`).
-- **Global Variables**: Tidak ditemukan variabel global yang menampung data besar (array/object) yang tumbuh tanpa batas seiring waktu.
-
----
-
-## Kesimpulan
-Aplikasi ini **AMAN dari Memory Leak** berkat arsitektur modernnya. Namun, aplikasi **BELUM 100% AMAN dari Data Leak** karena adanya *fallback key* pada autentikasi JWT.
-
-### Langkah Selanjutnya
-Apakah Anda ingin saya memperbaiki kerentanan `JWT_SECRET` sekarang? (Ini akan mengubah kode backend agar mewajibkan file `.env`).
+**Agent Note:** I can implement **Step 1 (Secure the API)** immediately if you approve, as this involves significant code changes to both Frontend and Backend.

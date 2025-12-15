@@ -76,24 +76,29 @@ app.get('/api/debug-db', async (req, res) => {
     res.json(status);
 });
 
+const verifyToken = require('./middleware/authMiddleware');
+
 // Application Routes
-// Note: systemRoutes handles its own paths inside
+// Note: systemRoutes handles its own paths inside (Public Frontend)
 app.use('/', systemRoutes);
 
+// Users has its own mixed internal protection (Login=Public, Others=Private)
 app.use('/api/users', usersRoutes);
-app.use('/api/units', unitsRoutes);
-app.use('/api/instruments', instrumentsRoutes);
-app.use('/api/sets', setsRoutes);
-app.use('/api/audit', require('./routes/auditRoutes'));
-app.use('/api/transactions', transactionsRoutes);
-app.use('/api/requests', require('./routes/requestsRoutes'));
-app.use('/api/sterilization', require('./routes/sterilizationRoutes'));
-app.use('/api/analytics', require('./routes/analyticsRoutes'));
-app.use('/api/logs', logsRoutes);
-app.use('/api/audit-logs', auditLogsRoutes);
-app.use('/api/ai', require('./routes/aiRoutes'));
-app.use('/api/assets', require('./routes/assetsRoutes'));
-app.use('/api/packs', require('./routes/packsRoutes'));
+
+// Protected API Routes (Auth Required)
+app.use('/api/units', verifyToken, unitsRoutes);
+app.use('/api/instruments', verifyToken, instrumentsRoutes);
+app.use('/api/sets', verifyToken, setsRoutes);
+app.use('/api/audit', verifyToken, require('./routes/auditRoutes'));
+app.use('/api/transactions', verifyToken, transactionsRoutes);
+app.use('/api/requests', verifyToken, require('./routes/requestsRoutes'));
+app.use('/api/sterilization', verifyToken, require('./routes/sterilizationRoutes'));
+app.use('/api/analytics', verifyToken, require('./routes/analyticsRoutes'));
+app.use('/api/logs', verifyToken, logsRoutes);
+app.use('/api/audit-logs', verifyToken, auditLogsRoutes);
+app.use('/api/ai', verifyToken, require('./routes/aiRoutes'));
+app.use('/api/assets', verifyToken, require('./routes/assetsRoutes'));
+app.use('/api/packs', verifyToken, require('./routes/packsRoutes'));
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
