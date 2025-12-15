@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS steritrack;
-USE steritrack;
+-- CREATE DATABASE IF NOT EXISTS steritrack;
+-- USE steritrack;
 
 -- Users
 CREATE TABLE IF NOT EXISTS users (
@@ -171,6 +171,7 @@ CREATE TABLE IF NOT EXISTS sterile_pack_items (
     instrumentId VARCHAR(50), -- Or setId if the pack contains a full set
     itemType VARCHAR(20) DEFAULT 'SINGLE',
     quantity INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (packId, instrumentId),
     FOREIGN KEY (packId) REFERENCES sterile_packs(id) ON DELETE CASCADE
 );
 

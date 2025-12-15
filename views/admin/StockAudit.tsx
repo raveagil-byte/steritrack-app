@@ -25,7 +25,7 @@ export const StockAudit = () => {
     const runAudit = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:3000/api/audit/stock-consistency');
+            const response = await fetch('/api/audit/stock-consistency');
             const data = await response.json();
             setResult(data);
 
@@ -64,8 +64,8 @@ export const StockAudit = () => {
 
                 {result && (
                     <div className={`mt-6 p-4 rounded-lg border-2 ${result.issuesCount === 0
-                            ? 'bg-green-50 border-green-200'
-                            : 'bg-amber-50 border-amber-200'
+                        ? 'bg-green-50 border-green-200'
+                        : 'bg-amber-50 border-amber-200'
                         }`}>
                         <div className="flex items-start gap-3">
                             {result.issuesCount === 0 ? (

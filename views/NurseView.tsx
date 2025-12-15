@@ -74,7 +74,7 @@ const NurseView = () => {
         if (!scannedTxId) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/api/transactions/${scannedTxId}/validate-with-verification`, {
+            const response = await fetch(`/api/transactions/${scannedTxId}/validate-with-verification`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
