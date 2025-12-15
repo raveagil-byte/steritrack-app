@@ -12,9 +12,12 @@ export const ApiService = {
             const res = await fetch(`${API_URL}/${endpoint}`, { headers });
 
             if (res.status === 401) {
-                // If token expired/invalid, logout (optional: trigger app wide logout)
+                // If token expired/invalid, logout
                 localStorage.removeItem('steritrack_current_user');
-                window.location.href = '/login';
+                // Only redirect if NOT already on login page to avoid infinite loop
+                if (!window.location.pathname.includes('/login')) {
+                    window.location.href = '/login';
+                }
                 throw new Error("Unauthorized");
             }
 
@@ -69,7 +72,9 @@ export const ApiService = {
 
         if (res.status === 401) {
             localStorage.removeItem('steritrack_current_user');
-            window.location.href = '/login';
+            if (!window.location.pathname.includes('/login')) {
+                window.location.href = '/login';
+            }
             throw new Error("Unauthorized");
         }
 
