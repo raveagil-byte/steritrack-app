@@ -8,6 +8,8 @@ const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemi
 const OLLAMA_API_URL = 'http://127.0.0.1:11434/api/generate';
 const OLLAMA_MODEL = 'gemma2:2b';
 
+const HF_API_KEY = process.env.HF_API_KEY; // Hugging Face Token
+
 exports.analyze = async (req, res) => {
     const { query, stockSummary, recentLogs } = req.body;
 
@@ -26,8 +28,8 @@ exports.analyze = async (req, res) => {
     ${recentLogs || 'Data tidak tersedia'}
     `;
 
-    // 1. Try Gemini
-    const isValidGeminiKey = GEMINI_API_KEY && GEMINI_API_KEY !== 'PLACEHOLDER_API_KEY' && GEMINI_API_KEY.length > 20;
+    // Priority 1: Gemini (Google)
+    const isValidGeminiKey = GEMINI_API_KEY && GEMINI_API_KEY.length > 20;
 
     if (isValidGeminiKey) {
         try {
@@ -42,22 +44,49 @@ exports.analyze = async (req, res) => {
                 })
             });
 
-            if (!response.ok) {
-                console.warn(`Gemini API returned ${response.status}: ${response.statusText}`);
-                // Proceed to fallback
-            } else {
+            if (response.ok) {
                 const data = await response.json();
                 const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (text) {
-                    return res.json({ response: text, source: 'gemini' });
-                }
+                if (text) return res.json({ response: text, source: 'gemini' });
             }
         } catch (error) {
             console.error("Gemini attempt failed:", error.message);
         }
     }
 
-    // 2. Fallback to Ollama
+    // Priority 2: Hugging Face (Open Source Models - Mistral/Llama)
+    if (HF_API_KEY) {
+        try {
+            console.log("Attempting Hugging Face...");
+            // Using Mistral-7B-Instruct-v0.2 as a good open source default
+            const HF_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
+
+            const response = await fetch(HF_URL, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${HF_API_KEY}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    inputs: `[INST] ${context}\n\n${query} [/INST]`,
+                    parameters: { max_new_tokens: 500, return_full_text: false }
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                // HF returns array of objects with generated_text
+                const text = data[0]?.generated_text;
+                if (text) return res.json({ response: text, source: 'huggingface' });
+            } else {
+                console.warn(`HF API Error: ${response.status} ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error("Hugging Face attempt failed:", error.message);
+        }
+    }
+
+    // Priority 3: Fallback to Ollama (Local Only - Fails on Vercel)
     try {
         console.log("Attempting Ollama...");
         const prompt = `${context}\n\nPertanyaan Pengguna: "${query}"\n\nInstruksi: Jawab dengan ringkas (Bahasa Indonesia).`;
@@ -73,26 +102,21 @@ exports.analyze = async (req, res) => {
             })
         });
 
-        if (!response.ok) {
-            throw new Error(`Ollama API Error: ${response.statusText}`);
-        }
+        if (!response.ok) throw new Error(`Ollama API Error: ${response.statusText}`);
 
         const data = await response.json();
         return res.json({ response: data.response, source: 'ollama' });
 
     } catch (error) {
-        console.error("AI Service Error:", error);
+        console.error("AI Service Error:", error.message);
 
-        let msg = "Maaf, saya tidak dapat terhubung ke server AI.";
-        if (isValidGeminiKey) {
-            msg = "Maaf, terjadi kesalahan pada layanan AI (Gemini & Ollama tidak merespons).";
+        let msg = "Maaf, layanan AI tidak tersedia saat ini.";
+        if (!isValidGeminiKey && !HF_API_KEY) {
+            msg = "Sistem AI belum dikonfigurasi. Harap tambahkan GEMINI_API_KEY atau HF_API_KEY (Hugging Face) di Vercel Environment Variables.";
         } else {
-            msg = "Maaf, Ollama tidak dapat dihubungi dan API Key Gemini tidak dikonfigurasi.";
+            msg = "Gagal terhubung ke semua penyedia AI (Gemini/HuggingFace/Ollama).";
         }
 
-        return res.status(503).json({
-            error: msg,
-            details: error.message
-        });
+        return res.status(503).json({ error: msg, details: error.message });
     }
 };
