@@ -9,6 +9,7 @@ import { ApiService } from '../services/apiService';
 import { NurseRequest } from './nurse/NurseRequest';
 import { ValidationForm } from './nurse/ValidationForm';
 import { NurseReturn } from './nurse/NurseReturn';
+import { NurseUsage } from './nurse/NurseUsage';
 
 const BTN_PRIMARY_CLASSES = "bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2";
 
@@ -125,7 +126,7 @@ const NurseView = () => {
         }
     };
 
-    const [activeTab, setActiveTab] = useState<'VALIDATE' | 'REQUEST' | 'INVENTORY' | 'RETURN'>('VALIDATE');
+    const [activeTab, setActiveTab] = useState<'VALIDATE' | 'REQUEST' | 'INVENTORY' | 'RETURN' | 'USAGE'>('USAGE');
 
     const [showUnitQR, setShowUnitQR] = useState(false);
 
@@ -201,6 +202,12 @@ const NurseView = () => {
                         Terima
                     </button>
                     <button
+                        onClick={() => setActiveTab('USAGE')}
+                        className={`px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all ${activeTab === 'USAGE' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-800'}`}
+                    >
+                        Pakai / Usage
+                    </button>
+                    <button
                         disabled={!selectedUnitId}
                         onClick={() => setActiveTab('REQUEST')}
                         className={`px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all ${activeTab === 'REQUEST' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-800'} disabled:opacity-50`}
@@ -267,6 +274,8 @@ const NurseView = () => {
                         </div>
                     </div>
                 </div>
+            ) : activeTab === 'USAGE' ? (
+                <NurseUsage unitId={selectedUnitId} />
             ) : activeTab === 'REQUEST' ? (
                 <NurseRequest unitId={selectedUnitId} />
             ) : activeTab === 'RETURN' ? (

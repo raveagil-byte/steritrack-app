@@ -129,5 +129,6 @@ export const ApiService = {
     getPacks: () => ApiService.getRecources<SterilePack[]>('packs'),
     getPack: (id: string) => ApiService.getRecources<SterilePack>(`packs/${id}`),
     createPack: (pack: { name: string, type: string, packedBy: string, items: any[] }) => ApiService.apiCall('packs', 'POST', pack),
-    sterilizePack: (id: string) => ApiService.apiCall(`packs/${id}/sterilize`, 'POST')
+    sterilizePack: (id: string) => ApiService.apiCall(`packs/${id}/sterilize`, 'POST'),
+    logUsage: (usage: any) => ApiService.apiCall('usage', 'POST', usage)
 };

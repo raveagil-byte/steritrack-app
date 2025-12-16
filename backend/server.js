@@ -101,6 +101,7 @@ app.use('/api/audit-logs', verifyToken, auditLogsRoutes);
 app.use('/api/ai', verifyToken, require('./routes/aiRoutes'));
 app.use('/api/assets', verifyToken, require('./routes/assetsRoutes'));
 app.use('/api/packs', verifyToken, require('./routes/packsRoutes'));
+app.use('/api/usage', verifyToken, require('./routes/usageRoutes'));
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
