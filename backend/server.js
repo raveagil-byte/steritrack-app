@@ -24,6 +24,7 @@ const setsRoutes = require('./routes/setsRoutes');
 const transactionsRoutes = require('./routes/transactionsRoutes');
 const logsRoutes = require('./routes/logsRoutes');
 const auditLogsRoutes = require('./routes/auditLogsRoutes');
+const db = require('./db');
 
 const app = express();
 app.set('trust proxy', 1); // Required for Vercel/Heroku logic to get real IP
@@ -124,6 +125,16 @@ process.on('unhandledRejection', (reason, promise) => {
 if (require.main === module) {
     app.listen(PORT, () => {
         console.log(`Backend server running on http://localhost:${PORT}`);
+
+        // Keep-Alive Mechanism for Aiven (pings every 4 minutes)
+        setInterval(async () => {
+            try {
+                await db.query('SELECT 1');
+                // console.log('Keep-alive ping sent.');
+            } catch (err) {
+                console.error('Keep-alive ping failed:', err.message);
+            }
+        }, 4 * 60 * 1000);
     });
 }
 

@@ -1,236 +1,246 @@
-=== ANALISA ISI SET DARI SHEET: TIDAK LENGKAP ===
-[Row 10] [ColA:YES] [Qty:undefined] DRESSING SET
+=== ANALISA ISI SET DARI SHEET: TIDAK LENGKAP dan ini adalah resep setingan instrumen ===
+[Row 10] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 11] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 12] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 13] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 14] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 15] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 16] [ColA:NO] [Qty:undefined]   IV LINE SET
+===batas setingan instrumen===
+[Row 16] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 17] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 18] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 19] [ColA:NO] [Qty:1]   PINSET
-[Row 20] [ColA:NO] [Qty:undefined]   CVP SET
+===batas setingan instrumen===
+[Row 20] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 21] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 22] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 23] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 24] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 25] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 26] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 27] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+===batas setingan instrumen===
+[Row 27] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 28] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 29] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 30] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 31] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 32] [ColA:NO] [Qty:undefined]   KOM SUCTION
+===batas setingan instrumen===
+[Row 32] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 33] [ColA:NO] [Qty:1]   KOM
 [Row 34] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 35] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+===batas setingan instrumen===
+[Row 35] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 36] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 37] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 38] [ColA:NO] [Qty:1]   PINSET
 [Row 39] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 40] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 41] [ColA:NO] [Qty:undefined]   CPAP
-[Row 42] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 43] [ColA:NO] [Qty:undefined]   HFNC
-[Row 44] [ColA:NO] [Qty:undefined]   HFO
-[Row 45] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 46] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 47] [ColA:NO] [Qty:undefined]   WIRE
-[Row 48] [ColA:NO] [Qty:undefined]   BAGGING
+===batas setingan instrumen===
+[Row 40] [ColA:NO] [Qty:1]   BOUGIE
+[Row 41] [ColA:NO] [Qty:1]   CPAP
+[Row 42] [ColA:NO] [Qty:1]   FLOW SENSOR
+[Row 43] [ColA:NO] [Qty:1]   HFNC
+[Row 44] [ColA:NO] [Qty:1]   HFO
+[Row 45] [ColA:NO] [Qty:1]   NEOFLOW
+[Row 46] [ColA:NO] [Qty:1]   VENTILATOR
+[Row 47] [ColA:NO] [Qty:1]   WIRE
+[Row 48] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 49] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 50] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 51] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 52] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 53] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 54] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 55] [ColA:NO] [Qty:undefined]   BAK SPUIT
+===batas setingan instrumen===
+[Row 55] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 56] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 57] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 58] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 59] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 60] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 61] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 62] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 63] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 64] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 65] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 66] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 67] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 68] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 69] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 70] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 71] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 72] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 73] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 74] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+===batas setingan instrumen===
+[Row 58] [ColA:NO] [Qty:1]   BENGKOK
+[Row 59] [ColA:NO] [Qty:1]   CORONG OTOSCOPE
+[Row 60] [ColA:NO] [Qty:1]   GELAS UKUR
+[Row 61] [ColA:NO] [Qty:1]   GUEDEL
+[Row 62] [ColA:NO] [Qty:1]   GUNTING PERBAN
+[Row 63] [ColA:NO] [Qty:1]   HEAD STRAP
+[Row 64] [ColA:NO] [Qty:1]   KLEM SATUAN
+[Row 65] [ColA:NO] [Qty:1]   KOM OBAT
+[Row 66] [ColA:NO] [Qty:1]   KONEKTOR
+[Row 67] [ColA:NO] [Qty:1]   LARYNGOSCOPE BLADE
+[Row 68] [ColA:NO] [Qty:1]   LARYNGOSCOPE HANDLE
+[Row 69] [ColA:NO] [Qty:1]   MANDRIN
+[Row 70] [ColA:NO] [Qty:1]   RESERVOIR BAG
+[Row 71] [ColA:NO] [Qty:1]   RESERVOIR HIJAU
+[Row 72] [ColA:NO] [Qty:1]   SELANG SUCTION
+[Row 73] [ColA:NO] [Qty:1]   SUNGKUP
+===batas setingan instrumen===
+[Row 74] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 75] [ColA:NO] [Qty:1]   TABUNG
 [Row 76] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 78] [ColA:YES] [Qty:undefined] DRESSING SET
+===batas setingan instrumen===
+[Row 78] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 79] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 80] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 81] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 82] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 83] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 84] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 84] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 85] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 86] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 87] [ColA:NO] [Qty:1]   PINSET
-[Row 88] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 88] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 89] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 90] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 91] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 92] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 93] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 94] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 95] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 95] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 96] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 97] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 98] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 99] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 100] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 100] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 101] [ColA:NO] [Qty:1]   KOM
 [Row 102] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 103] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 103] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 104] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 105] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 106] [ColA:NO] [Qty:1]   PINSET
 [Row 107] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 108] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 109] [ColA:NO] [Qty:undefined]   CPAP
-[Row 110] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 111] [ColA:NO] [Qty:undefined]   HFNC
-[Row 112] [ColA:NO] [Qty:undefined]   HFO
-[Row 113] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 114] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 115] [ColA:NO] [Qty:undefined]   WIRE
-[Row 116] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 108] [ColA:NO] [Qty:1]   BOUGIE
+[Row 109] [ColA:NO] [Qty:1]   CPAP
+[Row 110] [ColA:NO] [Qty:1]   FLOW SENSOR
+[Row 111] [ColA:NO] [Qty:1]   HFNC
+[Row 112] [ColA:NO] [Qty:1]   HFO
+[Row 113] [ColA:NO] [Qty:1]   NEOFLOW
+[Row 114] [ColA:NO] [Qty:1]   VENTILATOR
+[Row 115] [ColA:NO] [Qty:1]   WIRE
+[Row 116] [ColA:NO] [Qty:1]   BAGGING
 [Row 117] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 118] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 119] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 120] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 121] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 122] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 123] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 123] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 124] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 125] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 126] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 127] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 128] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 129] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 130] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 131] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 132] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 133] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 134] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 135] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 136] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 137] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 138] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 139] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 140] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 141] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 142] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 126] [ColA:NO] [Qty:1]   BENGKOK
+[Row 127] [ColA:NO] [Qty:1]   CORONG OTOSCOPE
+[Row 128] [ColA:NO] [Qty:1]   GELAS UKUR
+[Row 129] [ColA:NO] [Qty:1]   GUEDEL
+[Row 130] [ColA:NO] [Qty:1]   GUNTING PERBAN
+[Row 131] [ColA:NO] [Qty:1]   HEAD STRAP
+[Row 132] [ColA:NO] [Qty:1]   KLEM SATUAN
+[Row 133] [ColA:NO] [Qty:1]   KOM OBAT
+[Row 134] [ColA:NO] [Qty:1]   KONEKTOR
+[Row 135] [ColA:NO] [Qty:1]   LARYNGOSCOPE BLADE
+[Row 136] [ColA:NO] [Qty:1]   LARYNGOSCOPE HANDLE
+[Row 137] [ColA:NO] [Qty:1]   MANDRIN
+[Row 138] [ColA:NO] [Qty:1]   RESERVOIR BAG
+[Row 139] [ColA:NO] [Qty:1]   RESERVOIR HIJAU
+[Row 140] [ColA:NO] [Qty:1]   SELANG SUCTION
+[Row 141] [ColA:NO] [Qty:1]   SUNGKUP
+[Row 142] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 143] [ColA:NO] [Qty:1]   TABUNG
 [Row 144] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 146] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 146] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 147] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 148] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 149] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 150] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 151] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 152] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 152] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 153] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 154] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 155] [ColA:NO] [Qty:1]   PINSET
-[Row 156] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 156] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 157] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 158] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 159] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 160] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 161] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 162] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 163] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 163] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 164] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 165] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 166] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 167] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 168] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 168] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 169] [ColA:NO] [Qty:1]   KOM
 [Row 170] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 171] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 171] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 172] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 173] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 174] [ColA:NO] [Qty:1]   PINSET
 [Row 175] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 176] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 177] [ColA:NO] [Qty:undefined]   CPAP
-[Row 178] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 179] [ColA:NO] [Qty:undefined]   HFNC
-[Row 180] [ColA:NO] [Qty:undefined]   HFO
-[Row 181] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 182] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 183] [ColA:NO] [Qty:undefined]   WIRE
-[Row 184] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 176] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 177] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 178] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 179] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 180] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 181] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 182] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 183] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 184] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 185] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 186] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 187] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 188] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 189] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 190] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 191] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 191] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 192] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 193] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 194] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 195] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 196] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 197] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 198] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 199] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 200] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 201] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 202] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 203] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 204] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 205] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 206] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 207] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 208] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 209] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 210] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 194] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 195] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 196] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 197] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 198] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 199] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 200] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 201] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 202] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 203] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 204] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 205] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 206] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 207] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 208] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 209] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 210] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 211] [ColA:NO] [Qty:1]   TABUNG
 [Row 212] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 214] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 214] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 215] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 216] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 217] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 218] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 219] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 220] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 220] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 221] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 222] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 223] [ColA:NO] [Qty:1]   PINSET
-[Row 224] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 224] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 225] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 226] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 227] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 228] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 229] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 230] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 231] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 231] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 232] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 233] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 234] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 235] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 236] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 236] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 237] [ColA:NO] [Qty:1]   KOM
 [Row 238] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 239] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 239] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 240] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 241] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 242] [ColA:NO] [Qty:1]   PINSET
 [Row 243] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 244] [ColA:NO] [Qty:undefined]   DRAIN SET
+[Row 244] [ColA:NO] [Qty:1 Sets]   DRAIN SET
 [Row 245] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 246] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 247] [ColA:NO] [Qty:1]   HANDLE SCALPEL
@@ -239,75 +249,75 @@
 [Row 250] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 251] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 252] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 253] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 254] [ColA:NO] [Qty:undefined]   CPAP
-[Row 255] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 256] [ColA:NO] [Qty:undefined]   HFNC
-[Row 257] [ColA:NO] [Qty:undefined]   HFO
-[Row 258] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 259] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 260] [ColA:NO] [Qty:undefined]   WIRE
-[Row 261] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 253] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 254] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 255] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 256] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 257] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 258] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 259] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 260] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 261] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 262] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 263] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 264] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 265] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 266] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 267] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 268] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 268] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 269] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 270] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 271] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 272] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 273] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 274] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 275] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 276] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 277] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 278] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 279] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 280] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 281] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 282] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 283] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 284] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 285] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 286] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 287] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 271] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 272] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 273] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 274] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 275] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 276] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 277] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 278] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 279] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 280] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 281] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 282] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 283] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 284] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 285] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 286] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 287] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 288] [ColA:NO] [Qty:1]   TABUNG
 [Row 289] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 291] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 291] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 292] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 293] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 294] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 295] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 296] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 297] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 297] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 298] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 299] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 300] [ColA:NO] [Qty:1]   PINSET
-[Row 301] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 301] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 302] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 303] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 304] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 305] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 306] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 307] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 308] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 308] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 309] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 310] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 311] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 312] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 313] [ColA:NO] [Qty:undefined]   KOM SUCTION SET
+[Row 313] [ColA:NO] [Qty:1 Sets]   KOM SUCTION SET
 [Row 314] [ColA:NO] [Qty:1]   BENGKOK BESAR
 [Row 315] [ColA:NO] [Qty:2]   KOM
 [Row 316] [ColA:NO] [Qty:2]   TUTUP KOM
-[Row 317] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 317] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 318] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 319] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 320] [ColA:NO] [Qty:1]   PINSET
 [Row 321] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 322] [ColA:NO] [Qty:undefined]   DRAIN SET
+[Row 322] [ColA:NO] [Qty:1 Sets]   DRAIN SET
 [Row 323] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 324] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 325] [ColA:NO] [Qty:1]   HANDLE SCALPEL
@@ -316,74 +326,74 @@
 [Row 328] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 329] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 330] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 331] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 332] [ColA:NO] [Qty:undefined]   CPAP
-[Row 333] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 334] [ColA:NO] [Qty:undefined]   HFNC
-[Row 335] [ColA:NO] [Qty:undefined]   HFO
-[Row 336] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 337] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 338] [ColA:NO] [Qty:undefined]   WIRE
-[Row 339] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 331] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 332] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 333] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 334] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 335] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 336] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 337] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 338] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 339] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 340] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 341] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 342] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 343] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 344] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 345] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 346] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 346] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 347] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 348] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 349] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 350] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 351] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 352] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 353] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 354] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 355] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 356] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 357] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 358] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 359] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 360] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 361] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 362] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 363] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 364] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 365] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 349] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 350] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 351] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 352] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 353] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 354] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 355] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 356] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 357] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 358] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 359] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 360] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 361] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 362] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 363] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 364] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 365] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 366] [ColA:NO] [Qty:1]   TABUNG
 [Row 367] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 369] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 369] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 370] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 371] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 372] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 373] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 374] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 375] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 375] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 376] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 377] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 378] [ColA:NO] [Qty:1]   PINSET
-[Row 379] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 379] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 380] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 381] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 382] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 383] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 384] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 385] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 386] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 386] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 387] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 388] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 389] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 390] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 391] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 391] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 392] [ColA:NO] [Qty:1]   KOM
 [Row 393] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 394] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 394] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 395] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 396] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 397] [ColA:NO] [Qty:1]   PINSET
 [Row 398] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 399] [ColA:NO] [Qty:undefined]   DRAIN SET
+[Row 399] [ColA:NO] [Qty:1 Sets]   DRAIN SET
 [Row 400] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 401] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 402] [ColA:NO] [Qty:1]   HANDLE SCALPEL
@@ -392,77 +402,77 @@
 [Row 405] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 406] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 407] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 408] [ColA:NO] [Qty:undefined]   GUNTING KULTUR
-[Row 409] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 410] [ColA:NO] [Qty:undefined]   CPAP
-[Row 411] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 412] [ColA:NO] [Qty:undefined]   HFNC
-[Row 413] [ColA:NO] [Qty:undefined]   HFO
-[Row 414] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 415] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 416] [ColA:NO] [Qty:undefined]   WIRE
-[Row 417] [ColA:NO] [Qty:undefined]   KABEL PACEMAKER
-[Row 418] [ColA:NO] [Qty:undefined]   TEE
-[Row 419] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 408] [ColA:NO] [Qty:1 Sets]   GUNTING KULTUR
+[Row 409] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 410] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 411] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 412] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 413] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 414] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 415] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 416] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 417] [ColA:NO] [Qty:1 Sets]   KABEL PACEMAKER
+[Row 418] [ColA:NO] [Qty:1 Sets]   TEE
+[Row 419] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 420] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 421] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 422] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 423] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 424] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 425] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 426] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 426] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 427] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 428] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 429] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 430] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 431] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 432] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 433] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 434] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 435] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 436] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 437] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 438] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 439] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 440] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 441] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 442] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 443] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 444] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 445] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 429] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 430] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 431] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 432] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 433] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 434] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 435] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 436] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 437] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 438] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 439] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 440] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 441] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 442] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 443] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 444] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 445] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 446] [ColA:NO] [Qty:1]   TABUNG
 [Row 447] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 449] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 449] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 450] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 451] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 452] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 453] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 454] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 455] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 455] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 456] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 457] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 458] [ColA:NO] [Qty:1]   PINSET
-[Row 459] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 459] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 460] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 461] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 462] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 463] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 464] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 465] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 466] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 466] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 467] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 468] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 469] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 470] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 471] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 471] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 472] [ColA:NO] [Qty:1]   KOM
 [Row 473] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 474] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 474] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 475] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 476] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 477] [ColA:NO] [Qty:1]   PINSET
 [Row 478] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 479] [ColA:NO] [Qty:undefined]   DRAIN SET
+[Row 479] [ColA:NO] [Qty:1 Sets]   DRAIN SET
 [Row 480] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 481] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 482] [ColA:NO] [Qty:1]   HANDLE SCALPEL
@@ -471,209 +481,209 @@
 [Row 485] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 486] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 487] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 488] [ColA:NO] [Qty:undefined]   GUNTING KULTUR
-[Row 489] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 490] [ColA:NO] [Qty:undefined]   CPAP
-[Row 491] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 492] [ColA:NO] [Qty:undefined]   HFNC
-[Row 493] [ColA:NO] [Qty:undefined]   HFO
-[Row 494] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 495] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 496] [ColA:NO] [Qty:undefined]   WIRE
-[Row 497] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 488] [ColA:NO] [Qty:1 Sets]   GUNTING KULTUR
+[Row 489] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 490] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 491] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 492] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 493] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 494] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 495] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 496] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 497] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 498] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 499] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 500] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 501] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 502] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 503] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 504] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 504] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 505] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 506] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 507] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 508] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 509] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 510] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 511] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 512] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 513] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 514] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 515] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 516] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 517] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 518] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 519] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 520] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 521] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 522] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 523] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 507] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 508] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 509] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 510] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 511] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 512] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 513] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 514] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 515] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 516] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 517] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 518] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 519] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 520] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 521] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 522] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 523] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 524] [ColA:NO] [Qty:1]   TABUNG
 [Row 525] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 527] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 527] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 528] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 529] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 530] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 531] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 532] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 533] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 533] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 534] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 535] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 536] [ColA:NO] [Qty:1]   PINSET
-[Row 537] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 537] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 538] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 539] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 540] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 541] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 542] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 543] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 544] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 544] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 545] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 546] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 547] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 548] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 549] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 549] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 550] [ColA:NO] [Qty:1]   KOM
 [Row 551] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 552] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 552] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 553] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 554] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 555] [ColA:NO] [Qty:1]   PINSET
 [Row 556] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 557] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 558] [ColA:NO] [Qty:undefined]   CPAP
-[Row 559] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 560] [ColA:NO] [Qty:undefined]   HFNC
-[Row 561] [ColA:NO] [Qty:undefined]   HFO
-[Row 562] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 563] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 564] [ColA:NO] [Qty:undefined]   WIRE
-[Row 565] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 557] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 558] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 559] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 560] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 561] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 562] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 563] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 564] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 565] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 566] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 567] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 568] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 569] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 570] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 571] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 572] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 572] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 573] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 574] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 575] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 576] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 577] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 578] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 579] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 580] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 581] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 582] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 583] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 584] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 585] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 586] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 587] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 588] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 589] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 590] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 591] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 575] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 576] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 577] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 578] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 579] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 580] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 581] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 582] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 583] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 584] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 585] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 586] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 587] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 588] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 589] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 590] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 591] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 592] [ColA:NO] [Qty:1]   TABUNG
 [Row 593] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 595] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 595] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 596] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 597] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 598] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 599] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 600] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 601] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 601] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 602] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 603] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 604] [ColA:NO] [Qty:1]   PINSET
-[Row 605] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 605] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 606] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 607] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 608] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 609] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 610] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 611] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 612] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 612] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 613] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 614] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 615] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 616] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 617] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 617] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 618] [ColA:NO] [Qty:1]   KOM
 [Row 619] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 620] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 620] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 621] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 622] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 623] [ColA:NO] [Qty:1]   PINSET
 [Row 624] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 625] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 626] [ColA:NO] [Qty:undefined]   CPAP
-[Row 627] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 628] [ColA:NO] [Qty:undefined]   HFNC
-[Row 629] [ColA:NO] [Qty:undefined]   HFO
-[Row 630] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 631] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 632] [ColA:NO] [Qty:undefined]   WIRE
-[Row 633] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 625] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 626] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 627] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 628] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 629] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 630] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 631] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 632] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 633] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 634] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 635] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 636] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 637] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 638] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 639] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 640] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 640] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 641] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 642] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 643] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 644] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 645] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 646] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 647] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 648] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 649] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 650] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 651] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 652] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 653] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 654] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 655] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 656] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 657] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 658] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 659] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 643] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 644] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 645] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 646] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 647] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 648] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 649] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 650] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 651] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 652] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 653] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 654] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 655] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 656] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 657] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 658] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 659] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 660] [ColA:NO] [Qty:1]   TABUNG
 [Row 661] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 663] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 663] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 664] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 665] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 666] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 667] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 668] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 669] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 669] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 670] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 671] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 672] [ColA:NO] [Qty:1]   PINSET
-[Row 673] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 673] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 674] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 675] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 676] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 677] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 678] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 679] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 680] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 680] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 681] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 682] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 683] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 684] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 685] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 685] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 686] [ColA:NO] [Qty:1]   KOM
 [Row 687] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 688] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 688] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 689] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 690] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 691] [ColA:NO] [Qty:1]   PINSET
 [Row 692] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 693] [ColA:NO] [Qty:undefined]   VC SET
+[Row 693] [ColA:NO] [Qty:1 Sets]   VC SET
 [Row 694] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 695] [ColA:NO] [Qty:4]   DOEK KLEM
 [Row 696] [ColA:NO] [Qty:2]   FINGER RETRACTOR
@@ -690,79 +700,79 @@
 [Row 707] [ColA:NO] [Qty:1]   PEAN LURUS
 [Row 708] [ColA:NO] [Qty:4]   PINSET DEBAKEY
 [Row 709] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 710] [ColA:NO] [Qty:undefined]   GUNTING KULTUR
-[Row 711] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 712] [ColA:NO] [Qty:undefined]   CPAP
-[Row 713] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 714] [ColA:NO] [Qty:undefined]   HFNC
-[Row 715] [ColA:NO] [Qty:undefined]   HFO
-[Row 716] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 717] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 718] [ColA:NO] [Qty:undefined]   WIRE
-[Row 719] [ColA:NO] [Qty:undefined]   ENDOSKOPI
-[Row 720] [ColA:NO] [Qty:undefined]   ORAL HYGIENE PED
+[Row 710] [ColA:NO] [Qty:1 Sets]   GUNTING KULTUR
+[Row 711] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 712] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 713] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 714] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 715] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 716] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 717] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 718] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 719] [ColA:NO] [Qty:1 Sets]   ENDOSKOPI
+[Row 720] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE PED
 [Row 721] [ColA:NO] [Qty:1]   BENGKOK KECIL
 [Row 722] [ColA:NO] [Qty:1]   KOM KECIL
-[Row 723] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 723] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 724] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 725] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 726] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 727] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 728] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 729] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 730] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 730] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 731] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 732] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 733] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 734] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 735] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 736] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 737] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 738] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 739] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 740] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 741] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 742] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 743] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 744] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 745] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 746] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 747] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 748] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 749] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 733] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 734] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 735] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 736] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 737] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 738] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 739] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 740] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 741] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 742] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 743] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 744] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 745] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 746] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 747] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 748] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 749] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 750] [ColA:NO] [Qty:1]   TABUNG
 [Row 751] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 753] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 753] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 754] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 755] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 756] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 757] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 758] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 759] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 759] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 760] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 761] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 762] [ColA:NO] [Qty:1]   PINSET
-[Row 763] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 763] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 764] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 765] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 766] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 767] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 768] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 769] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 770] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 770] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 771] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 772] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 773] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 774] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 775] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 775] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 776] [ColA:NO] [Qty:1]   KOM
 [Row 777] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 778] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 778] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 779] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 780] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 781] [ColA:NO] [Qty:1]   PINSET
 [Row 782] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 783] [ColA:NO] [Qty:undefined]   VC SET
+[Row 783] [ColA:NO] [Qty:1 Sets]   VC SET
 [Row 784] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 785] [ColA:NO] [Qty:4]   DOEK KLEM
 [Row 786] [ColA:NO] [Qty:2]   FINGER RETRACTOR
@@ -779,109 +789,109 @@
 [Row 797] [ColA:NO] [Qty:1]   PEAN LURUS
 [Row 798] [ColA:NO] [Qty:4]   PINSET DEBAKEY
 [Row 799] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 800] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 801] [ColA:NO] [Qty:undefined]   CPAP
-[Row 802] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 803] [ColA:NO] [Qty:undefined]   HFNC
-[Row 804] [ColA:NO] [Qty:undefined]   HFO
-[Row 805] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 806] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 807] [ColA:NO] [Qty:undefined]   WIRE
-[Row 808] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 800] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 801] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 802] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 803] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 804] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 805] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 806] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 807] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 808] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 809] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 810] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 811] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 812] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 813] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 814] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 815] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 815] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 816] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 817] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 818] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 819] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 820] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 821] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 822] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 823] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 824] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 825] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 826] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 827] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 828] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 829] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 830] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 831] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 832] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 833] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 834] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 818] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 819] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 820] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 821] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 822] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 823] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 824] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 825] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 826] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 827] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 828] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 829] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 830] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 831] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 832] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 833] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 834] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 835] [ColA:NO] [Qty:1]   TABUNG
 [Row 836] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 838] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 838] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 839] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 840] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 841] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 842] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 843] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 844] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 844] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 845] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 846] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 847] [ColA:NO] [Qty:1]   PINSET
-[Row 848] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 848] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 849] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 850] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 851] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 852] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 853] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 854] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 855] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 855] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 856] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 857] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 858] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 859] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 860] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 860] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 861] [ColA:NO] [Qty:1]   KOM
 [Row 862] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 863] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 863] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 864] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 865] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 866] [ColA:NO] [Qty:1]   PINSET
 [Row 867] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 868] [ColA:NO] [Qty:undefined]   GUNTING KULTUR
-[Row 869] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 870] [ColA:NO] [Qty:undefined]   CPAP
-[Row 871] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 872] [ColA:NO] [Qty:undefined]   HFNC
-[Row 873] [ColA:NO] [Qty:undefined]   HFO
-[Row 874] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 875] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 876] [ColA:NO] [Qty:undefined]   WIRE
-[Row 877] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 868] [ColA:NO] [Qty:1 Sets]   GUNTING KULTUR
+[Row 869] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 870] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 871] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 872] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 873] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 874] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 875] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 876] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 877] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 878] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 879] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 880] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 881] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 882] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 883] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 884] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 884] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 885] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 886] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 887] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 888] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 889] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 890] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 891] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 892] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 893] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 894] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 895] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 896] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 897] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 898] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 899] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 900] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 901] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 902] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 903] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 887] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 888] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 889] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 890] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 891] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 892] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 893] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 894] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 895] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 896] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 897] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 898] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 899] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 900] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 901] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 902] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 903] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 904] [ColA:NO] [Qty:1]   TABUNG
 [Row 905] [ColA:NO] [Qty:1]   TUTUP TABUNG
 [Row 907] [ColA:YES] [Qty:1] DRESSING SET
@@ -890,11 +900,11 @@
 [Row 910] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 911] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 912] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 913] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 913] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 914] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 915] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 916] [ColA:NO] [Qty:1]   PINSET
-[Row 917] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 917] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 918] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 919] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 920] [ColA:NO] [Qty:2]   KOM SEDANG
@@ -906,22 +916,22 @@
 [Row 926] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 927] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 928] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 929] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 929] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 930] [ColA:NO] [Qty:1]   KOM
 [Row 931] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 932] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 932] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 933] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 934] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 935] [ColA:NO] [Qty:1]   PINSET
 [Row 936] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 937] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 938] [ColA:NO] [Qty:undefined]   CPAP
-[Row 939] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 940] [ColA:NO] [Qty:undefined]   HFNC
-[Row 941] [ColA:NO] [Qty:undefined]   HFO
-[Row 942] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 943] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 944] [ColA:NO] [Qty:undefined]   WIRE
+[Row 937] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 938] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 939] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 940] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 941] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 942] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 943] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 944] [ColA:NO] [Qty:1 Sets]   WIRE
 [Row 945] [ColA:NO] [Qty:1]   BAGGING
 [Row 946] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 947] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
@@ -932,23 +942,23 @@
 [Row 952] [ColA:NO] [Qty:1]   BAK SPUIT
 [Row 953] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 954] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 955] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 956] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 957] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 958] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 959] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 960] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 961] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 962] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 963] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 964] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 965] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 966] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 967] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 968] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 969] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 970] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 971] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 955] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 956] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 957] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 958] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 959] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 960] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 961] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 962] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 963] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 964] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 965] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 966] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 967] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 968] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 969] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 970] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 971] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 972] [ColA:NO] [Qty:1]   TABUNG
 [Row 973] [ColA:NO] [Qty:1]   TUTUP TABUNG
 [Row 975] [ColA:YES] [Qty:1] DRESSING SET
@@ -957,165 +967,165 @@
 [Row 978] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 979] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 980] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 981] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 981] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 982] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 983] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 984] [ColA:NO] [Qty:1]   PINSET
-[Row 985] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 985] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 986] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 987] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 988] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 989] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 990] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 991] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 992] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 992] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 993] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 994] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 995] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 996] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 997] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 997] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 998] [ColA:NO] [Qty:1]   KOM
 [Row 999] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 1000] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 1000] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 1001] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 1002] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 1003] [ColA:NO] [Qty:1]   PINSET
 [Row 1004] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 1005] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 1006] [ColA:NO] [Qty:undefined]   CPAP
-[Row 1007] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 1008] [ColA:NO] [Qty:undefined]   HFNC
-[Row 1009] [ColA:NO] [Qty:undefined]   HFO
-[Row 1010] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 1011] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 1012] [ColA:NO] [Qty:undefined]   WIRE
-[Row 1013] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 1005] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 1006] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 1007] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 1008] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 1009] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 1010] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 1011] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 1012] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 1013] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 1014] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 1015] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 1016] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 1017] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 1018] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 1019] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 1020] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 1020] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 1021] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 1022] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 1023] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 1024] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 1025] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 1026] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 1027] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 1028] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 1029] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 1030] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 1031] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 1032] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 1033] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 1034] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 1035] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 1036] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 1037] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 1038] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 1039] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 1023] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 1024] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 1025] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 1026] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 1027] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 1028] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 1029] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 1030] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 1031] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 1032] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 1033] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 1034] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 1035] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 1036] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 1037] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 1038] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 1039] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 1040] [ColA:NO] [Qty:1]   TABUNG
 [Row 1041] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 1043] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 1043] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 1044] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 1045] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 1046] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 1047] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 1048] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 1049] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 1049] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 1050] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 1051] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 1052] [ColA:NO] [Qty:1]   PINSET
-[Row 1053] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 1053] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 1054] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 1055] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 1056] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 1057] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 1058] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 1059] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 1060] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 1060] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 1061] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 1062] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 1063] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 1064] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 1065] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 1065] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 1066] [ColA:NO] [Qty:1]   KOM
 [Row 1067] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 1068] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 1068] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 1069] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 1070] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 1071] [ColA:NO] [Qty:1]   PINSET
 [Row 1072] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 1073] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 1074] [ColA:NO] [Qty:undefined]   CPAP
-[Row 1075] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 1076] [ColA:NO] [Qty:undefined]   HFNC
-[Row 1077] [ColA:NO] [Qty:undefined]   HFO
-[Row 1078] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 1079] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 1080] [ColA:NO] [Qty:undefined]   WIRE
-[Row 1081] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 1073] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 1074] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 1075] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 1076] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 1077] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 1078] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 1079] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 1080] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 1081] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 1082] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 1083] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 1084] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 1085] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 1086] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 1087] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 1088] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 1088] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 1089] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 1090] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 1091] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 1092] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 1093] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 1094] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 1095] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 1096] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 1097] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 1098] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 1099] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 1100] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 1101] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 1102] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 1103] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 1104] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 1105] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 1106] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 1107] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 1091] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 1092] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 1093] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 1094] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 1095] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 1096] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 1097] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 1098] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 1099] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 1100] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 1101] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 1102] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 1103] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 1104] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 1105] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 1106] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 1107] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 1108] [ColA:NO] [Qty:1]   TABUNG
 [Row 1109] [ColA:NO] [Qty:1]   TUTUP TABUNG
-[Row 1111] [ColA:YES] [Qty:undefined] DRESSING SET
+[Row 1111] [ColA:YES] [Qty:1 Sets] DRESSING SET
 [Row 1112] [ColA:YES] [Qty:1] BAK INSTRUMEN SEDANG
 [Row 1113] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 1114] [ColA:NO] [Qty:2]   KOM KECIL
 [Row 1115] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 1116] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 1117] [ColA:NO] [Qty:undefined]   IV LINE SET
+[Row 1117] [ColA:NO] [Qty:1 Sets]   IV LINE SET
 [Row 1118] [ColA:NO] [Qty:1]   BAK INSTRUMEN KECIL
 [Row 1119] [ColA:NO] [Qty:1]   KOM KECIL
 [Row 1120] [ColA:NO] [Qty:1]   PINSET
-[Row 1121] [ColA:NO] [Qty:undefined]   CVP SET
+[Row 1121] [ColA:NO] [Qty:1 Sets]   CVP SET
 [Row 1122] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 1123] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 1124] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 1125] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 1126] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 1127] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 1128] [ColA:NO] [Qty:undefined]   ORAL HYGIENE SET
+[Row 1128] [ColA:NO] [Qty:1 Sets]   ORAL HYGIENE SET
 [Row 1129] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 1130] [ColA:NO] [Qty:1]   KLEM PANJANG
 [Row 1131] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 1132] [ColA:NO] [Qty:1]   TONGUE SPATEL
-[Row 1133] [ColA:NO] [Qty:undefined]   KOM SUCTION
+[Row 1133] [ColA:NO] [Qty:1 Sets]   KOM SUCTION
 [Row 1134] [ColA:NO] [Qty:1]   KOM
 [Row 1135] [ColA:NO] [Qty:1]   TUTUP KOM
-[Row 1136] [ColA:NO] [Qty:undefined]   DOWER CATH SET
+[Row 1136] [ColA:NO] [Qty:1 Sets]   DOWER CATH SET
 [Row 1137] [ColA:NO] [Qty:1]   BENGKOK SEDANG
 [Row 1138] [ColA:NO] [Qty:2]   KOM SEDANG
 [Row 1139] [ColA:NO] [Qty:1]   PINSET
 [Row 1140] [ColA:NO] [Qty:1]   SPONGE HOLDER
-[Row 1141] [ColA:NO] [Qty:undefined]   DRAIN SET
+[Row 1141] [ColA:NO] [Qty:1 Sets]   DRAIN SET
 [Row 1142] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 1143] [ColA:NO] [Qty:1]   GUNTING LITTAUER
 [Row 1144] [ColA:NO] [Qty:1]   HANDLE SCALPEL
@@ -1124,7 +1134,7 @@
 [Row 1147] [ColA:NO] [Qty:1]   NEEDLE HOLDER
 [Row 1148] [ColA:NO] [Qty:1]   PINSET ANATOMIS
 [Row 1149] [ColA:NO] [Qty:1]   PINSET CIRURGIS
-[Row 1150] [ColA:NO] [Qty:undefined]   SET PARTUS
+[Row 1150] [ColA:NO] [Qty:1 Sets]   SET PARTUS
 [Row 1151] [ColA:NO] [Qty:1]   BAK INSTRUMEN BESAR
 [Row 1152] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
 [Row 1153] [ColA:NO] [Qty:1]   GUNTING LITTAUER
@@ -1135,40 +1145,40 @@
 [Row 1158] [ColA:NO] [Qty:1]   GUNTING EPISIOTOMI
 [Row 1159] [ColA:NO] [Qty:1]   GUNTING UMBILICAL
 [Row 1160] [ColA:NO] [Qty:2]   KOM SEDANG
-[Row 1161] [ColA:NO] [Qty:undefined]   BOUGIE
-[Row 1162] [ColA:NO] [Qty:undefined]   CPAP
-[Row 1163] [ColA:NO] [Qty:undefined]   FLOW SENSOR
-[Row 1164] [ColA:NO] [Qty:undefined]   HFNC
-[Row 1165] [ColA:NO] [Qty:undefined]   HFO
-[Row 1166] [ColA:NO] [Qty:undefined]   NEOFLOW
-[Row 1167] [ColA:NO] [Qty:undefined]   VENTILATOR
-[Row 1168] [ColA:NO] [Qty:undefined]   WIRE
-[Row 1169] [ColA:NO] [Qty:undefined]   BAGGING
+[Row 1161] [ColA:NO] [Qty:1 Sets]   BOUGIE
+[Row 1162] [ColA:NO] [Qty:1 Sets]   CPAP
+[Row 1163] [ColA:NO] [Qty:1 Sets]   FLOW SENSOR
+[Row 1164] [ColA:NO] [Qty:1 Sets]   HFNC
+[Row 1165] [ColA:NO] [Qty:1 Sets]   HFO
+[Row 1166] [ColA:NO] [Qty:1 Sets]   NEOFLOW
+[Row 1167] [ColA:NO] [Qty:1 Sets]   VENTILATOR
+[Row 1168] [ColA:NO] [Qty:1 Sets]   WIRE
+[Row 1169] [ColA:NO] [Qty:1 Sets]   BAGGING
 [Row 1170] [ColA:NO] [Qty:1]   RESERVOIR BAG
 [Row 1171] [ColA:NO] [Qty:1]   RESERVOIR SOCKET
 [Row 1172] [ColA:NO] [Qty:1]   RESERVOIR VALVES
 [Row 1173] [ColA:NO] [Qty:1]   VENTILATION BAG
 [Row 1174] [ColA:NO] [Qty:1]   PATIENT VALVE
 [Row 1175] [ColA:NO] [Qty:1]   EXPIRATORY VALVE
-[Row 1176] [ColA:NO] [Qty:undefined]   BAK SPUIT
+[Row 1176] [ColA:NO] [Qty:1 Sets]   BAK SPUIT
 [Row 1177] [ColA:NO] [Qty:1]   BAK INSTRUMEN
 [Row 1178] [ColA:NO] [Qty:1]   TUTUP BAK INSTRUMEN
-[Row 1179] [ColA:NO] [Qty:undefined]   BENGKOK
-[Row 1180] [ColA:NO] [Qty:undefined]   CORONG OTOSCOPE
-[Row 1181] [ColA:NO] [Qty:undefined]   GELAS UKUR
-[Row 1182] [ColA:NO] [Qty:undefined]   GUEDEL
-[Row 1183] [ColA:NO] [Qty:undefined]   GUNTING PERBAN
-[Row 1184] [ColA:NO] [Qty:undefined]   HEAD STRAP
-[Row 1185] [ColA:NO] [Qty:undefined]   KLEM SATUAN
-[Row 1186] [ColA:NO] [Qty:undefined]   KOM OBAT
-[Row 1187] [ColA:NO] [Qty:undefined]   KONEKTOR
-[Row 1188] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE BLADE
-[Row 1189] [ColA:NO] [Qty:undefined]   LARYNGOSCOPE HANDLE
-[Row 1190] [ColA:NO] [Qty:undefined]   MANDRIN
-[Row 1191] [ColA:NO] [Qty:undefined]   RESERVOIR BAG
-[Row 1192] [ColA:NO] [Qty:undefined]   RESERVOIR HIJAU
-[Row 1193] [ColA:NO] [Qty:undefined]   SELANG SUCTION
-[Row 1194] [ColA:NO] [Qty:undefined]   SUNGKUP
-[Row 1195] [ColA:NO] [Qty:undefined]   TABUNG SUCTION
+[Row 1179] [ColA:NO] [Qty:1 Sets]   BENGKOK
+[Row 1180] [ColA:NO] [Qty:1 Sets]   CORONG OTOSCOPE
+[Row 1181] [ColA:NO] [Qty:1 Sets]   GELAS UKUR
+[Row 1182] [ColA:NO] [Qty:1 Sets]   GUEDEL
+[Row 1183] [ColA:NO] [Qty:1 Sets]   GUNTING PERBAN
+[Row 1184] [ColA:NO] [Qty:1 Sets]   HEAD STRAP
+[Row 1185] [ColA:NO] [Qty:1 Sets]   KLEM SATUAN
+[Row 1186] [ColA:NO] [Qty:1 Sets]   KOM OBAT
+[Row 1187] [ColA:NO] [Qty:1 Sets]   KONEKTOR
+[Row 1188] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE BLADE
+[Row 1189] [ColA:NO] [Qty:1 Sets]   LARYNGOSCOPE HANDLE
+[Row 1190] [ColA:NO] [Qty:1 Sets]   MANDRIN
+[Row 1191] [ColA:NO] [Qty:1 Sets]   RESERVOIR BAG
+[Row 1192] [ColA:NO] [Qty:1 Sets]   RESERVOIR HIJAU
+[Row 1193] [ColA:NO] [Qty:1 Sets]   SELANG SUCTION
+[Row 1194] [ColA:NO] [Qty:1 Sets]   SUNGKUP
+[Row 1195] [ColA:NO] [Qty:1 Sets]   TABUNG SUCTION
 [Row 1196] [ColA:NO] [Qty:1]   TABUNG
 [Row 1197] [ColA:NO] [Qty:1]   TUTUP TABUNG
