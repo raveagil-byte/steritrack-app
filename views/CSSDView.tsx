@@ -22,12 +22,15 @@ const CSSDView = () => {
     const pendingCount = requests.filter(r => r.status === 'PENDING').length;
 
     const handleUnitScan = (code: string) => {
-        const unit = units.find((u: Unit) => u.qrCode === code);
+        // Trim whitespace just in case
+        const cleanCode = code.trim();
+        const unit = units.find((u: Unit) => u.qrCode === cleanCode);
+
         if (unit) {
             setScannedUnit(unit);
             setMode('FORM');
         } else {
-            toast.error('QR Code Unit Tidak Dikenal: ' + code);
+            toast.error('QR Code Unit Tidak Dikenal: ' + cleanCode);
         }
     };
 

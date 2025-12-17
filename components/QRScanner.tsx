@@ -181,7 +181,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, title = "Scan QR
           {title.includes('Unit') && (
             <div className="mt-3 flex flex-wrap gap-2 justify-center opacity-50 hover:opacity-100 transition-opacity">
               <button onClick={() => setManualCode('UNIT-OK-001')} className="text-[10px] bg-slate-200 hover:bg-slate-300 px-2 py-1 rounded text-slate-600">Demo: OK</button>
-              <button onClick={() => setManualCode('UNIT-IGD-001')} className="text-[10px] bg-slate-200 hover:bg-slate-300 px-2 py-1 rounded text-slate-600">Demo: IGD</button>
+              <button onClick={() => setManualCode('UNIT-IGD-0535')} className="text-[10px] bg-slate-200 hover:bg-slate-300 px-2 py-1 rounded text-slate-600">Demo: IGD</button>
             </div>
           )}
         </div>

@@ -136,7 +136,7 @@ const NurseView = () => {
 
     return (
         <div className="space-y-6">
-            {/* Unit QR Modal - Unchanged */}
+            {/* Unit QR Modal - Unchanged // FORCE UPDATE TRIGGER */}
             {showUnitQR && currentUnit && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
                     <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm text-center space-y-4">
@@ -147,11 +147,13 @@ const NurseView = () => {
                             </button>
                         </div>
                         <div className="flex justify-center p-4 bg-white rounded-xl border-2 border-dashed border-blue-200">
-                            <QRCodeGenerator value={selectedUnitId} size={200} />
+                            {/* Ensure we use QR CODE, fallback to ID only if missing */}
+                            <QRCodeGenerator value={currentUnit.qrCode || currentUnit.id} size={200} />
                         </div>
                         <div>
                             <h2 className="text-xl font-bold text-blue-600">{currentUnit.name}</h2>
-                            <p className="text-xs text-slate-400 font-mono mt-1">{currentUnit.id}</p>
+                            <p className="text-lg font-mono font-bold text-slate-700 mt-2 bg-slate-100 py-1 rounded">{currentUnit.qrCode || currentUnit.id}</p>
+                            <p className="text-[10px] text-slate-400 mt-1">ID: {currentUnit.id}</p>
                         </div>
                         <p className="text-sm text-slate-500 bg-slate-50 p-3 rounded-lg">
                             Tunjukkan QR ini kepada petugas CSSD saat pengambilan barang kotor atau penerimaan barang steril.

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Test API Units</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>API Unit Data Inspector</h1>
+    <button onclick="checkUnits()">Check /api/units</button>
+    <div id="result"></div>
+
+    <script>
+        async function checkUnits() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = "Loading...";
+
+            // Try to get token from localStorage used by the app
+            let token = null;
+            try {
+                const userStr = localStorage.getItem('steritrack_current_user');
+                if (userStr) {
+                    const user = JSON.parse(userStr);
+                    token = user.token;
+                }
+            } catch (e) { }
+
+            const headers = {};
+            if (token) headers['Authorization'] = 'Bearer ' + token;
+
+            try {
+                const res = await fetch('/api/units', { headers });
+                if (!res.ok) throw new Error("API Error: " + res.status);
+
+                const data = await res.json();
+
+                let html = '<h3>Raw Data from Backend:</h3>';
+                html += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+
+                // Analyze
+                const igd = data.find(u => u.type === 'IGD');
+                if (igd) {
+                    html += `<p>Type: <b>IGD</b> <br> ID: <b>${igd.id}</b> <br> QRCode: <span class="${igd.qrCode === 'UNIT-IGD-0535' ? 'success' : 'error'}">${igd.qrCode}</span></p>`;
+
+                    if (igd.qrCode === 'UNIT-IGD-0535') {
+                        html += '<p class="success">✅ API IS CORRECT! The backend is sending the updated QR code.</p>';
+                    } else {
+                        html += '<p class="error">❌ API IS WRONG! The backend is still sending the old QR code. Database or Connection issue.</p>';
+                    }
+                }
+
+                resultDiv.innerHTML = html;
+
+            } catch (err) {
+                resultDiv.innerHTML = '<p class="error">' + err.message + '</p><p>Please Login to the main app first to get a token!</p>';
+            }
+        }
+    </script>
+</body>
+
+</html>
