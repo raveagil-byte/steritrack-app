@@ -7,14 +7,14 @@ CREATE TABLE IF NOT EXISTS sterilization_batches (
     timestamp BIGINT NOT NULL,
     operator VARCHAR(100) NOT NULL,
     status VARCHAR(20) DEFAULT 'COMPLETED', -- COMPLETED
-    machineNumber VARCHAR(50) DEFAULT 'Autoclave 1'
+    machine VARCHAR(50) DEFAULT 'Autoclave 1'
 );
 
 CREATE TABLE IF NOT EXISTS sterilization_batch_items (
     batchId VARCHAR(50),
-    instrumentId VARCHAR(50),
+    itemId VARCHAR(50),
     quantity INT NOT NULL,
-    PRIMARY KEY (batchId, instrumentId),
+    PRIMARY KEY (batchId, itemId),
     FOREIGN KEY (batchId) REFERENCES sterilization_batches(id) ON DELETE CASCADE,
-    FOREIGN KEY (instrumentId) REFERENCES instruments(id)
+    FOREIGN KEY (itemId) REFERENCES instruments(id)
 );
