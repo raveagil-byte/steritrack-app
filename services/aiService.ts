@@ -27,11 +27,18 @@ export const analyzeSystemState = async (
 
   // 2. Call Backend API
   try {
+    const token = localStorage.getItem('steritrack_current_user')
+      ? JSON.parse(localStorage.getItem('steritrack_current_user') || '{}').token
+      : null;
+
+    const headers: any = {
+      'Content-Type': 'application/json'
+    };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const response = await fetch('/api/ai/analyze', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({
         query,
         stockSummary,
