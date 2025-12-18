@@ -66,7 +66,7 @@ const RegisterView = () => {
                         <UserPlus size={32} />
                     </div>
                     <h1 className="text-2xl font-bold text-slate-900">Daftar Akun Baru</h1>
-                    <p className="text-slate-500">Bergabung dengan SteriTrack</p>
+                    <p className="text-slate-500">Bergabung dengan SIAPPMEN</p>
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

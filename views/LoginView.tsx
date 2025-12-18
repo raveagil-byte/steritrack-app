@@ -83,8 +83,8 @@ const LoginView = () => {
                     <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                         <Activity size={32} />
                     </div>
-                    <h1 className="text-2xl font-bold text-slate-900">SteriTrack Login</h1>
-                    <p className="text-slate-500">Sistem Pelacakan Instrumen Steril</p>
+                    <h1 className="text-2xl font-bold text-slate-900">SIAPPMEN Login</h1>
+                    <p className="text-slate-500 text-sm font-semibold mt-2">SISTEM APLIKASI PENGAMBILAN DAN PENDISTRIBUSIAN INSTRUMEN</p>
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

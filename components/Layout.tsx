@@ -61,7 +61,7 @@ export const Layout = () => {
             {/* Desktop Sidebar */}
             <div className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-slate-900 text-white p-4">
                 <h1 className="text-2xl font-bold mb-2 flex items-center gap-2 text-blue-400">
-                    <Activity /> SteriTrack
+                    <Activity /> SIAPPMEN
                 </h1>
                 <div className="mb-8 px-2">
                     <p className="text-xs text-slate-400">Masuk sebagai:</p>
