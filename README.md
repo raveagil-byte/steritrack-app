@@ -1,4 +1,4 @@
-# SteriTrack - Sistem Pelacakan Instrumen Steril CSSD
+# SIAPPMEN - Sistem Aplikasi Pengambilan dan Pendistribusian Instrumen
 
 Aplikasi manajemen dan pelacakan instrumen medis steril untuk Central Sterile Supply Department (CSSD) rumah sakit.
 
@@ -43,7 +43,7 @@ Aplikasi manajemen dan pelacakan instrumen medis steril untuk Central Sterile Su
 ### 5. **Dashboard & Analytics**
 - Dashboard visual dengan chart (Recharts)
 - Statistik inventori, transaksi, dan aktivitas
-- AI Assistant (Google Gemini / Ollama) untuk analisis sistem
+- AI Assistant (Gemini / HuggingFace / Ollama) untuk analisis sistem
 
 ### 6. **Keamanan**
 - Password hashing dengan bcryptjs
@@ -64,6 +64,7 @@ Aplikasi manajemen dan pelacakan instrumen medis steril untuk Central Sterile Su
 - **Recharts** (Data visualization)
 - **Lucide React** (Icons)
 - **Sonner** (Toast notifications)
+- **PWA Support** (Manifest & Icons)
 
 ### Backend
 - **Node.js** + **Express.js**
@@ -73,6 +74,7 @@ Aplikasi manajemen dan pelacakan instrumen medis steril untuk Central Sterile Su
 
 ### AI Integration
 - **Google Gemini API** (Primary)
+- **Hugging Face API** (Secondary)
 - **Ollama** (Local fallback)
 
 ---
@@ -103,6 +105,7 @@ Pastikan komputer Anda sudah terinstal:
 # Jika menggunakan Git
 git clone <repository-url>
 cd steritrack---simple-cssd
+# (Atau nama folder SIAPPMEN Anda)
 
 # Atau download ZIP dan extract
 ```
@@ -110,7 +113,7 @@ cd steritrack---simple-cssd
 ### Langkah 2: Install Dependencies
 
 ```bash
-# Install dependencies frontend
+# Install dependencies
 npm install
 ```
 
@@ -147,8 +150,8 @@ mysql -u root -p steritrack < backend/schema.sql
 
 ### Langkah 4: Konfigurasi Environment Variables
 
-#### A. Backend Environment
-Buat file `backend/.env`:
+#### Backend Environment
+Buat file `backend/.env` (atau di root folder `.env.local` untuk Vercel/Simple Setup):
 
 ```env
 DB_HOST=localhost
@@ -156,66 +159,30 @@ DB_USER=root
 DB_PASSWORD=
 DB_NAME=steritrack
 PORT=3000
+# JWT Secret (Ganti dengan string acak yang panjang)
+JWT_SECRET=rahasia_super_aman_banget_12345
+# Hugging Face Token (Opsional untuk AI)
+HF_API_KEY=hf_xxxxxxxxxxxxxxxxx
 ```
 
 **⚠️ Sesuaikan `DB_PASSWORD` dengan password MySQL Anda!**
-
-#### B. Frontend Environment (Opsional - untuk AI)
-Buat file `.env.local` di root folder:
-
-```env
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
-```
-
-**Cara mendapatkan Gemini API Key:**
-1. Kunjungi https://aistudio.google.com/app/apikey
-2. Login dengan Google Account
-3. Klik "Create API Key"
-4. Copy dan paste ke `.env.local`
 
 ---
 
 ## ▶️ Menjalankan Aplikasi
 
-### Metode 1: Manual (2 Terminal)
+### Metode 1: Manual (Recommended)
 
-**Terminal 1 - Backend:**
+**Terminal 1:**
 ```bash
-cd backend
-node server.js
+npm run start
 ```
-Output yang benar:
-```
-Database ensured.
-Backend server running on http://localhost:3000
-```
-
-**Terminal 2 - Frontend:**
-```bash
-npm run dev
-```
-Output yang benar:
-```
-VITE v5.x.x  ready in xxx ms
-
-➜  Local:   http://localhost:5173/
-```
-
-### Metode 2: Menggunakan Script (Windows)
-
-Buat file `start.bat`:
-```batch
-@echo off
-start cmd /k "cd backend && node server.js"
-timeout /t 2
-start cmd /k "npm run dev"
-```
-
-Double-click `start.bat` untuk menjalankan keduanya sekaligus.
+Perintah ini akan menjalankan backend (port 3000) dan frontend (port 5173) secara bersamaan menggunakan `concurrently`.
 
 ### Akses Aplikasi
 
 Buka browser dan kunjungi: **http://localhost:5173**
+Atau di HP (jika satu Wi-Fi): **http://<IP-KOMPUTER>:5173**
 
 ---
 
@@ -236,7 +203,7 @@ Setelah import `schema.sql`, gunakan akun berikut:
 ## 📁 Struktur Proyek
 
 ```
-steritrack---simple-cssd/
+SIAPPMEN/
 ├── backend/                    # Backend API (Express + MySQL)
 │   ├── controllers/           # Logic untuk setiap endpoint
 │   ├── routes/                # Definisi route API
@@ -258,7 +225,7 @@ steritrack---simple-cssd/
 │   ├── App.tsx               # Root component
 │   └── main.tsx              # Entry point
 │
-├── public/                    # Static assets
+├── public/                    # Static assets (Icon, Manifest)
 ├── index.html                 # HTML template
 ├── index.css                  # Global styles (Tailwind)
 ├── vite.config.ts            # Vite configuration
@@ -275,10 +242,7 @@ steritrack---simple-cssd/
 
 1. **Login** dengan `admin` / `123`
 2. **Dashboard**: Lihat overview sistem
-3. **Users**: Kelola pengguna
-   - Tambah user baru
-   - Assign perawat ke unit
-   - Toggle status aktif/nonaktif
+3. **Users**: Kelola pengguna (Tambah user baru, assign perawat)
 4. **Units**: Kelola ruangan/unit rumah sakit
 5. **Instruments**: Kelola instrumen medis
 6. **Sets**: Kelola instrument sets (kits)
@@ -303,132 +267,42 @@ steritrack---simple-cssd/
 1. **Login** dengan `nurse` / `123`
 2. **Buat Permintaan**:
    - Pilih instrumen/set yang dibutuhkan
-   - Tambah ke keranjang
    - Kirim permintaan ke CSSD
 3. **Terima Barang**:
    - Scan QR transaksi dari CSSD
    - Validasi item yang diterima
-   - Konfirmasi penerimaan
 
 ---
 
 ## 🔧 Troubleshooting
 
 ### 1. Backend tidak bisa connect ke database
-
 **Error**: `ER_ACCESS_DENIED_ERROR` atau `ECONNREFUSED`
+**Solusi**: Pastikan MySQL server running, cek user/password di `.env` atau `.env.local`, pastikan database `steritrack` ada.
 
-**Solusi**:
-- Pastikan MySQL server sudah running
-- Cek `backend/.env`:
-  - `DB_USER` dan `DB_PASSWORD` sesuai dengan MySQL Anda
-  - `DB_NAME=steritrack` sudah dibuat
-- Test koneksi: `mysql -u root -p` di terminal
+### 2. Password tidak bisa login
+**Solusi**: Gunakan password default `123`.
 
-### 2. Frontend tidak bisa connect ke backend
+### 3. AI Assistant tidak berfungsi
+**Error**: "Access Denied" atau "Service Unavailable"
+**Solusi**: Pastikan `HF_API_KEY` ada di `.env.local` dan restart server (`npm run start`).
 
-**Error**: `Failed to fetch` atau `Network Error`
-
-**Solusi**:
-- Pastikan backend running di `http://localhost:3000`
-- Cek `services/apiService.ts` → `API_URL` harus `http://localhost:3000/api`
-- Disable antivirus/firewall sementara
-
-### 3. Password tidak bisa login
-
-**Error**: "Username atau password salah"
-
-**Solusi**:
-- Gunakan password default: `123`
-- Jika sudah ganti password, reset via database:
-  ```sql
-  UPDATE users SET password='123' WHERE username='admin';
-  ```
-- Restart backend untuk trigger auto-hash
-
-### 4. Tailwind CSS tidak muncul
-
-**Error**: Styling tidak tampil / plain HTML
-
-**Solusi**:
-- Pastikan `npm install` sudah selesai
-- Restart dev server: `Ctrl+C` → `npm run dev`
-- Clear browser cache: `Ctrl+Shift+R`
-
-### 5. Port sudah digunakan
-
-**Error**: `EADDRINUSE: address already in use`
-
-**Solusi Backend (Port 3000)**:
-```bash
-# Windows
-netstat -ano | findstr :3000
-taskkill /PID <PID> /F
-
-# Atau ganti port di backend/.env
-PORT=3001
-```
-
-**Solusi Frontend (Port 5173)**:
-- Vite akan otomatis pakai port lain (5174, 5175, dst)
-- Atau edit `vite.config.ts` → `server.port`
-
-### 6. AI Assistant tidak berfungsi
-
-**Error**: "Cannot connect to AI service"
-
-**Solusi**:
-- **Gemini**: Pastikan `VITE_GEMINI_API_KEY` di `.env.local` valid
-- **Ollama** (fallback):
-  1. Install Ollama: https://ollama.ai/download
-  2. Pull model: `ollama pull llama2`
-  3. Run: `ollama serve`
-- Restart frontend setelah update `.env.local`
-
-### 7. QR Scanner tidak berfungsi
-
-**Error**: Kamera tidak muncul
-
-**Solusi**:
-- Browser harus HTTPS atau localhost
-- Izinkan akses kamera di browser
-- Gunakan Chrome/Edge (Firefox kadang bermasalah)
-- Fallback: Klik transaksi pending di list
-
----
-
-## 🔄 Update & Maintenance
-
-### Update Dependencies
-```bash
-npm update
-```
-
-### Backup Database
-```bash
-mysqldump -u root -p steritrack > backup_$(date +%Y%m%d).sql
-```
-
-### Reset Database (HATI-HATI: Hapus semua data!)
-```bash
-mysql -u root -p steritrack < backend/schema.sql
-```
+### 4. QR Scanner tidak berfungsi
+**Solusi**: Gunakan HTTPS atau localhost. Izinkan akses kamera.
 
 ---
 
 ## 📞 Support & Kontribusi
 
-Jika menemukan bug atau ingin request fitur:
-1. Buat issue di repository
-2. Atau hubungi developer
+Jika menemukan bug atau ingin request fitur, silakan hubungi tim IT Rumah Sakit.
 
 ---
 
 ## 📄 Lisensi
 
-Proyek ini dibuat untuk keperluan internal rumah sakit.
+Proyek ini dibuat untuk keperluan internal Rumah Sakit.
 
 ---
 
-**Terakhir diupdate**: 7 Desember 2024
-**Versi**: 1.0.0
+**Terakhir diupdate**: 18 Desember 2025
+**Versi**: 1.1.0 (Rebranded to SIAPPMEN)
