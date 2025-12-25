@@ -11,21 +11,31 @@ const OLLAMA_MODEL = 'gemma2:2b';
 const HF_API_KEY = process.env.HF_API_KEY; // Hugging Face Token
 
 exports.analyze = async (req, res) => {
-    const { query, stockSummary, recentLogs } = req.body;
+    const { query, stockSummary, unitSummary, recentLogs } = req.body;
 
     if (!query) {
         return res.status(400).json({ error: 'Query is required' });
     }
 
     const context = `
-    Konteks Sistem:
-    Anda adalah asisten cerdas untuk Departemen Pusat Sterilisasi (CSSD) di sebuah Rumah Sakit.
-    
-    Inventaris Saat Ini:
-    ${stockSummary || 'Data tidak tersedia'}
+    PERAN:
+    Anda adalah Asisten Cerdas SIAPPMEN (Sistem Aplikasi Pengambilan dan Pendistribusian Instrumen) di Unit sterilisasi (CSSD) Rumah Sakit.
+    Tugas Anda adalah membantu staf memantau stok dan aktivitas instrumen berdasarkan data yang diberikan.
 
-    Log Aktivitas Terbaru:
-    ${recentLogs || 'Data tidak tersedia'}
+    INSTRUKSI:
+    1. Jawablah HANYA berdasarkan data "Data Inventaris", "Data Unit", dan "Log Aktivitas" di bawah ini.
+    2. Jika informasi tidak ada di data, katakan "Maaf, data tidak tersedia untuk menjawab hal tersebut".
+    3. Gunakan Bahasa Indonesia yang sopan, formal, dan ringkas.
+    4. Hindari kalimat pembuka yang basa-basi. Langsung ke inti jawaban.
+
+    DATA INVENTARIS LIVE:
+    ${stockSummary || 'Data Kosong'}
+
+    DATA UNIT / RUANGAN:
+    ${unitSummary || 'Data Kosong'}
+
+    LOG AKTIVITAS TERBARU (10 Terakhir):
+    ${recentLogs || 'Belum ada aktivitas'}
     `;
 
     // Priority 1: Gemini (Google)
@@ -48,6 +58,9 @@ exports.analyze = async (req, res) => {
                 const data = await response.json();
                 const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
                 if (text) return res.json({ response: text, source: 'gemini' });
+            } else {
+                const errText = await response.text();
+                console.error(`Gemini API Error: ${response.status} - ${errText}`);
             }
         } catch (error) {
             console.error("Gemini attempt failed:", error.message);
@@ -58,8 +71,8 @@ exports.analyze = async (req, res) => {
     if (HF_API_KEY) {
         try {
             console.log("Attempting Hugging Face...");
-            // Using Mistral-7B-Instruct-v0.2 as a good open source default
-            const HF_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
+            // Using Qwen2.5-Coder-32B-Instruct as a robust alternative
+            const HF_URL = "https://api-inference.huggingface.co/models/Qwen/Qwen2.5-Coder-32B-Instruct";
 
             const response = await fetch(HF_URL, {
                 method: "POST",
@@ -142,12 +155,20 @@ exports.analyze = async (req, res) => {
         console.error("AI Service Error:", error.message);
 
         let msg = "Maaf, layanan AI tidak tersedia saat ini.";
+        // Debugging info
+        const debugInfo = {
+            gemini_check: isValidGeminiKey ? 'KEY_PRESENT' : 'KEY_MISSING',
+            hf_check: HF_API_KEY ? 'KEY_PRESENT' : 'KEY_MISSING',
+            hf_key_sample: HF_API_KEY ? HF_API_KEY.substring(0, 5) + '...' : 'null'
+        };
+        console.log("AI DEBUG STATUS:", debugInfo);
+
         if (!isValidGeminiKey && !HF_API_KEY) {
-            msg = "Sistem AI belum dikonfigurasi. Harap tambahkan GEMINI_API_KEY atau HF_API_KEY (Hugging Face) di Vercel Environment Variables.";
+            msg = "Sistem AI belum dikonfigurasi. Harap tambahkan GEMINI_API_KEY atau HF_API_KEY (Hugging Face) di environment variables.";
         } else {
-            msg = "Gagal terhubung ke semua penyedia AI (Gemini/HuggingFace/Ollama).";
+            msg = "Gagal terhubung ke semua penyedia AI (Gemini/HuggingFace/Ollama). Periksa konsol server untuk detail error.";
         }
 
-        return res.status(503).json({ error: msg, details: error.message });
+        return res.status(503).json({ error: msg, details: error.message, debug: debugInfo });
     }
 };

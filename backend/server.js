@@ -33,7 +33,17 @@ const rateLimit = require('express-rate-limit');
 
 // Security Middleware
 app.use(helmet());
-app.use(cors()); // Configure strict CORS in production!
+
+// Hardening: STRICT CORS
+// In production, FRONTEND_URL should be set (e.g., https://steritrack.vercel.app)
+const allowedOrigins = process.env.FRONTEND_URL ? [process.env.FRONTEND_URL, 'http://localhost:5173'] : '*';
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(bodyParser.json());
 
 // Rate Limiting
@@ -47,6 +57,11 @@ app.use('/api/', limiter); // Apply to all API routes
 const PORT = process.env.PORT || 3000;
 
 app.get('/api/debug-db', async (req, res) => {
+    // Hardening: Disable full debug info in production
+    if (process.env.NODE_ENV === 'production') {
+        return res.status(403).json({ error: 'Debug endpoint disabled in production' });
+    }
+
     const status = {
         uptime: process.uptime(),
         node: process.version,
@@ -107,10 +122,15 @@ app.use('/api/setup', require('./routes/setupRoutes'));
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
-    console.error('Unhandled Error:', err.stack);
+    console.error('Unhandled Error:', err.stack); // Log full stack on server
+
+    // Hardening: Hide stack trace in production
+    const isProduction = process.env.NODE_ENV === 'production';
+
     res.status(500).json({
         error: 'Internal Server Error',
-        message: err.message
+        message: isProduction ? 'Terjadi kesalahan internal pada server.' : err.message,
+        ...(isProduction ? {} : { stack: err.stack })
     });
 });
 

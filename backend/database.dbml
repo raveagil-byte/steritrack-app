@@ -1,0 +1,170 @@
+Table users {
+  id varchar(50) [pk]
+  username varchar(50) [not null]
+  password varchar(255) [not null]
+  name varchar(100) [not null]
+  role varchar(20) [not null]
+  unitId varchar(50) [ref: > units.id]
+  is_active boolean [default: true]
+}
+
+Table units {
+  id varchar(50) [pk]
+  name varchar(100) [not null]
+  type varchar(20) [not null]
+  qrCode varchar(100)
+  is_active boolean [default: true]
+}
+
+Table instruments {
+  id varchar(50) [pk]
+  name varchar(100) [not null]
+  category varchar(50) [not null]
+  totalStock int [not null, default: 0]
+  cssdStock int [not null, default: 0]
+  dirtyStock int [not null, default: 0]
+  packingStock int [not null, default: 0]
+  brokenStock int [not null, default: 0]
+  is_active boolean [default: true]
+}
+
+Table instrument_unit_stock {
+  instrumentId varchar(50) [ref: > instruments.id]
+  unitId varchar(50) [ref: > units.id]
+  quantity int [not null, default: 0]
+
+  indexes {
+    (instrumentId, unitId) [pk]
+  }
+}
+
+Table instrument_sets {
+  id varchar(50) [pk]
+  name varchar(100) [not null]
+  description text
+  is_active boolean [default: true]
+}
+
+Table instrument_set_items {
+  setId varchar(50) [ref: > instrument_sets.id]
+  instrumentId varchar(50) [ref: > instruments.id]
+  quantity int [not null, default: 1]
+
+  indexes {
+    (setId, instrumentId) [pk]
+  }
+}
+
+Table transactions {
+  id varchar(50) [pk]
+  timestamp bigint [not null]
+  type varchar(20) [not null]
+  status varchar(20) [not null]
+  unitId varchar(50) [not null, ref: > units.id]
+  qrCode varchar(100)
+  createdBy varchar(100)
+  validatedBy varchar(100)
+}
+
+Table transaction_items {
+  transactionId varchar(50) [ref: > transactions.id]
+  instrumentId varchar(50) [ref: > instruments.id]
+  count int [not null]
+  itemType varchar(20) [default: 'SINGLE']
+  brokenCount int [default: 0]
+  missingCount int [default: 0]
+
+  indexes {
+    (transactionId, instrumentId) [pk]
+  }
+}
+
+Table transaction_set_items {
+  transactionId varchar(50) [ref: > transactions.id]
+  setId varchar(50) [ref: > instrument_sets.id]
+  quantity int [not null, default: 1]
+  brokenCount int [default: 0]
+  missingCount int [default: 0]
+
+  indexes {
+    (transactionId, setId) [pk]
+  }
+}
+
+Table requests {
+  id varchar(50) [pk]
+  timestamp bigint [not null]
+  unitId varchar(50) [not null, ref: > units.id]
+  status varchar(20) [default: 'PENDING']
+  requestedBy varchar(100) [not null]
+}
+
+Table request_items {
+  requestId varchar(50) [ref: > requests.id]
+  itemId varchar(50)
+  itemType varchar(20) [not null]
+  quantity int [not null, default: 1]
+
+  indexes {
+    (requestId, itemId) [pk]
+  }
+}
+
+Table logs {
+  id varchar(50) [pk]
+  timestamp bigint [not null]
+  message text [not null]
+  type varchar(20) [not null]
+}
+
+Table sterile_packs {
+  id varchar(50) [pk]
+  name varchar(100)
+  type varchar(20) [not null]
+  status varchar(20) [not null]
+  targetUnitId varchar(50)
+  createdAt bigint [not null]
+  packedBy varchar(100)
+  expiresAt bigint
+  qrCode varchar(100)
+}
+
+Table sterile_pack_items {
+  packId varchar(50) [ref: > sterile_packs.id]
+  instrumentId varchar(50)
+  itemType varchar(20) [default: 'SINGLE']
+  quantity int [not null, default: 1]
+
+  indexes {
+    (packId, instrumentId) [pk]
+  }
+}
+
+Table transaction_packs {
+  transactionId varchar(50) [ref: > transactions.id]
+  packId varchar(50) [ref: > sterile_packs.id]
+
+  indexes {
+    (transactionId, packId) [pk]
+  }
+}
+
+Table sterilization_batches {
+  id varchar(50) [pk]
+  timestamp bigint [not null]
+  machine varchar(50) [not null]
+  operator varchar(100)
+  status varchar(20) [default: 'SUCCESS']
+  startTime bigint
+  endTime bigint
+}
+
+Table sterilization_batch_items {
+  batchId varchar(50) [ref: > sterilization_batches.id]
+  itemId varchar(50)
+  quantity int [not null, default: 1]
+
+  indexes {
+    (batchId, itemId) [pk]
+  }
+}

@@ -1,0 +1,158 @@
+// IMPROVED DATABASE DESIGN FOR SIAPPMEN (STERITRACK)
+// Based on Evaluation Report v1.0
+
+Table roles {
+  id varchar(50) [pk]
+  name varchar(50) [not null, note: "e.g. Admin, CSSD, Nurse"]
+  description text
+}
+
+Table users {
+  id varchar(50) [pk]
+  username varchar(50) [not null]
+  password varchar(255) [not null]
+  name varchar(100) [not null]
+  unitId varchar(50) [ref: > units.id, note: "Home unit for the user"]
+  is_active boolean [default: true]
+}
+
+// Many-to-Many relationship for scalable role management
+Table user_roles {
+  userId varchar(50) [ref: > users.id]
+  roleId varchar(50) [ref: > roles.id]
+  
+  indexes {
+    (userId, roleId) [pk]
+  }
+}
+
+Table units {
+  id varchar(50) [pk]
+  name varchar(100) [not null]
+  type varchar(20) [not null, note: "IGD, OK, ICU, CSSD"]
+  qrCode varchar(100)
+  is_active boolean [default: true]
+}
+
+// Normalized Instruments (Stock columns removed)
+Table instruments {
+  id varchar(50) [pk]
+  name varchar(100) [not null]
+  category varchar(50) [not null]
+  is_active boolean [default: true]
+  measure_unit varchar(20) [default: 'pcs']
+}
+
+// Current stock snapshot (Optional but good for performance)
+// Ideally calculated from transactions, or updated via triggers
+Table inventory_snapshots {
+  unitId varchar(50) [ref: > units.id]
+  instrumentId varchar(50) [ref: > instruments.id]
+  quantity int [not null, default: 0]
+  last_updated timestamp
+  
+  indexes {
+    (unitId, instrumentId) [pk]
+  }
+}
+
+Table instrument_sets {
+  id varchar(50) [pk]
+  name varchar(100) [not null]
+  description text
+  is_active boolean [default: true]
+  current_version_id varchar(50)
+}
+
+// Versioning for sets to track historical composition
+Table instrument_set_versions {
+  id varchar(50) [pk]
+  setId varchar(50) [ref: > instrument_sets.id]
+  version_number int [not null]
+  effective_date timestamp [not null]
+  created_by varchar(50) [ref: > users.id]
+}
+
+Table instrument_set_items {
+  versionId varchar(50) [ref: > instrument_set_versions.id]
+  instrumentId varchar(50) [ref: > instruments.id]
+  quantity int [not null, default: 1]
+
+  indexes {
+    (versionId, instrumentId) [pk]
+  }
+}
+
+Table transaction_types {
+  code varchar(50) [pk]
+  name varchar(100) [not null]
+  description text
+}
+
+Table transaction_statuses {
+  code varchar(50) [pk]
+  name varchar(100) [not null]
+}
+
+Table transactions {
+  id varchar(50) [pk]
+  timestamp bigint [not null]
+  type varchar(50) [not null, ref: > transaction_types.code]
+  status varchar(50) [not null, ref: > transaction_statuses.code]
+  
+  // Improved Tracking
+  source_unit_id varchar(50) [ref: > units.id]
+  destination_unit_id varchar(50) [ref: > units.id]
+  
+  qrCode varchar(100)
+  created_by varchar(50) [ref: > users.id]
+  validated_by varchar(50) [ref: > users.id]
+}
+
+Table transaction_items {
+  transactionId varchar(50) [ref: > transactions.id]
+  instrumentId varchar(50) [ref: > instruments.id]
+  quantity int [not null]
+  condition varchar(20) [default: 'GOOD', note: "GOOD, BROKEN, MISSING"]
+  
+  indexes {
+    (transactionId, instrumentId) [pk]
+  }
+}
+
+Table sterilization_batches {
+  id varchar(50) [pk]
+  timestamp bigint [not null]
+  machine varchar(50) [not null]
+  operator_user_id varchar(50) [ref: > users.id]
+  status varchar(20) [default: 'SUCCESS']
+  startTime bigint
+  endTime bigint
+}
+
+Table sterile_packs {
+  id varchar(50) [pk]
+  batchId varchar(50) [ref: > sterilization_batches.id]
+  name varchar(100)
+  type varchar(20) [not null]
+  status varchar(20) [not null]
+  source_unit_id varchar(50) [ref: > units.id]
+  target_unit_id varchar(50) [ref: > units.id]
+  createdAt bigint [not null]
+  packed_by varchar(50) [ref: > users.id]
+  expiresAt bigint
+  qrCode varchar(100)
+}
+
+// Improved Logs with Context
+Table audit_logs {
+  id varchar(50) [pk]
+  timestamp bigint [not null]
+  user_id varchar(50) [ref: > users.id]
+  action varchar(100) [not null]
+  entity_table varchar(50) [not null]
+  entity_id varchar(50) [not null]
+  old_value text
+  new_value text
+  ip_address varchar(45)
+}

@@ -1,0 +1,15 @@
+[
+  {
+    "Trigger": "trg_instrument_update_history",
+    "Event": "UPDATE",
+    "Table": "instruments",
+    "Statement": "BEGIN\n    IF OLD.totalStock != NEW.totalStock THEN\n        INSERT INTO instrument_history (id, instrumentId, timestamp, changeType, fieldName, oldValue, newValue)\n        VALUES (CONCAT('HIS-', UUID()), NEW.id, UNIX_TIMESTAMP() * 1000, 'UPDATE', 'totalStock', OLD.totalStock, NEW.totalStock);\n    END IF;\n    \n    IF OLD.cssdStock != NEW.cssdStock THEN\n        INSERT INTO instrument_history (id, instrumentId, timestamp, changeType, fieldName, oldValue, newValue)\n        VALUES (CONCAT('HIS-', UUID()), NEW.id, UNIX_TIMESTAMP() * 1000, 'UPDATE', 'cssdStock', OLD.cssdStock, NEW.cssdStock);\n    END IF;\n    \n    IF OLD.dirtyStock != NEW.dirtyStock THEN\n        INSERT INTO instrument_history (id, instrumentId, timestamp, changeType, fieldName, oldValue, newValue)\n        VALUES (CONCAT('HIS-', UUID()), NEW.id, UNIX_TIMESTAMP() * 1000, 'UPDATE', 'dirtyStock', OLD.dirtyStock, NEW.dirtyStock);\n    END IF;\n    \n    IF OLD.brokenStock != NEW.brokenStock THEN\n        INSERT INTO instrument_history (id, instrumentId, timestamp, changeType, fieldName, oldValue, newValue)\n        VALUES (CONCAT('HIS-', UUID()), NEW.id, UNIX_TIMESTAMP() * 1000, 'UPDATE', 'brokenStock', OLD.brokenStock, NEW.brokenStock);\n    END IF;\nEND",
+    "Timing": "AFTER",
+    "Created": "2025-12-10T14:44:08.490Z",
+    "sql_mode": "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION",
+    "Definer": "root@localhost",
+    "character_set_client": "cp850",
+    "collation_connection": "cp850_general_ci",
+    "Database Collation": "utf8mb4_0900_ai_ci"
+  }
+]

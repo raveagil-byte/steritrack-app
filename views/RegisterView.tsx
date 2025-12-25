@@ -77,7 +77,7 @@ const RegisterView = () => {
                             <User size={18} className="absolute left-3 top-3 text-slate-400" />
                             <input
                                 {...register('name')}
-                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none ${errors.name ? 'border-red-500' : 'focus:ring-blue-500'}`}
+                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none text-slate-900 placeholder:text-slate-400 ${errors.name ? 'border-red-500' : 'focus:ring-blue-500'}`}
                                 placeholder="Nama Lengkap Anda"
                             />
                         </div>
@@ -91,7 +91,7 @@ const RegisterView = () => {
                             <User size={18} className="absolute left-3 top-3 text-slate-400" />
                             <input
                                 {...register('username')}
-                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none ${errors.username ? 'border-red-500' : 'focus:ring-blue-500'}`}
+                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none text-slate-900 placeholder:text-slate-400 ${errors.username ? 'border-red-500' : 'focus:ring-blue-500'}`}
                                 placeholder="Username untuk login"
                             />
                         </div>
@@ -106,7 +106,7 @@ const RegisterView = () => {
                             <input
                                 {...register('password')}
                                 type="password"
-                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none ${errors.password ? 'border-red-500' : 'focus:ring-blue-500'}`}
+                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none text-slate-900 placeholder:text-slate-400 ${errors.password ? 'border-red-500' : 'focus:ring-blue-500'}`}
                                 placeholder="Minimal 6 karakter"
                             />
                         </div>
@@ -120,7 +120,7 @@ const RegisterView = () => {
                             <Briefcase size={18} className="absolute left-3 top-3 text-slate-400" />
                             <select
                                 {...register('role')}
-                                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none focus:ring-blue-500 bg-white"
+                                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none focus:ring-blue-500 bg-white text-slate-900"
                             >
                                 <option value="NURSE">Perawat (Nurse)</option>
                                 <option value="CSSD">Staf CSSD</option>
@@ -136,7 +136,7 @@ const RegisterView = () => {
                                 <Building2 size={18} className="absolute left-3 top-3 text-slate-400" />
                                 <select
                                     {...register('unitId')}
-                                    className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none focus:ring-blue-500 bg-white"
+                                    className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none focus:ring-blue-500 bg-white text-slate-900"
                                 >
                                     <option value="">-- Pilih Unit --</option>
                                     {units.map(u => (

@@ -43,7 +43,7 @@ interface AppContextType {
     updateUserStatus: (id: string, is_active: boolean) => Promise<void>;
     deleteUser: (id: string) => Promise<void>;
     addInstrument: (inst: Instrument) => Promise<void>;
-    updateInstrument: (inst: { id: string, name: string, category: string, is_serialized?: boolean, totalStock?: number, cssdStock?: number, dirtyStock?: number, packingStock?: number }) => Promise<void>;
+    updateInstrument: (inst: { id: string, name: string, category: string, is_serialized?: boolean, totalStock?: number, cssdStock?: number, dirtyStock?: number, packingStock?: number, measure_unit_id?: string }) => Promise<void>;
     updateInstrumentStatus: (id: string, is_active: boolean) => Promise<void>;
     deleteInstrument: (id: string) => Promise<void>;
     addUnit: (unit: Unit) => Promise<void>;
@@ -115,7 +115,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const deleteUser = async (id: string) => { await appMutations.deleteUser.mutateAsync(id); };
 
     const addInstrument = async (inst: Instrument) => { await appMutations.addInstrument.mutateAsync(inst); };
-    const updateInstrument = async (inst: { id: string, name: string, category: string, is_serialized?: boolean, totalStock?: number, cssdStock?: number, dirtyStock?: number, packingStock?: number }) => { await appMutations.updateInstrument.mutateAsync({ id: inst.id, ...inst }); };
+    const updateInstrument = async (inst: { id: string, name: string, category: string, is_serialized?: boolean, totalStock?: number, cssdStock?: number, dirtyStock?: number, packingStock?: number, measure_unit_id?: string }) => { await appMutations.updateInstrument.mutateAsync({ id: inst.id, ...inst }); };
     const updateInstrumentStatus = async (id: string, is_active: boolean) => { await appMutations.updateInstrumentStatus.mutateAsync({ id, is_active }); };
     const deleteInstrument = async (id: string) => { await appMutations.deleteInstrument.mutateAsync(id); };
 

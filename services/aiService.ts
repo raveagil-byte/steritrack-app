@@ -1,21 +1,27 @@
-import { Instrument, LogEntry, Transaction } from '../types';
+import { Instrument, LogEntry, Transaction, Unit } from '../types';
 
 export const analyzeSystemState = async (
   query: string,
   instruments: Instrument[],
   transactions: Transaction[],
-  logs: LogEntry[]
+  logs: LogEntry[],
+  units: Unit[] = []
 ): Promise<string> => {
 
-  // 1. Prepare Context Summary
   // 1. Prepare Context Summary (Defensive)
   let stockSummary = 'Data inventaris tidak tersedia';
+  let unitSummary = 'Data unit tidak tersedia';
+
   try {
     if (instruments && Array.isArray(instruments)) {
       stockSummary = instruments.map(i => {
         const distrib = i.unitStock ? Object.values(i.unitStock).reduce((a: any, b: any) => a + b, 0) : 0;
         return `- ${i.name}: Steril(${i.cssdStock || 0}), Kotor(${i.dirtyStock || 0}), Terdistribusi(${distrib})`;
       }).join('\n');
+    }
+
+    if (units && Array.isArray(units)) {
+      unitSummary = units.map(u => `- ${u.name} (Kode: ${u.id})`).join('\n');
     }
   } catch (e) {
     console.error("Error formatting context:", e);
@@ -42,6 +48,7 @@ export const analyzeSystemState = async (
       body: JSON.stringify({
         query,
         stockSummary,
+        unitSummary,
         recentLogs
       }),
     });

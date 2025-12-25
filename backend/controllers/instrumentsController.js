@@ -2,8 +2,8 @@ const db = require('../db');
 
 // Helper to optimized attachUnitStock
 const attachUnitStock = async (instruments) => {
-    // Optimized: fetch all unit stocks in one query
-    const [allStocks] = await db.query('SELECT instrumentId, unitId, quantity FROM instrument_unit_stock');
+    // Optimized: fetch all unit stocks in one query from NEW inventory_snapshots
+    const [allStocks] = await db.query('SELECT instrumentId, unitId, quantity FROM inventory_snapshots');
 
     // Group by instrumentId
     const stockMap = {};
@@ -22,6 +22,7 @@ exports.getAllInstruments = async (req, res) => {
     try {
         const [instruments] = await db.query('SELECT * FROM instruments');
         const [sets] = await db.query('SELECT id, name FROM instrument_sets');
+        // Note: Future improvement -> use instrument_set_versions for recipes
         const [recipes] = await db.query('SELECT * FROM instrument_set_items');
 
         // 1. Map Set Definition ID -> Set Name (normalized)
@@ -82,7 +83,7 @@ exports.getUnassignedInstruments = async (req, res) => {
 };
 
 exports.createInstrument = async (req, res) => {
-    const { id, name, category, totalStock, cssdStock, dirtyStock, unitStock, is_serialized } = req.body;
+    const { id, name, category, totalStock, cssdStock, dirtyStock, unitStock, is_serialized, measure_unit_id } = req.body;
     const connection = await db.getConnection();
     try {
         // Check if instrument with same name already exists
@@ -95,12 +96,13 @@ exports.createInstrument = async (req, res) => {
         }
 
         await connection.beginTransaction();
-        await connection.query('INSERT INTO instruments (id, name, category, totalStock, cssdStock, dirtyStock, is_serialized) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [id, name, category, totalStock, cssdStock, dirtyStock, is_serialized || false]);
+        await connection.query('INSERT INTO instruments (id, name, category, totalStock, cssdStock, dirtyStock, is_serialized, measure_unit_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [id, name, category, totalStock, cssdStock, dirtyStock, is_serialized || false, measure_unit_id || 'mu1']);
 
         if (unitStock) {
             for (const [unitId, qty] of Object.entries(unitStock)) {
-                await connection.query('INSERT INTO instrument_unit_stock (instrumentId, unitId, quantity) VALUES (?, ?, ?)', [id, unitId, qty]);
+                // Use inventory_snapshots
+                await connection.query('INSERT INTO inventory_snapshots (instrumentId, unitId, quantity) VALUES (?, ?, ?)', [id, unitId, qty]);
             }
         }
         await connection.commit();
@@ -121,7 +123,7 @@ exports.deleteInstrument = async (req, res) => {
 };
 
 exports.updateInstrument = async (req, res) => {
-    const { name, category, is_serialized, totalStock, cssdStock, dirtyStock, packingStock } = req.body;
+    const { name, category, is_serialized, totalStock, cssdStock, dirtyStock, packingStock, measure_unit_id } = req.body;
     const instrumentId = req.params.id;
     try {
         // Check if another instrument with same name already exists (excluding current one)
@@ -136,8 +138,8 @@ exports.updateInstrument = async (req, res) => {
         // If stock values are provided, update them too. Otherwise just update info.
         if (totalStock !== undefined) {
             await db.query(
-                'UPDATE instruments SET name = ?, category = ?, is_serialized = ?, totalStock = ?, cssdStock = ?, dirtyStock = ?, packingStock = ? WHERE id = ?',
-                [name, category, is_serialized, totalStock, cssdStock || 0, dirtyStock || 0, packingStock || 0, instrumentId]
+                'UPDATE instruments SET name = ?, category = ?, is_serialized = ?, totalStock = ?, cssdStock = ?, dirtyStock = ?, packingStock = ?, measure_unit_id = ? WHERE id = ?',
+                [name, category, is_serialized, totalStock, cssdStock || 0, dirtyStock || 0, packingStock || 0, measure_unit_id || 'mu1', instrumentId]
             );
         } else {
             await db.query('UPDATE instruments SET name = ?, category = ?, is_serialized = ? WHERE id = ?',
@@ -162,10 +164,17 @@ exports.updateStock = async (req, res) => {
     try {
         await connection.beginTransaction();
         await connection.query('UPDATE instruments SET cssdStock = ?, dirtyStock = ? WHERE id = ?', [cssdStock, dirtyStock, id]);
-        await connection.query('DELETE FROM instrument_unit_stock WHERE instrumentId = ?', [id]);
+
+        // Update inventory_snapshots for unit stock
         if (unitStock) {
+            // First we might want to clear old snapshots for this instrument ?? 
+            // Or just upsert. If we want to fully replace the state like before:
+            // "DELETE FROM instrument_unit_stock WHERE ..." was the old way.
+            // We can do the same for inventory_snapshots for this instrument.
+            await connection.query('DELETE FROM inventory_snapshots WHERE instrumentId = ?', [id]);
+
             for (const [unitId, qty] of Object.entries(unitStock)) {
-                await connection.query('INSERT INTO instrument_unit_stock (instrumentId, unitId, quantity) VALUES (?, ?, ?)', [id, unitId, qty]);
+                await connection.query('INSERT INTO inventory_snapshots (instrumentId, unitId, quantity) VALUES (?, ?, ?)', [id, unitId, qty]);
             }
         }
         await connection.commit();

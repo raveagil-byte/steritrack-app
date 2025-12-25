@@ -4,6 +4,11 @@ const db = require('../db');
 
 // Endpoint khusus untuk menjalankan migrasi database via Postman/Browser
 router.get('/migrate-usage-logs', async (req, res) => {
+    // Hardening: Disable in production
+    if (process.env.NODE_ENV === 'production') {
+        return res.status(403).json({ error: 'Setup/Migration routes are disabled in production.' });
+    }
+
     try {
         const createTableSQL = `
             CREATE TABLE IF NOT EXISTS usage_logs (

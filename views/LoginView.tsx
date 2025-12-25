@@ -95,7 +95,7 @@ const LoginView = () => {
                             <input
                                 {...register('username')}
                                 type="text"
-                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none ${errors.username ? 'border-red-500 focus:ring-red-200' : 'focus:ring-blue-500'}`}
+                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none text-slate-900 placeholder:text-slate-400 ${errors.username ? 'border-red-500 focus:ring-red-200' : 'focus:ring-blue-500'}`}
                                 placeholder="Masukkan username"
                             />
                         </div>
@@ -109,7 +109,7 @@ const LoginView = () => {
                             <input
                                 {...register('password')}
                                 type="password"
-                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none ${errors.password ? 'border-red-500 focus:ring-red-200' : 'focus:ring-blue-500'}`}
+                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none text-slate-900 placeholder:text-slate-400 ${errors.password ? 'border-red-500 focus:ring-red-200' : 'focus:ring-blue-500'}`}
                                 placeholder="Masukkan password"
                             />
                         </div>

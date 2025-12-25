@@ -47,6 +47,7 @@ export interface Instrument {
   usedInSets?: number;
   remainingLoose?: number;
   is_serialized?: boolean;
+  measure_unit_id?: string;
 
   is_active?: boolean;
 }

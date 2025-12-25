@@ -20,6 +20,7 @@ const instrumentSchema = z.object({
     packingStock: z.number().min(0).optional(),
     initialCondition: z.enum(["STERILE", "CLEAN", "DIRTY"]).optional(),
     is_serialized: z.boolean().optional(),
+    measure_unit_id: z.string().optional(),
 });
 
 type InstrumentFormValues = z.infer<typeof instrumentSchema>;
@@ -56,7 +57,8 @@ export const AdminInstruments = () => {
         resolver: zodResolver(instrumentSchema),
         defaultValues: {
             totalStock: 10,
-            initialCondition: 'DIRTY' // Default safest option
+            initialCondition: 'DIRTY', // Default safest option,
+            measure_unit_id: 'mu1'
         }
     });
 
@@ -101,7 +103,8 @@ export const AdminInstruments = () => {
                 dirtyStock: dirtyStock,
                 packingStock: packingStock,
                 unitStock: {},
-                is_serialized: data.is_serialized || false
+                is_serialized: data.is_serialized || false,
+                measure_unit_id: data.measure_unit_id
             });
             toast.success(`Instrumen ${data.name} berhasil ditambahkan (${data.initialCondition})`);
             reset();
@@ -121,7 +124,8 @@ export const AdminInstruments = () => {
                 totalStock: data.totalStock,
                 cssdStock: data.cssdStock,
                 dirtyStock: data.dirtyStock,
-                packingStock: data.packingStock
+                packingStock: data.packingStock,
+                measure_unit_id: data.measure_unit_id
             });
             await queryClient.invalidateQueries({ queryKey: ['instruments'] });
             toast.success(`Instrumen ${data.name} berhasil diupdate`);
@@ -163,7 +167,8 @@ export const AdminInstruments = () => {
             totalStock: instrument.totalStock,
             cssdStock: instrument.cssdStock,
             dirtyStock: instrument.dirtyStock,
-            packingStock: instrument.packingStock || 0
+            packingStock: instrument.packingStock || 0,
+            measure_unit_id: instrument.measure_unit_id || 'mu1'
         });
     };
 
@@ -200,6 +205,14 @@ export const AdminInstruments = () => {
                                     <option value="Sets">Sets (Paket)</option>
                                 </select>
                                 {errorsEdit.category && <p className="text-red-500 text-xs mt-1">{errorsEdit.category.message}</p>}
+                            </div>
+                            <div className="w-full">
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Satuan</label>
+                                <select {...registerEdit('measure_unit_id')} className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                                    <option value="mu1">Pcs (Pieces)</option>
+                                    <option value="mu2">Set (Paket)</option>
+                                    <option value="mu3">Box (Kotak)</option>
+                                </select>
                             </div>
                             <div className="flex items-center gap-2">
                                 <input type="checkbox" {...registerEdit('is_serialized')} id="edit_serialized" className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
@@ -253,7 +266,7 @@ export const AdminInstruments = () => {
             {/* Add Form */}
             <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 shadow-sm">
                 <h3 className="font-bold text-slate-800 mb-4">Master Data Instrumen</h3>
-                <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-5 gap-4 items-start">
+                <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-6 gap-4 items-start">
                     <div className="w-full">
                         <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Nama</label>
                         <input {...register('name')} placeholder="Nama Instrumen" className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none" />
@@ -276,11 +289,20 @@ export const AdminInstruments = () => {
                     </div>
 
                     <div className="w-full">
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Kondisi Saat Ini</label>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Kondisi</label>
                         <select {...register('initialCondition')} className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
-                            <option value="DIRTY">Kotor (Perlu Cuci)</option>
-                            <option value="CLEAN">Bersih (Perlu Steril)</option>
-                            <option value="STERILE">Steril (Siap Pakai)</option>
+                            <option value="DIRTY">Kotor/Rusak</option>
+                            <option value="CLEAN">Bersih</option>
+                            <option value="STERILE">Steril</option>
+                        </select>
+                    </div>
+
+                    <div className="w-full">
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Satuan</label>
+                        <select {...register('measure_unit_id')} className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="mu1">Pcs (Pieces)</option>
+                            <option value="mu2">Set (Paket)</option>
+                            <option value="mu3">Box (Kotak)</option>
                         </select>
                     </div>
 
@@ -290,7 +312,7 @@ export const AdminInstruments = () => {
                         </button>
                     </div>
 
-                    <div className="col-span-1 md:col-span-5">
+                    <div className="col-span-1 md:col-span-6">
                         <label className="flex items-center gap-2 cursor-pointer w-fit">
                             <input type="checkbox" {...register('is_serialized')} className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 h-4 w-4" />
                             <span className="text-sm font-medium text-slate-700">Wajib Serial Number (Untuk tracking aset bernilai tinggi)</span>

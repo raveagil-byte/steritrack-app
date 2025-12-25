@@ -5,7 +5,7 @@ import { analyzeSystemState } from '../services/aiService';
 import { DashboardCharts } from '../components/DashboardCharts';
 
 const AnalyticsView = () => {
-    const { instruments, transactions, logs, currentUser } = useAppContext();
+    const { instruments, transactions, logs, currentUser, units } = useAppContext();
     const [tab, setTab] = useState<'DASHBOARD' | 'AI'>('DASHBOARD');
     const [prompt, setPrompt] = useState('');
     const [loading, setLoading] = useState(false);
@@ -13,8 +13,10 @@ const AnalyticsView = () => {
 
     const handleAsk = async () => {
         if (!prompt.trim()) return;
+        const currentPrompt = prompt; // Save prompt to display or use
+        setPrompt(''); // Clear input immediately for better UX
         setLoading(true);
-        const result = await analyzeSystemState(prompt, instruments, transactions, logs);
+        const result = await analyzeSystemState(currentPrompt, instruments, transactions, logs, units);
         setResponse(result);
         setLoading(false);
     };

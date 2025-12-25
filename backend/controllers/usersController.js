@@ -3,6 +3,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === 'production') {
+    console.error('FATAL WARNING: JWT_SECRET is not defined. Using insecure fallback!');
+}
 const JWT_SECRET = process.env.JWT_SECRET || 'steritrack-secret-fallback-dev';
 
 exports.login = async (req, res) => {
