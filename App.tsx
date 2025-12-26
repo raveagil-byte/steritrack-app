@@ -4,6 +4,7 @@ import { AppProvider, useAppContext } from './context/AppContext';
 import { ThemeProvider } from './context/ThemeContext';
 import LoginView from './views/LoginView';
 import RegisterView from './views/RegisterView';
+import NotFoundView from './views/NotFoundView';
 import CSSDView from './views/CSSDView';
 import NurseView from './views/NurseView';
 import InventoryView from './views/InventoryView';
@@ -14,6 +15,7 @@ import ProfileView from './views/ProfileView';
 import { Layout } from './components/Layout';
 import { Role } from './types';
 import { Toaster } from './components/ui/Toaster';
+import UnauthorizedView from './views/UnauthorizedView';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ roles, children }: { roles?: Role[], children: React.ReactNode }) => {
@@ -22,7 +24,7 @@ const ProtectedRoute = ({ roles, children }: { roles?: Role[], children: React.R
   if (!currentUser) return <Navigate to="/login" replace />;
 
   if (roles && !roles.includes(currentUser.role)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/unauthorized" replace />;
   }
 
   return children;
@@ -33,6 +35,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/login" element={<LoginView />} />
       <Route path="/register" element={<RegisterView />} />
+      <Route path="/unauthorized" element={<UnauthorizedView />} />
 
       <Route element={<Layout />}>
         <Route path="/" element={<Navigate to="/inventory" replace />} />
@@ -65,7 +68,7 @@ const AppRoutes = () => {
       </Route>
 
       {/* Catch all redirect */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<NotFoundView />} />
     </Routes>
   );
 };

@@ -90,7 +90,7 @@ export const ApiService = {
     createUser: (user: User) => ApiService.apiCall('users', 'POST', user),
     updateUser: (id: string, user: Partial<User>) => ApiService.apiCall(`users/${id}`, 'PUT', user),
     updateUserStatus: (id: string, is_active: boolean) => ApiService.apiCall(`users/${id}/status`, 'PUT', { is_active }),
-    updateUserProfile: (id: string, data: { name: string, password?: string }) => ApiService.apiCall(`users/${id}/profile`, 'PUT', data),
+    updateUserProfile: (id: string, data: { name: string, password?: string, phone?: string, photo_url?: string }) => ApiService.apiCall(`users/${id}/profile`, 'PUT', data),
     deleteUser: (id: string) => ApiService.apiCall(`users/${id}`, 'DELETE'),
 
 

@@ -28,7 +28,7 @@ Before "Go Live" in a real hospital, the following **Infrastructure & Operationa
 *   [ ] **Server Setup:** Move from `localhost` (laragon) to a dedicated server (Windows Server or Linux).
 *   [ ] **Process Management:** Use **PM2** to keep the Node.js backend running 24/7 (auto-restart on crash).
 *   [ ] **Network Security:** Configure a firewall and use **SSL/HTTPS** (via Nginx or Apache reverse proxy) to encrypt data in transit.
-*   [ ] **Database Backup:** Set up an automated scheduled task to backup the MySQL database daily (e.g., `mysqldump`).
+*   [ ] **Database Backup:** Set up an automated scheduled task to backup the PostgreSQL database daily (e.g., `pg_dump`).
 
 ### 2. Hardware Integration
 *   [ ] **Barcode Scanners:** Test the application with the actual physical barcode/QR scanners intended for use. (Ensure they successfully input text into the fields).

@@ -120,10 +120,10 @@ Saya telah membuat 4 file untuk implementasi:
 
 ```bash
 # 1. Backup database
-mysqldump -u root -p steritrack > backup.sql
+pg_dump -h localhost -p 5432 -U postgres -F p -f backup.sql steritrack
 
 # 2. Run migration
-mysql -u root -p steritrack < backend/migration_enhanced_validation_audit.sql
+psql -h localhost -U postgres -d steritrack < backend/migration_enhanced_validation_audit.sql
 
 # 3. Update controller
 cp backend/controllers/transactionsController_ENHANCED.js backend/controllers/transactionsController.js

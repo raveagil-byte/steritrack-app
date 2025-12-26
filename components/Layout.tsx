@@ -16,6 +16,7 @@ import { useAppContext } from '../context/AppContext';
 import { useTheme } from '../context/ThemeContext';
 import { Role } from '../types';
 import { NavBtn, SidebarBtn } from './Navigation';
+import { DigitalClock } from './DigitalClock';
 
 export const Layout = () => {
     const { currentUser, logout } = useAppContext();
@@ -27,6 +28,15 @@ export const Layout = () => {
 
     return (
         <div className="min-h-screen pb-20 md:pb-0 bg-background text-foreground transition-colors duration-300">
+
+            {/* Mobile Header */}
+            <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-slate-900 border-b border-white/10 flex items-center justify-between px-4 z-40 shadow-md">
+                <div className="flex items-center gap-2 font-bold text-lg text-blue-400">
+                    <Activity size={20} />
+                    <span>SIAPPMEN</span>
+                </div>
+                {/* Optional: User Avatar or small widget could go here */}
+            </div>
 
             {/* Mobile Navigation */}
             <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border flex justify-around p-2 z-40 shadow-lg">
@@ -47,15 +57,6 @@ export const Layout = () => {
                 <NavBtn icon={<User />} label="Profil" to="/profile" />
 
 
-                <button onClick={toggleTheme} className="flex flex-col items-center justify-center w-full py-2 rounded-lg transition-colors text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800">
-                    {theme === 'dark' ? <Sun className="mb-1" size={20} /> : <Moon className="mb-1" size={20} />}
-                    <span className="text-[10px] font-medium">{theme === 'dark' ? 'Terang' : 'Gelap'}</span>
-                </button>
-
-                <button onClick={logout} className="flex flex-col items-center justify-center w-full py-2 rounded-lg transition-colors text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800">
-                    <LogOut className="mb-1" />
-                    <span className="text-[10px] font-medium">Keluar</span>
-                </button>
             </div>
 
             {/* Desktop Sidebar */}
@@ -67,6 +68,10 @@ export const Layout = () => {
                     <p className="text-xs text-slate-400">Masuk sebagai:</p>
                     <p className="font-semibold">{currentUser.name}</p>
                     <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-blue-300 uppercase">{currentUser.role}</span>
+                </div>
+
+                <div className="mb-4">
+                    <DigitalClock />
                 </div>
 
                 <nav className="flex flex-col gap-2">
@@ -110,7 +115,7 @@ export const Layout = () => {
             </div>
 
             {/* Main Content Area */}
-            <main className="md:ml-64 min-h-screen p-4 md:p-8">
+            <main className="md:ml-64 min-h-screen p-4 md:p-8 pt-20 md:pt-8">
                 <Outlet />
             </main>
         </div>

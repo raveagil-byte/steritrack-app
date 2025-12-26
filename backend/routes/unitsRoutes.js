@@ -2,10 +2,14 @@ const express = require('express');
 const router = express.Router();
 const unitsController = require('../controllers/unitsController');
 
-router.get('/', unitsController.getAllUnits);
-router.post('/', unitsController.createUnit);
-router.put('/:id', unitsController.updateUnit);
-router.put('/:id/status', unitsController.updateStatus);
-router.delete('/:id', unitsController.deleteUnit);
+const verifyToken = require('../middleware/authMiddleware');
+
+router.get('/', unitsController.getAllUnits); // Public access for Registration
+
+// Protected Routes
+router.post('/', verifyToken, unitsController.createUnit);
+router.put('/:id', verifyToken, unitsController.updateUnit);
+router.put('/:id/status', verifyToken, unitsController.updateStatus);
+router.delete('/:id', verifyToken, unitsController.deleteUnit);
 
 module.exports = router;

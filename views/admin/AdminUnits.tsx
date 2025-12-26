@@ -11,6 +11,7 @@ import QRScanner from '../../components/QRScanner';
 import QRCodeGenerator from '../../components/QRCodeGenerator';
 import { ApiService } from '../../services/apiService';
 import { useQueryClient } from '@tanstack/react-query';
+import { Pagination } from '../../components/Pagination';
 
 const unitSchema = z.object({
     name: z.string().min(2, "Nama unit wajib diisi"),
@@ -25,6 +26,15 @@ export const AdminUnits = () => {
     const [viewQrUnit, setViewQrUnit] = useState<Unit | null>(null);
     const [editingUnit, setEditingUnit] = useState<Unit | null>(null);
     const [isScanning, setIsScanning] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    // Derived state for pagination
+    const totalPages = Math.ceil(units.length / itemsPerPage);
+    const displayedUnits = units.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<UnitFormValues>({
         resolver: zodResolver(unitSchema),
@@ -206,7 +216,7 @@ export const AdminUnits = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                        {units.map((unit: Unit) => (
+                        {displayedUnits.map((unit: Unit) => (
                             <tr key={unit.id} className="hover:bg-slate-50 transition-colors">
                                 <td className="p-4 font-medium text-slate-800">{unit.name}</td>
                                 <td className="p-4">
@@ -248,6 +258,17 @@ export const AdminUnits = () => {
                     </tbody>
                 </table>
                 {units.length === 0 && <div className="p-8 text-center text-slate-400">Belum ada unit terdaftar.</div>}
+
+                {/* Pagination */}
+                <div className="bg-white px-4 pb-4">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        totalItems={units.length}
+                        itemsPerPage={itemsPerPage}
+                    />
+                </div>
             </div>
         </div>
     );

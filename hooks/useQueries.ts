@@ -16,67 +16,75 @@ export const KEYS = {
 
 // --- Queries ---
 
-export const useRequests = () => {
+export const useRequests = (options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: KEYS.REQUESTS,
         queryFn: ApiService.getRequests,
         staleTime: 1000 * 30,
+        enabled: options?.enabled,
     });
 };
 
-export const useStats = () => {
+export const useStats = (options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: ['stats'],
         queryFn: ApiService.getStats,
         staleTime: 1000 * 60, // 1 min
+        enabled: options?.enabled,
     });
 };
 
-export const useUsers = () => {
+export const useUsers = (options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: KEYS.USERS,
         queryFn: ApiService.getUsers,
         staleTime: 1000 * 60 * 5, // 5 mins
+        enabled: options?.enabled,
     });
 };
 
-export const useUnits = () => {
+export const useUnits = (options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: KEYS.UNITS,
         queryFn: ApiService.getUnits,
         staleTime: 1000 * 60 * 5,
+        enabled: options?.enabled,
     });
 };
 
-export const useInstruments = () => {
+export const useInstruments = (options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: KEYS.INSTRUMENTS,
         queryFn: ApiService.getInstruments,
         staleTime: 1000 * 30, // 30 sec
+        enabled: options?.enabled,
     });
 };
 
-export const useSets = () => {
+export const useSets = (options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: KEYS.SETS,
         queryFn: ApiService.getSets,
         staleTime: 1000 * 60 * 5,
+        enabled: options?.enabled,
     });
 };
 
-export const useTransactions = () => {
+export const useTransactions = (options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: KEYS.TRANSACTIONS,
         queryFn: ApiService.getTransactions,
         staleTime: 1000 * 10, // 10 sec for near real-time updates
+        enabled: options?.enabled,
     });
 };
 
-export const useLogs = () => {
+export const useLogs = (options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: KEYS.LOGS,
         queryFn: ApiService.getLogs,
         staleTime: 1000 * 30,
+        enabled: options?.enabled,
     });
 };
 

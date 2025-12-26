@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import { Shield, Filter, Download, Search, Calendar, User, Activity, AlertTriangle } from 'lucide-react';
 import { ApiService } from '../../services/apiService';
+import { Pagination } from '../../components/Pagination';
 
 interface AuditLog {
     id: string;
@@ -323,26 +324,14 @@ export const AuditLogView = () => {
                 )}
 
                 {/* Pagination Controls */}
-                <div className="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-                    <div className="text-sm text-slate-500">
-                        Page {currentPage} of {totalPages} ({totalLogs} items)
-                    </div>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                            disabled={currentPage === 1}
-                            className="px-3 py-1 bg-white border rounded text-slate-600 hover:bg-slate-100 disabled:opacity-50"
-                        >
-                            Previous
-                        </button>
-                        <button
-                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                            disabled={currentPage >= totalPages}
-                            className="px-3 py-1 bg-white border rounded text-slate-600 hover:bg-slate-100 disabled:opacity-50"
-                        >
-                            Next
-                        </button>
-                    </div>
+                <div className="bg-white px-4 pb-4">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        totalItems={totalLogs}
+                        itemsPerPage={filters.limit}
+                    />
                 </div>
             </div>
         </div>

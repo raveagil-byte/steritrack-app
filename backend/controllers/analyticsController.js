@@ -15,12 +15,12 @@ exports.getStats = async (req, res) => {
         // 2. Transaction Activity (Last 7 Days)
         const [activityRows] = await connection.query(`
             SELECT 
-                DATE(FROM_UNIXTIME(timestamp / 1000)) as date,
+                to_timestamp(timestamp / 1000)::date as date,
                 type,
                 COUNT(*) as count
             FROM transactions
-            WHERE timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 7 DAY)) * 1000
-            GROUP BY DATE(FROM_UNIXTIME(timestamp / 1000)), type
+            WHERE timestamp >= (EXTRACT(EPOCH FROM (NOW() - INTERVAL '7 days')) * 1000)
+            GROUP BY to_timestamp(timestamp / 1000)::date, type
             ORDER BY date ASC
         `);
 

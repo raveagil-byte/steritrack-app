@@ -73,15 +73,17 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const queryClient = useQueryClient();
     const { confirm, showAlert } = useConfirmation();
 
-    // Data Hooks
-    const usersQuery = useUsers();
-    const unitsQuery = useUnits();
-    const instrumentsQuery = useInstruments();
-    const setsQuery = useSets();
-    const transactionsQuery = useTransactions();
-    const logsQuery = useLogs();
-    const requestsQuery = useRequests();
-    const statsQuery = useStats();
+    // Data Hooks - ONLY FETCH IF LOGGED IN
+    const queryEnabled = !!currentUser;
+    const usersQuery = useUsers({ enabled: queryEnabled });
+    // Units must be available for registration even if logged out
+    const unitsQuery = useUnits({ enabled: true });
+    const instrumentsQuery = useInstruments({ enabled: queryEnabled });
+    const setsQuery = useSets({ enabled: queryEnabled });
+    const transactionsQuery = useTransactions({ enabled: queryEnabled });
+    const logsQuery = useLogs({ enabled: queryEnabled });
+    const requestsQuery = useRequests({ enabled: queryEnabled });
+    const statsQuery = useStats({ enabled: queryEnabled });
 
     // Mutations
     const appMutations = useAppMutations();
@@ -94,6 +96,12 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const login = (user: User) => {
         setCurrentUser(user);
         StorageService.saveCurrentUser(user);
+
+        // Force refetch because enabled:false -> true transition handles it mostly,
+        // but if there was existing cache (even empty), we want to be sure.
+        // Actually the transition from enabled: false to true automatically triggers fetch.
+        // But let's be safe against any weird caching state from before.
+        queryClient.invalidateQueries();
     };
 
     const logout = () => {

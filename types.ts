@@ -24,6 +24,8 @@ export interface User {
   role: Role;
   unitId?: string; // Optional: bind a nurse to a specific unit
   is_active?: boolean;
+  phone?: string;
+  photo_url?: string;
 }
 
 export interface Unit {

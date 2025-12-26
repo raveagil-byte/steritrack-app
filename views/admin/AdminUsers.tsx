@@ -9,6 +9,7 @@ import { Role, User } from '../../types';
 import { toast } from 'sonner';
 import { ApiService } from '../../services/apiService';
 import { useQueryClient } from '@tanstack/react-query';
+import { Pagination } from '../../components/Pagination';
 
 const userSchema = z.object({
     username: z.string().min(3, "Username minimal 3 karakter"),
@@ -25,6 +26,15 @@ export const AdminUsers = () => {
     const { confirm } = useConfirmation();
     const queryClient = useQueryClient();
     const [editingUser, setEditingUser] = useState<User | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    // Derived state for pagination
+    const totalPages = Math.ceil(users.length / itemsPerPage);
+    const displayedUsers = users.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<UserFormValues>({
         resolver: zodResolver(userSchema),
@@ -225,7 +235,7 @@ export const AdminUsers = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                        {users.map((u: User) => (
+                        {displayedUsers.map((u: User) => (
                             <tr key={u.id} className="hover:bg-slate-50 transition-colors">
                                 <td className="p-4 font-medium text-slate-800">{u.name}</td>
                                 <td className="p-4 text-slate-600">
@@ -270,6 +280,17 @@ export const AdminUsers = () => {
                     </tbody>
                 </table>
                 {users.length === 0 && <div className="p-8 text-center text-slate-400">Belum ada pengguna terdaftar.</div>}
+
+                {/* Pagination */}
+                <div className="bg-white px-4 pb-4">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        totalItems={users.length}
+                        itemsPerPage={itemsPerPage}
+                    />
+                </div>
             </div>
         </div>
     );

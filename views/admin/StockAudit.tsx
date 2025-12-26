@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AlertTriangle, CheckCircle, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import { ApiService } from '../../services/apiService';
+import { Pagination } from '../../components/Pagination';
 
 interface StockIssue {
     SetName: string;
@@ -22,12 +23,15 @@ interface AuditResult {
 export const StockAudit = () => {
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<AuditResult | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const runAudit = async () => {
         setLoading(true);
         try {
             const data: any = await ApiService.auditStockConsistency();
             setResult(data);
+            setCurrentPage(1); // Reset to first page on new audit
 
             if (data.issuesCount === 0) {
                 toast.success('Audit selesai: Semua stok wajar!');
@@ -41,6 +45,14 @@ export const StockAudit = () => {
             setLoading(false);
         }
     };
+
+    // Derived state for pagination
+    const issues = result?.issues || [];
+    const totalPages = Math.ceil(issues.length / itemsPerPage);
+    const displayedIssues = issues.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     return (
         <div className="space-y-6">
@@ -108,7 +120,7 @@ export const StockAudit = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
-                                {result.issues.map((issue, idx) => {
+                                {displayedIssues.map((issue, idx) => {
                                     const shortage = issue.RequiredTotal - issue.AvailableSingleStock;
                                     return (
                                         <tr key={idx} className="hover:bg-slate-50">
@@ -128,6 +140,17 @@ export const StockAudit = () => {
                                 })}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Pagination */}
+                    <div className="px-4 pb-4 bg-white">
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                            totalItems={issues.length}
+                            itemsPerPage={itemsPerPage}
+                        />
                     </div>
                 </div>
             )}

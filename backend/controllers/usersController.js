@@ -38,7 +38,7 @@ exports.login = async (req, res) => {
 
         // 2. Generate JWT Token
         const token = jwt.sign(
-            { id: user.id, username: user.username, role: user.role, unitId: user.unitId },
+            { id: user.id, username: user.username, role: user.role, unitId: user.unitId, photo_url: user.photo_url },
             JWT_SECRET,
             { expiresIn: '24h' }
         );
@@ -89,7 +89,7 @@ exports.registerPublic = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const [users] = await db.query('SELECT id, username, name, role, unitId, is_active FROM users');
+        const [users] = await db.query('SELECT id, username, name, role, unitId, is_active, phone, photo_url FROM users');
         res.json(users);
     } catch (err) { res.status(500).json({ error: err.message }); }
 };
@@ -128,28 +128,28 @@ exports.updateUser = async (req, res) => {
         if (password && password.trim() !== '') {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
-            await db.query('UPDATE users SET username = ?, name = ?, role = ?, unitId = ?, password = ? WHERE id = ?',
-                [username, name, role, unitId || null, hashedPassword, req.params.id]);
+            await db.query('UPDATE users SET username = ?, name = ?, role = ?, unitId = ?, password = ?, phone = ? WHERE id = ?',
+                [username, name, role, unitId || null, hashedPassword, req.body.phone || null, req.params.id]);
         } else {
             // Update without changing password
-            await db.query('UPDATE users SET username = ?, name = ?, role = ?, unitId = ? WHERE id = ?',
-                [username, name, role, unitId || null, req.params.id]);
+            await db.query('UPDATE users SET username = ?, name = ?, role = ?, unitId = ?, phone = ? WHERE id = ?',
+                [username, name, role, unitId || null, req.body.phone || null, req.params.id]);
         }
         res.json({ message: 'User updated' });
     } catch (err) { res.status(500).json({ error: err.message }); }
 };
 
 exports.updateUserProfile = async (req, res) => {
-    const { name, password } = req.body;
+    const { name, password, phone, photo_url } = req.body;
     try {
         if (password && password.trim() !== '') {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
-            await db.query('UPDATE users SET name = ?, password = ? WHERE id = ?',
-                [name, hashedPassword, req.params.id]);
+            await db.query('UPDATE users SET name = ?, password = ?, phone = ?, photo_url = ? WHERE id = ?',
+                [name, hashedPassword, phone || null, photo_url || null, req.params.id]);
         } else {
-            await db.query('UPDATE users SET name = ? WHERE id = ?',
-                [name, req.params.id]);
+            await db.query('UPDATE users SET name = ?, phone = ?, photo_url = ? WHERE id = ?',
+                [name, phone || null, photo_url || null, req.params.id]);
         }
         res.json({ message: 'Profile updated' });
     } catch (err) { res.status(500).json({ error: err.message }); }

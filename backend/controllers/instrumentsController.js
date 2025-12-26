@@ -20,7 +20,27 @@ const attachUnitStock = async (instruments) => {
 
 exports.getAllInstruments = async (req, res) => {
     try {
-        const [instruments] = await db.query('SELECT * FROM instruments');
+        // Optimized: Fetch instruments WITH aggregated unit stock in one go (SQL Subquery)
+        const query = `
+            SELECT 
+                i.*,
+                COALESCE(
+                    (SELECT json_object_agg(s.unitid, s.quantity)
+                     FROM inventory_snapshots s
+                     WHERE s.instrumentid = i.id),
+                    '{}'::json
+                ) as "unitStock",
+                COALESCE(
+                    (SELECT json_object_agg(s.unitid, s.max_stock)
+                     FROM inventory_snapshots s
+                     WHERE s.instrumentid = i.id),
+                    '{}'::json
+                ) as "unitMaxStock"
+            FROM instruments i
+        `;
+        const [instruments] = await db.query(query);
+
+        // Fetch aggregation data for usage calculation
         const [sets] = await db.query('SELECT id, name FROM instrument_sets');
         // Note: Future improvement -> use instrument_set_versions for recipes
         const [recipes] = await db.query('SELECT * FROM instrument_set_items');
@@ -47,10 +67,8 @@ exports.getAllInstruments = async (req, res) => {
             }
         });
 
-        // 4. Attach to output
-        const detailedInstruments = await attachUnitStock(instruments);
-
-        const finalResult = detailedInstruments.map(inst => {
+        // 4. Attach Usage Stats to Output (unitStock is already attached by SQL)
+        const finalResult = instruments.map(inst => {
             const used = instrumentUsage[inst.id] || 0;
             // Only 'Single' items can be inside sets, but we calculate for all just in case
             return {
@@ -73,7 +91,7 @@ exports.getUnassignedInstruments = async (req, res) => {
                 SELECT DISTINCT instrumentId 
                 FROM instrument_set_items
             )
-            AND i.is_active = 1
+            AND i.is_active = TRUE
         `;
         const [instruments] = await db.query(query);
         res.json(instruments);
@@ -184,5 +202,25 @@ exports.updateStock = async (req, res) => {
         res.status(500).json({ error: err.message });
     } finally {
         connection.release();
+    }
+};
+
+// NEW: Update Max Stock (Par Level)
+exports.updateMaxStock = async (req, res) => {
+    const { unitId, maxStock } = req.body;
+    const instrumentId = req.params.id;
+
+    try {
+        // Upsert logic: If record doesn't exist, create it with 0 quantity but set max_stock
+        await db.query(`
+            INSERT INTO inventory_snapshots (instrumentId, unitId, quantity, max_stock)
+            VALUES (?, ?, 0, ?)
+            ON CONFLICT (instrumentId, unitId) 
+            DO UPDATE SET max_stock = ?
+        `, [instrumentId, unitId, maxStock, maxStock]);
+
+        res.json({ message: 'Max Stock updated' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 };

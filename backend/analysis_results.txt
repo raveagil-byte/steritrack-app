@@ -1,0 +1,12 @@
+=== Analisis Status Instrumen ===
+Total Instrumen (Sirkulasi): 0
+---------------------------------
+1. Kotor (Belum Dicuci): 	0 item	(0%)
+2. Packing (Sudah Cuci): 	0 item	(0%)
+3. Steril (Siap Kirim): 	0 item	(0%)
+4. Terdistribusi (Di Unit): 	0 item	(0%)
+---------------------------------
+
+KESIMPULAN:
+Total Belum Steril (Kotor + Packing): 0 item (0%)
+=> SALAH. Sebagian besar instrumen sudah steril atau terdistribusi.

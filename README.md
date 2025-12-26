@@ -45,22 +45,59 @@ Aplikasi manajemen dan pelacakan instrumen medis steril untuk Central Sterile Su
 
 ---
 
-## 🛠 Teknologi yang Digunakan
+## 🧠 Metodologi Pengembangan
+Sistem ini dikembangkan menggunakan pendekatan **Agile Iterative** dengan kombinasi **User-Centered Design (UCD)**.
 
-### Frontend
-- **React 18** + **TypeScript** + **Vite**
-- **Tailwind CSS v4** (Modern Styling)
-- **React Query** (Server State Management)
-- **Zod** (Schema Validation)
-- **PWA Ready** (Bisa diinstall di HP)
-
-### Backend
-- **Node.js** + **Express**
-- **MySQL 8.0** (Relational Database)
-- **Security**: `helmet`, `express-rate-limit`, `cors`, `bcryptjs`, `jsonwebtoken`
-- **AI**: Google Gemini API / Hugging Face
+1.  **Iterative Development**: Pengembangan dilakukan dalam siklus pendek (sprints) untuk memastikan fitur kritis seperti *security hardening* dan *inventory logic* teruji dengan baik sebelum fitur tambahan dibangun.
+2.  **User-Centered Experience**:
+    *   Fokus pada *User Experience (UX)* untuk tenaga medis yang membutuhkan akses cepat.
+    *   Penggunaan **"Blue Liquid Glass" Design Language** untuk memberikan tampilan modern, bersih, dan menenangkan (psikologi warna rumah sakit).
+    *   Minimasi input manual melalui penggunaan QR Code dan dropdown cerdas.
+3.  **Security-First Architecture**: Keamanan data bukan fitur tambahan, melainkan pondasi (bawaan) melalui enkripsi, validasi ketat, dan masker error.
 
 ---
+
+## 🎨 Design Language: "Blue Liquid Glass"
+Sistem ini menerapkan filosofi desain antarmuka modern yang unik:
+- **Glassmorphism**: Efek transparansi *frosted glass* untuk memberikan kedalaman visual.
+- **Liquid Motion**: Animasi *fluid/floating* yang halus pada elemen UI untuk interaksi yang organik.
+- **Dynamic Feedback**: Elemen UI bereaksi terhadap fokus dan input pengguna (contoh: animasi berhenti saat mengetik).
+
+---
+
+## 🛠 Teknologi Stack (MERN + Modern Ecosystem)
+
+### Frontend (Client-Side)
+- **Core**: [React 18](https://reactjs.org/) dengan [TypeScript](https://www.typescriptlang.org/) untuk *type-safety*.
+- **Build Tool**: [Vite](https://vitejs.dev/) untuk performa development super cepat.
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) dengan kustomisasi *Glassmorphism* dan animasi CSS native.
+- **State Management**: 
+    - [TanStack Query](https://tanstack.com/query) untuk sinkronisasi state server (caching, re-fetching).
+    - React Context API untuk global app state.
+- **Form Handling**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) untuk validasi skema yang robust.
+- **UI Components**: 
+    - [Lucide React](https://lucide.dev/) untuk ikonografi modern.
+    - [Sonner](https://sonner.emilkowal.ski/) untuk notifikasi *toast* yang elegan.
+
+### Backend (Server-Side)
+- **Runtime**: [Node.js](https://nodejs.org/) (Environment Serverless-ready).
+- **Framework**: [Express.js](https://expressjs.com/) untuk REST API yang cepat dan ringan.
+- **Keamanan**:
+    - `Helmet`: Hardening HTTP Headers.
+    - `Bcrypt`: Hashing password satu arah.
+    - `JWT`: Token-based authentication stateless.
+    - `Express-Rate-Limit`: Perlindungan terhadap DDoS/Brute-force.
+- **AI Integration**: Konektor ke Google Gemini / Hugging Face untuk analisis prediktif.
+
+### Database & Storage
+- **Primary**: PostgreSQL (via Aiven Cloud) untuk produksi.
+- **Fallback/Local**: MySQL 8.0 support untuk instalasi on-premise.
+- **Schema Management**: SQL Migration scripts dengan versioning (V1 -> V2).
+
+### Deployment & DevOps
+- **Vercel**: Hosting Frontend & Backend (Serverless Functions).
+- **GitHub**: Version Control dan CI/CD pipeline sederhana.
+- **Testing**: SQA Test Plan terintegrasi untuk pengujian fungsional dan UI.
 
 ## 📦 Prasyarat Instalasi
 
@@ -114,17 +151,7 @@ Akses di: `http://localhost:5173`
 
 ---
 
-## 🔐 Akun Demo
-
-| Role | Username | Password |
-|------|----------|----------|
-| **Admin** | `admin` | `123` |
-| **CSSD Staff** | `staff` | `123` |
-| **Nurse (IGD)**| `nurse` | `123` |
-
----
-
-## � Troubleshooting Deployment
+##  Troubleshooting Deployment
 
 ### 1. CORS Error di Production
 Pastikan `FRONTEND_URL` di env backend sesuai dengan domain frontend Vercel Anda (tanpa slash di akhir).

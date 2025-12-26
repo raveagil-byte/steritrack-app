@@ -1,5 +1,6 @@
 // FINAL OPTIMIZED DATABASE DESIGN FOR SIAPPMEN (STERITRACK)
 // Based on Evaluation Report v2.0 (Advanced Optimizations)
+// NOTE: Physical Schema is PostgreSQL (Snake_case/Lowercase). Application maps this to CamelCase automatically.
 
 Table roles {
   id varchar(50) [pk]

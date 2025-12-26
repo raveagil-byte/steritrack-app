@@ -6,58 +6,75 @@ const db = require('../db');
 exports.getAuditLogs = async (req, res) => {
     const { userId, action, entityType, severity, dateFrom, dateTo, limit = 100, page = 1, search } = req.query;
 
-    let query = 'SELECT SQL_CALC_FOUND_ROWS * FROM audit_logs WHERE 1=1';
-    const params = [];
+    // Construct query without SQL_CALC_FOUND_ROWS
+    let query = 'SELECT * FROM audit_logs WHERE 1=1';
+
+    // ... (rest of filtering logic effectively unchanged for the WHERE clause construction, but applied to two queries)
+
+    // We need two queries:
+    // 1. Data Query (with LIMIT/OFFSET)
+    // 2. Count Query (without LIMIT/OFFSET)
+
+    // Reconstruct Filter String
+    let filterClause = '';
+    const filterParams = [];
 
     if (search) {
-        query += ' AND (userName LIKE ? OR action LIKE ? OR entityType LIKE ? OR entityId LIKE ?)';
+        filterClause += ' AND (userName LIKE ? OR action LIKE ? OR entityType LIKE ? OR entityId LIKE ?)';
         const searchPattern = `%${search}%`;
-        params.push(searchPattern, searchPattern, searchPattern, searchPattern);
+        filterParams.push(searchPattern, searchPattern, searchPattern, searchPattern);
     }
 
     if (userId) {
-        query += ' AND (userId = ? OR userName = ?)';
-        params.push(userId, userId);
+        filterClause += ' AND (userId = ? OR userName = ?)';
+        filterParams.push(userId, userId);
     }
 
     if (action) {
-        query += ' AND action = ?';
-        params.push(action);
+        filterClause += ' AND action = ?';
+        filterParams.push(action);
     }
 
     if (entityType) {
-        query += ' AND entityType = ?';
-        params.push(entityType);
+        filterClause += ' AND entityType = ?';
+        filterParams.push(entityType);
     }
 
     if (severity) {
-        query += ' AND severity = ?';
-        params.push(severity);
+        filterClause += ' AND severity = ?';
+        filterParams.push(severity);
     }
 
     if (dateFrom) {
-        query += ' AND timestamp >= ?';
-        params.push(parseInt(dateFrom));
+        filterClause += ' AND timestamp >= ?';
+        filterParams.push(parseInt(dateFrom));
     }
 
     if (dateTo) {
-        query += ' AND timestamp <= ?';
-        params.push(parseInt(dateTo));
+        filterClause += ' AND timestamp <= ?';
+        filterParams.push(parseInt(dateTo));
     }
+
+    // Main Query
+    const dataQuery = `SELECT * FROM audit_logs WHERE 1=1 ${filterClause} ORDER BY timestamp DESC LIMIT ? OFFSET ?`;
 
     const limitVal = parseInt(limit);
     const offsetVal = (parseInt(page) - 1) * limitVal;
 
-    query += ' ORDER BY timestamp DESC LIMIT ? OFFSET ?';
-    params.push(limitVal, offsetVal);
+    const dataParams = [...filterParams, limitVal, offsetVal];
+
+    // Count Query
+    const countQuery = `SELECT COUNT(*) as total FROM audit_logs WHERE 1=1 ${filterClause}`;
+    const countParams = [...filterParams];
 
     try {
-        const [logs] = await db.query(query, params);
-        const [countResult] = await db.query('SELECT FOUND_ROWS() as total');
-        const total = countResult[0].total;
+        const [logs] = await db.query(dataQuery, dataParams);
+        const [countResult] = await db.query(countQuery, countParams);
+        const total = countResult[0].total; // Parsing is handled by db.js (int8 parser)
 
         res.json({
             data: logs,
+
             pagination: {
                 total,
                 page: parseInt(page),

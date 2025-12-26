@@ -134,9 +134,9 @@ async function updateInstrumentStock(connection, instrumentId, count, broken, mi
 
         // Update Snapshot for Destination
         await connection.query(
-            `INSERT INTO inventory_snapshots (instrumentId, unitId, quantity) 
+            `INSERT INTO inventory_snapshots ("instrumentId", "unitId", quantity) 
              VALUES (?, ?, ?) 
-             ON DUPLICATE KEY UPDATE quantity = quantity + ?`,
+             ON CONFLICT ("instrumentId", "unitId") DO UPDATE SET quantity = inventory_snapshots.quantity + ?`,
             [instrumentId, destUnit, count, count]
         );
 

@@ -30,13 +30,21 @@ const app = express();
 app.set('trust proxy', 1); // Required for Vercel/Heroku logic to get real IP
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const compression = require('compression'); // Performance Optimization
+
+// Enable Gzip Compression
+app.use(compression());
 
 // Security Middleware
 app.use(helmet());
 
 // Hardening: STRICT CORS
 // In production, FRONTEND_URL should be set (e.g., https://steritrack.vercel.app)
-const allowedOrigins = process.env.FRONTEND_URL ? [process.env.FRONTEND_URL, 'http://localhost:5173'] : '*';
+// For local PWA testing, we allow '*' if not in production to support mobile IPs (e.g., 192.168.x.x)
+const isProduction = process.env.NODE_ENV === 'production';
+const allowedOrigins = isProduction && process.env.FRONTEND_URL
+    ? [process.env.FRONTEND_URL]
+    : '*';
 
 app.use(cors({
     origin: allowedOrigins,
@@ -103,7 +111,7 @@ app.use('/', systemRoutes);
 app.use('/api/users', usersRoutes);
 
 // Protected API Routes (Auth Required)
-app.use('/api/units', verifyToken, unitsRoutes);
+app.use('/api/units', unitsRoutes);
 app.use('/api/instruments', verifyToken, instrumentsRoutes);
 app.use('/api/sets', verifyToken, setsRoutes);
 app.use('/api/audit', verifyToken, require('./routes/auditRoutes'));

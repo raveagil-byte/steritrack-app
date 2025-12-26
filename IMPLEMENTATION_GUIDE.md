@@ -36,16 +36,16 @@ Dokumen ini adalah panduan implementasi untuk meningkatkan sistem **Log Aktivita
 #### Step 1.1: Backup Database
 ```bash
 # Backup database sebelum migration
-mysqldump -u root -p steritrack > backup_steritrack_$(date +%Y%m%d_%H%M%S).sql
+pg_dump -h localhost -p 5432 -U postgres -F p -f backup_steritrack_$(date +%Y%m%d_%H%M%S).sql steritrack
 ```
 
 #### Step 1.2: Run Migration Script
 ```bash
 # Masuk ke MySQL
-mysql -u root -p steritrack
+psql -h localhost -p 5432 -U postgres -d steritrack
 
 # Run migration script
-source backend/migration_enhanced_validation_audit.sql
+\i backend/migration_enhanced_validation_audit.sql
 
 # Verify tables created
 SHOW TABLES;
@@ -720,7 +720,7 @@ If something goes wrong:
 ```bash
 # 1. Stop backend server
 # 2. Restore database backup
-mysql -u root -p steritrack < backup_steritrack_YYYYMMDD_HHMMSS.sql
+psql -h localhost -U postgres -d steritrack < backup_steritrack_YYYYMMDD_HHMMSS.sql
 
 # 3. Restore original controller
 cp backend/controllers/transactionsController_BACKUP.js backend/controllers/transactionsController.js
