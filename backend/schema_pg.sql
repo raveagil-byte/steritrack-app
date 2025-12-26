@@ -24,7 +24,9 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(100) NOT NULL,
     role VARCHAR(20) NOT NULL,
     unitid VARCHAR(50), -- mapped to unitId
-    is_active BOOLEAN DEFAULT TRUE
+    is_active BOOLEAN DEFAULT TRUE,
+    phone VARCHAR(20),
+    photo_url TEXT
 );
 
 -- User Roles (Many-to-Many)
@@ -95,6 +97,7 @@ CREATE TABLE IF NOT EXISTS inventory_snapshots (
     unitid VARCHAR(50), -- unitId
     instrumentid VARCHAR(50), -- instrumentId
     quantity INTEGER NOT NULL DEFAULT 0,
+    max_stock INTEGER DEFAULT 0, -- target par level
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (unitid, instrumentid),
     FOREIGN KEY (unitid) REFERENCES units(id) ON DELETE CASCADE,
