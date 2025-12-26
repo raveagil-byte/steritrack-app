@@ -30,8 +30,8 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD || process.env.DB_PASS || '',
     database: process.env.DB_NAME || 'steritrack',
     ssl: (process.env.DB_SSL === 'true' || process.env.NODE_ENV === 'production') ? { rejectUnauthorized: false } : undefined,
-    max: 20, // Increase pool size for better concurrency
-    idleTimeoutMillis: 30000,
+    max: 5, // Aiven Free Tier Limit: 10 connections. Use 5 to be safe.
+    idleTimeoutMillis: 10000,
     connectionTimeoutMillis: 2000,
 });
 
