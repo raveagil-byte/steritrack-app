@@ -78,7 +78,22 @@ export const ApiService = {
             throw new Error("Unauthorized");
         }
 
+        if (!res.ok) {
+            const errBody = await res.json().catch(() => ({}));
+            throw new Error(errBody.error || errBody.message || `API Error: ${res.status}`);
+        }
+
         return res.json();
+    },
+
+    async batchGenerateAssets(instrumentId: string, prefix: string, count: number) {
+        const response = await fetch(`${API_URL}/assets/batch`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ instrumentId, prefix, count, startFrom: 1 })
+        });
+        if (!response.ok) throw new Error('Gagal generate batch');
+        return response.json();
     },
 
     createTransaction: (tx: Transaction) => ApiService.apiCall('transactions', 'POST', tx),
