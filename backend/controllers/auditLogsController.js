@@ -124,4 +124,169 @@ exports.getAuditStats = async (req, res) => {
     }
 };
 
+/**
+ * Get combined logs from Audit, Transactions, Packs, and Batches
+ */
+exports.getCombinedLogs = async (req, res) => {
+    const { search, dateFrom, dateTo, limit = 50, page = 1 } = req.query;
+    const limitVal = parseInt(limit);
+    const offsetVal = (parseInt(page) - 1) * limitVal;
+
+    // Base params for dates (used in all unions)
+    let dateParams = [];
+    let dateClauses = {
+        audit: '',
+        tx: '',
+        pack: '',
+        batch: ''
+    };
+
+    if (dateFrom) {
+        const from = parseInt(dateFrom);
+        dateClauses.audit += ' AND timestamp >= ?';
+        dateClauses.tx += ' AND timestamp >= ?';
+        dateClauses.pack += ' AND createdat >= ?';
+        dateClauses.batch += ' AND timestamp >= ?';
+        // We will push these into the main params array later
+    }
+
+    if (dateTo) {
+        const to = parseInt(dateTo);
+        dateClauses.audit += ' AND timestamp <= ?';
+        dateClauses.tx += ' AND timestamp <= ?';
+        dateClauses.pack += ' AND createdat <= ?';
+        dateClauses.batch += ' AND timestamp <= ?';
+    }
+
+    // Search Clause (Wrapper based approach is better for UNION, but MySQL/PG differences make subqueries safer)
+    // We will use a wrapping subquery for search/pagination for simplicity
+
+    // Construct the 4 SELECT statements
+
+    // 1. Audit Logs
+    const qAudit = `
+        SELECT id, timestamp, 'System' as source, action, severity, details, username as actor
+        FROM audit_logs
+        WHERE 1=1 ${dateClauses.audit}
+    `;
+
+    // 2. Transactions
+    const qTx = `
+        SELECT id, timestamp, 'Transaction' as source, type as action, 
+        CASE WHEN status='COMPLETED' THEN 'INFO' ELSE 'WARNING' END as severity,
+        CONCAT('Unit: ', unitid, ', Status: ', status) as details, 
+        createdby as actor
+        FROM transactions
+        WHERE 1=1 ${dateClauses.tx}
+    `;
+
+    // 3. Packs
+    const qPack = `
+        SELECT id, createdat as timestamp, 'Packing' as source, 'PACK_CREATED' as action,
+        'INFO' as severity,
+        CONCAT('Pack: ', name, ', QR: ', qrcode) as details,
+        packedby as actor
+        FROM sterile_packs
+        WHERE 1=1 ${dateClauses.pack}
+    `;
+
+    // 4. Batches
+    const qBatches = `
+        SELECT id, timestamp, 'Sterilization' as source, 'CYCLE_START' as action,
+        CASE WHEN status='SUCCESS' THEN 'INFO' ELSE 'ERROR' END as severity,
+        CONCAT('Machine: ', machine, ', Cycle: ', status) as details,
+        operator as actor
+        FROM sterilization_batches
+        WHERE 1=1 ${dateClauses.batch}
+    `;
+
+    // Combine them
+    let mainQuery = `
+        SELECT * FROM (
+            ${qAudit}
+            UNION ALL
+            ${qTx}
+            UNION ALL
+            ${qPack}
+            UNION ALL
+            ${qBatches}
+        ) as combined_logs
+        WHERE 1=1
+    `;
+
+    // Add Search to the outer query
+    const queryParams = [];
+
+    // Add date params for EACH of the 4 queries
+    const singleQueryDateParams = [];
+    if (dateFrom) singleQueryDateParams.push(parseInt(dateFrom));
+    if (dateTo) singleQueryDateParams.push(parseInt(dateTo));
+
+    // We have 4 subqueries, so request params * 4
+    for (let i = 0; i < 4; i++) {
+        queryParams.push(...singleQueryDateParams);
+    }
+
+    if (search) {
+        mainQuery += ` AND (
+            id LIKE ? OR 
+            action LIKE ? OR 
+            details LIKE ? OR 
+            actor LIKE ?
+        )`;
+        const s = `%${search}%`;
+        queryParams.push(s, s, s, s);
+    }
+
+    // Count Total (before pagination)
+    const countQuery = `SELECT COUNT(*) as total FROM (${mainQuery.split('WHERE 1=1')[0]} WHERE 1=1 ${search ? 'AND (id LIKE ? OR action LIKE ? OR details LIKE ? OR actor LIKE ?)' : ''}) as combined_count`;
+    // ^ This is a bit hacky string manipulation but works for this structure. 
+    // Actually safer to run the exact same WHERE clause logic.
+
+    // Let's execute Count first
+    // Note: The count params are same as queryParams (without limit/offset)
+
+    // Add Order and Limit to Main Query
+    mainQuery += ` ORDER BY timestamp DESC LIMIT ? OFFSET ?`;
+    queryParams.push(limitVal, offsetVal);
+
+    try {
+        // Execute Data Query
+        const [logs] = await db.query(mainQuery, queryParams);
+
+        // Execute Count Query
+        // For count, we need the params WITHOUT limit/offset
+        const countParams = queryParams.slice(0, queryParams.length - 2);
+        // We need to reconstruct the count SQL properly
+        const countSql = `SELECT COUNT(*) as total FROM (
+            ${qAudit}
+            UNION ALL
+            ${qTx}
+            UNION ALL
+            ${qPack}
+            UNION ALL
+            ${qBatches}
+        ) as combined_logs
+        WHERE 1=1
+        ${search ? 'AND (id LIKE ? OR action LIKE ? OR details LIKE ? OR actor LIKE ?)' : ''}`;
+
+        const [countRes] = await db.query(countSql, countParams);
+        const total = countRes[0].total;
+
+        res.json({
+            data: logs,
+            pagination: {
+                total,
+                page: parseInt(page),
+                limit: limitVal,
+                totalPages: Math.ceil(total / limitVal)
+            }
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
 module.exports = exports;
