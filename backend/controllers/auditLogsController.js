@@ -141,17 +141,14 @@ exports.getCombinedLogs = async (req, res) => {
         batch: ''
     };
 
-    if (dateFrom) {
-        const from = parseInt(dateFrom);
+    if (dateFrom && !isNaN(parseInt(dateFrom))) {
         dateClauses.audit += ' AND timestamp >= ?';
         dateClauses.tx += ' AND timestamp >= ?';
         dateClauses.pack += ' AND createdat >= ?';
         dateClauses.batch += ' AND timestamp >= ?';
-        // We will push these into the main params array later
     }
 
-    if (dateTo) {
-        const to = parseInt(dateTo);
+    if (dateTo && !isNaN(parseInt(dateTo))) {
         dateClauses.audit += ' AND timestamp <= ?';
         dateClauses.tx += ' AND timestamp <= ?';
         dateClauses.pack += ' AND createdat <= ?';
@@ -217,10 +214,13 @@ exports.getCombinedLogs = async (req, res) => {
     // Add Search to the outer query
     const queryParams = [];
 
-    // Add date params for EACH of the 4 queries
     const singleQueryDateParams = [];
-    if (dateFrom) singleQueryDateParams.push(parseInt(dateFrom));
-    if (dateTo) singleQueryDateParams.push(parseInt(dateTo));
+    if (dateFrom && !isNaN(parseInt(dateFrom))) {
+        singleQueryDateParams.push(parseInt(dateFrom));
+    }
+    if (dateTo && !isNaN(parseInt(dateTo))) {
+        singleQueryDateParams.push(parseInt(dateTo));
+    }
 
     // We have 4 subqueries, so request params * 4
     for (let i = 0; i < 4; i++) {

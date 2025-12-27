@@ -48,8 +48,13 @@ export const ApiService = {
     getTransactions: () => ApiService.getRecources<Transaction[]>('transactions'),
     getLogs: () => ApiService.getRecources<LogEntry[]>('logs'),
     getCombinedLogs: (params: any) => {
-        const query = new URLSearchParams(params).toString();
-        return ApiService.getRecources<{ data: any[], pagination: any }>(`audit-logs/combined?${query}`);
+        const searchParams = new URLSearchParams();
+        Object.keys(params).forEach(key => {
+            if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
+                searchParams.append(key, params[key]);
+            }
+        });
+        return ApiService.getRecources<{ data: any[], pagination: any }>(`audit-logs/combined?${searchParams.toString()}`);
     },
     getUsers: () => ApiService.getRecources<User[]>('users'),
     getRequests: () => ApiService.getRecources<Request[]>('requests'),
