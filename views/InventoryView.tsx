@@ -3,11 +3,12 @@ import { RefreshCw, AlertCircle, ChevronRight, MapPin, Building2 } from 'lucide-
 import { useAppContext } from '../context/AppContext';
 import { Role, Instrument } from '../types';
 import InstrumentDetailModal from '../components/InstrumentDetailModal';
+import { INVENTORY_FILTERS } from '../constants';
 
 const InventoryView = () => {
     const { instruments, units, transactions, sterilizeDirtyStock, currentUser } = useAppContext();
     const [selectedInstrument, setSelectedInstrument] = useState<Instrument | null>(null);
-    const [selectedUnitId, setSelectedUnitId] = useState<string>('ALL');
+    const [selectedUnitId, setSelectedUnitId] = useState<string>(INVENTORY_FILTERS.ALL);
 
     const totalDirty = instruments.reduce((acc: number, curr: Instrument) => acc + curr.dirtyStock, 0);
 
@@ -23,11 +24,11 @@ const InventoryView = () => {
 
     // Filter instruments based on selected unit
     const filteredInstruments = useMemo(() => {
-        if (selectedUnitId === 'ALL') {
+        if (selectedUnitId === INVENTORY_FILTERS.ALL) {
             return instruments;
         }
 
-        if (selectedUnitId === 'CSSD') {
+        if (selectedUnitId === INVENTORY_FILTERS.CSSD) {
             // Show instruments with CSSD stock
             return instruments.filter((inst: Instrument) => inst.cssdStock > 0);
         }
@@ -57,7 +58,7 @@ const InventoryView = () => {
 
     // Get selected unit info
     const selectedUnit = useMemo(() => {
-        if (selectedUnitId === 'ALL' || selectedUnitId === 'CSSD') return null;
+        if (selectedUnitId === INVENTORY_FILTERS.ALL || selectedUnitId === INVENTORY_FILTERS.CSSD) return null;
         return units.find(u => u.id === selectedUnitId);
     }, [units, selectedUnitId]);
 
@@ -78,9 +79,9 @@ const InventoryView = () => {
                             className="pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-sm font-medium min-w-[200px]"
                         >
                             {/* Admin/CSSD can see Aggregate view */}
-                            {!isNurse && <option value="ALL">Semua Lokasi</option>}
+                            {!isNurse && <option value={INVENTORY_FILTERS.ALL}>Semua Lokasi</option>}
 
-                            <option value="CSSD">CSSD (Steril)</option>
+                            <option value={INVENTORY_FILTERS.CSSD}>CSSD (Steril)</option>
 
                             {units
                                 .filter(u => u.is_active)
@@ -112,12 +113,12 @@ const InventoryView = () => {
             )}
 
             {/* Info Banner for Unit Filter */}
-            {selectedUnitId !== 'ALL' && (
+            {selectedUnitId !== INVENTORY_FILTERS.ALL && (
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center gap-3">
                     <Building2 className="text-blue-600" size={20} />
                     <div className="flex-1">
                         <p className="text-sm font-medium text-blue-900">
-                            {selectedUnitId === 'CSSD'
+                            {selectedUnitId === INVENTORY_FILTERS.CSSD
                                 ? 'Menampilkan instrumen steril di CSSD'
                                 : `Menampilkan instrumen di ${selectedUnit?.name}`
                             }
@@ -127,7 +128,7 @@ const InventoryView = () => {
                         </p>
                     </div>
                     <button
-                        onClick={() => setSelectedUnitId('ALL')}
+                        onClick={() => setSelectedUnitId(INVENTORY_FILTERS.ALL)}
                         className="text-xs text-blue-600 hover:text-blue-800 font-medium"
                     >
                         Lihat Semua
@@ -141,17 +142,17 @@ const InventoryView = () => {
                         <thead className="bg-slate-50 text-slate-500 font-medium uppercase tracking-wider">
                             <tr>
                                 <th className="p-4">Instrumen</th>
-                                {selectedUnitId === 'ALL' && (
+                                {selectedUnitId === INVENTORY_FILTERS.ALL && (
                                     <>
                                         <th className="p-4 text-center">Di CSSD (Steril)</th>
                                         {!isNurse && <th className="p-4 text-center">Di CSSD (Kotor)</th>}
                                         <th className="p-4 text-right">Terdistribusi (Di Unit)</th>
                                     </>
                                 )}
-                                {selectedUnitId === 'CSSD' && (
+                                {selectedUnitId === INVENTORY_FILTERS.CSSD && (
                                     <th className="p-4 text-center">Stok Steril</th>
                                 )}
-                                {selectedUnitId !== 'ALL' && selectedUnitId !== 'CSSD' && (
+                                {selectedUnitId !== INVENTORY_FILTERS.ALL && selectedUnitId !== INVENTORY_FILTERS.CSSD && (
                                     <>
                                         <th className="p-4 text-center">Stok di Unit</th>
                                         <th className="p-4 text-center text-slate-400 font-normal text-xs">Tersedia di Pusat</th>
@@ -173,7 +174,7 @@ const InventoryView = () => {
                                     const values = Object.values(unitStock) as number[];
                                     const totalInUnits: number = values.reduce((a, b) => a + b, 0);
                                     const isLowStock = inst.cssdStock < 10;
-                                    const currentUnitStock = selectedUnitId !== 'ALL' && selectedUnitId !== 'CSSD'
+                                    const currentUnitStock = selectedUnitId !== INVENTORY_FILTERS.ALL && selectedUnitId !== INVENTORY_FILTERS.CSSD
                                         ? (unitStock[selectedUnitId] || 0)
                                         : 0;
 
@@ -189,7 +190,7 @@ const InventoryView = () => {
                                                         <div className="font-semibold text-slate-900">{inst.name}</div>
                                                         <div className="text-xs text-slate-400">{inst.category}</div>
                                                     </div>
-                                                    {isLowStock && selectedUnitId === 'ALL' && (
+                                                    {isLowStock && selectedUnitId === INVENTORY_FILTERS.ALL && (
                                                         <span className="flex items-center gap-1 text-[10px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full border border-red-200 ml-2">
                                                             <AlertCircle size={10} /> RENDAH
                                                         </span>
@@ -197,7 +198,7 @@ const InventoryView = () => {
                                                 </div>
                                             </td>
 
-                                            {selectedUnitId === 'ALL' && (
+                                            {selectedUnitId === INVENTORY_FILTERS.ALL && (
                                                 <>
                                                     <td className="p-4 text-center">
                                                         <span className={`inline-block px-3 py-1 rounded-full font-bold ${isLowStock ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-green-100 text-green-600'}`}>
@@ -221,7 +222,7 @@ const InventoryView = () => {
                                                 </>
                                             )}
 
-                                            {selectedUnitId === 'CSSD' && (
+                                            {selectedUnitId === INVENTORY_FILTERS.CSSD && (
                                                 <td className="p-4 text-center">
                                                     <span className={`inline-block px-4 py-2 rounded-full font-bold text-lg ${isLowStock ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-green-100 text-green-600'}`}>
                                                         {inst.cssdStock}
@@ -229,7 +230,7 @@ const InventoryView = () => {
                                                 </td>
                                             )}
 
-                                            {selectedUnitId !== 'ALL' && selectedUnitId !== 'CSSD' && (
+                                            {selectedUnitId !== INVENTORY_FILTERS.ALL && selectedUnitId !== INVENTORY_FILTERS.CSSD && (
                                                 <>
                                                     <td className="p-4 text-center">
                                                         <span className="inline-block px-4 py-2 rounded-full font-bold text-lg bg-blue-100 text-blue-600">

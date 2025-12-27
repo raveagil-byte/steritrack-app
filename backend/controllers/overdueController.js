@@ -1,4 +1,5 @@
 const db = require('../db');
+const { TRANSACTION_TYPES, TRANSACTION_STATUS, ITEM_TYPES } = require('../constants');
 
 // Helper to calculate days overdue
 const getDaysOverdue = (expectedDate) => {
@@ -15,12 +16,12 @@ exports.getOverdueInstruments = async (req, res) => {
         const [distItems] = await db.query(`
             SELECT 
                 t.id as transactionId, t.unitid as unitId, u.name as unitName, t.timestamp, t.expectedreturndate as expectedReturnDate,
-                ti.instrumentid as instrumentId, i.name as instrumentName, ti.count, 'SINGLE' as itemType
+                ti.instrumentid as instrumentId, i.name as instrumentName, ti.count, '${ITEM_TYPES.SINGLE}' as itemType
             FROM transactions t
             JOIN units u ON t.unitid = u.id
             JOIN transaction_items ti ON t.id = ti.transactionid
             JOIN instruments i ON ti.instrumentid = i.id
-            WHERE t.type = 'DISTRIBUTE' AND t.status = 'COMPLETED'
+            WHERE t.type = '${TRANSACTION_TYPES.DISTRIBUTE}' AND t.status = '${TRANSACTION_STATUS.COMPLETED}'
             ORDER BY t.timestamp ASC
         `);
 
@@ -28,30 +29,30 @@ exports.getOverdueInstruments = async (req, res) => {
         const [distSets] = await db.query(`
             SELECT 
                 t.id as transactionId, t.unitid as unitId, u.name as unitName, t.timestamp, t.expectedreturndate as expectedReturnDate,
-                tsi.setid as instrumentId, s.name as instrumentName, tsi.quantity as count, 'SET' as itemType
+                tsi.setid as instrumentId, s.name as instrumentName, tsi.quantity as count, '${ITEM_TYPES.SET}' as itemType
             FROM transactions t
             JOIN units u ON t.unitid = u.id
             JOIN transaction_set_items tsi ON t.id = tsi.transactionid
             JOIN instrument_sets s ON tsi.setid = s.id
-            WHERE t.type = 'DISTRIBUTE' AND t.status = 'COMPLETED'
+            WHERE t.type = '${TRANSACTION_TYPES.DISTRIBUTE}' AND t.status = '${TRANSACTION_STATUS.COMPLETED}'
             ORDER BY t.timestamp ASC
         `);
 
         // 2. Fetch all COMPLETED COLLECTIONS (Singles and Sets)
         // We only need counts to offset the distributions
         const [collItems] = await db.query(`
-            SELECT t.unitid as unitId, ti.instrumentid as instrumentId, ti.count, 'SINGLE' as itemType, t.timestamp
+            SELECT t.unitid as unitId, ti.instrumentid as instrumentId, ti.count, '${ITEM_TYPES.SINGLE}' as itemType, t.timestamp
             FROM transactions t
             JOIN transaction_items ti ON t.id = ti.transactionid
-            WHERE t.type = 'COLLECT' AND t.status = 'COMPLETED'
+            WHERE t.type = '${TRANSACTION_TYPES.COLLECT}' AND t.status = '${TRANSACTION_STATUS.COMPLETED}'
             ORDER BY t.timestamp ASC
         `);
 
         const [collSets] = await db.query(`
-            SELECT t.unitid as unitId, tsi.setid as instrumentId, tsi.quantity as count, 'SET' as itemType, t.timestamp
+            SELECT t.unitid as unitId, tsi.setid as instrumentId, tsi.quantity as count, '${ITEM_TYPES.SET}' as itemType, t.timestamp
             FROM transactions t
             JOIN transaction_set_items tsi ON t.id = tsi.transactionid
-            WHERE t.type = 'COLLECT' AND t.status = 'COMPLETED'
+            WHERE t.type = '${TRANSACTION_TYPES.COLLECT}' AND t.status = '${TRANSACTION_STATUS.COMPLETED}'
             ORDER BY t.timestamp ASC
         `);
 
@@ -142,29 +143,29 @@ exports.checkUnitOverdue = async (req, res) => {
 
         // Fetch Distributions for specific unit
         const [distRows] = await db.query(`
-            SELECT t.id, ti.instrumentid as instrumentId, ti.count, t.expectedreturndate, 'SINGLE' as itemType
+            SELECT t.id, ti.instrumentid as instrumentId, ti.count, t.expectedreturndate, '${ITEM_TYPES.SINGLE}' as itemType
             FROM transactions t
             JOIN transaction_items ti ON t.id = ti.transactionid
-            WHERE t.type = 'DISTRIBUTE' AND t.status = 'COMPLETED' AND t.unitid = $1
+            WHERE t.type = '${TRANSACTION_TYPES.DISTRIBUTE}' AND t.status = '${TRANSACTION_STATUS.COMPLETED}' AND t.unitid = $1
             UNION ALL
-            SELECT t.id, tsi.setid as instrumentId, tsi.quantity as count, t.expectedreturndate, 'SET' as itemType
+            SELECT t.id, tsi.setid as instrumentId, tsi.quantity as count, t.expectedreturndate, '${ITEM_TYPES.SET}' as itemType
             FROM transactions t
             JOIN transaction_set_items tsi ON t.id = tsi.transactionid
-            WHERE t.type = 'DISTRIBUTE' AND t.status = 'COMPLETED' AND t.unitid = $1
+            WHERE t.type = '${TRANSACTION_TYPES.DISTRIBUTE}' AND t.status = '${TRANSACTION_STATUS.COMPLETED}' AND t.unitid = $1
             ORDER BY expectedreturndate ASC
         `, [unitId]);
 
         // Fetch Collections for specific unit
         const [collRows] = await db.query(`
-            SELECT ti.instrumentid as instrumentId, ti.count, 'SINGLE' as itemType
+            SELECT ti.instrumentid as instrumentId, ti.count, '${ITEM_TYPES.SINGLE}' as itemType
             FROM transactions t
             JOIN transaction_items ti ON t.id = ti.transactionid
-            WHERE t.type = 'COLLECT' AND t.status = 'COMPLETED' AND t.unitid = $1
+            WHERE t.type = '${TRANSACTION_TYPES.COLLECT}' AND t.status = '${TRANSACTION_STATUS.COMPLETED}' AND t.unitid = $1
             UNION ALL
-            SELECT tsi.setid as instrumentId, tsi.quantity as count, 'SET' as itemType
+            SELECT tsi.setid as instrumentId, tsi.quantity as count, '${ITEM_TYPES.SET}' as itemType
             FROM transactions t
             JOIN transaction_set_items tsi ON t.id = tsi.transactionid
-            WHERE t.type = 'COLLECT' AND t.status = 'COMPLETED' AND t.unitid = $1
+            WHERE t.type = '${TRANSACTION_TYPES.COLLECT}' AND t.status = '${TRANSACTION_STATUS.COMPLETED}' AND t.unitid = $1
         `, [unitId]);
 
         // FIFO Processing

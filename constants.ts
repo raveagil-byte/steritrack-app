@@ -70,4 +70,22 @@ export const BUTTON_CLASSES = {
     SUCCESS: "bg-green-600 text-white hover:bg-green-700"
 } as const;
 
+// Inventory Filters
+export const INVENTORY_FILTERS = {
+    ALL: 'ALL',
+    CSSD: 'CSSD'
+} as const;
+
+// Sterilization Steps
+export const STERILIZATION_STEPS = {
+    DECONTAMINATION: 'DECONTAMINATION',
+    STERILIZATION: 'STERILIZATION'
+} as const;
+
+// Cycle Statuses
+export const CYCLE_STATUS = {
+    SUCCESS: 'SUCCESS',
+    FAILED: 'FAILED'
+} as const;
+
 export const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/Dbb6Zgp1OdvEdLOkvMo8Db';

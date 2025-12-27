@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Transaction, Instrument, InstrumentSet } from '../../types';
 import { CheckCircle2, AlertTriangle, Package } from 'lucide-react';
 import { toast } from 'sonner';
+import { ITEM_TYPES } from '../../constants';
 
 interface ItemVerification {
     id: string; // instrumentId or setId
@@ -34,7 +35,7 @@ export const ValidationForm: React.FC<Props> = ({ transaction, instruments, sets
             const instrument = instruments.find(i => i.id === item.instrumentId);
             return {
                 id: item.instrumentId,
-                type: 'SINGLE' as const,
+                type: ITEM_TYPES.SINGLE,
                 name: instrument?.name || 'Unknown Instrument',
                 expectedCount: item.count,
                 receivedCount: item.count,
@@ -55,7 +56,7 @@ export const ValidationForm: React.FC<Props> = ({ transaction, instruments, sets
 
             return {
                 id: item.setId,
-                type: 'SET' as const,
+                type: ITEM_TYPES.SET,
                 name: set?.name || 'Unknown Set',
                 expectedCount: item.quantity,
                 receivedCount: item.quantity,
@@ -213,12 +214,12 @@ export const ValidationForm: React.FC<Props> = ({ transaction, instruments, sets
                                         {verification.name}
                                     </h3>
                                     <div className="flex gap-2 text-xs font-mono items-center mt-1">
-                                        <span className={`px-2 py-0.5 rounded text-white ${verification.type === 'SET' ? 'bg-purple-500' : 'bg-blue-500'}`}>
+                                        <span className={`px-2 py-0.5 rounded text-white ${verification.type === ITEM_TYPES.SET ? 'bg-purple-500' : 'bg-blue-500'}`}>
                                             {verification.type}
                                         </span>
                                         <span className="text-slate-500">ID: {verification.id}</span>
                                     </div>
-                                    {verification.type === 'SET' && verification.internalItems && (
+                                    {verification.type === ITEM_TYPES.SET && verification.internalItems && (
                                         <div className="mt-3 bg-slate-50 border border-slate-200 rounded-lg p-3">
                                             <p className="text-xs font-bold text-slate-500 uppercase mb-2">Cek Kelengkapan Isi:</p>
                                             <div className="space-y-2">

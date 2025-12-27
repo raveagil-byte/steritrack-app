@@ -9,11 +9,11 @@ const INITIAL_UNITS: Unit[] = [
 ];
 
 const INITIAL_INSTRUMENTS: Instrument[] = [
-  { id: 'i1', name: 'Set Bedah Mayor', category: 'Sets', totalStock: 20, cssdStock: 15, dirtyStock: 0, unitStock: {} },
-  { id: 'i2', name: 'Set Bedah Minor', category: 'Sets', totalStock: 30, cssdStock: 25, dirtyStock: 0, unitStock: {} },
-  { id: 'i3', name: 'Laringoskop', category: 'Device', totalStock: 15, cssdStock: 10, dirtyStock: 0, unitStock: {} },
-  { id: 'i4', name: 'Gunting Bedah (Bengkok)', category: 'Single', totalStock: 50, cssdStock: 40, dirtyStock: 0, unitStock: {} },
-  { id: 'i5', name: 'Pinset Anatomis', category: 'Single', totalStock: 50, cssdStock: 45, dirtyStock: 0, unitStock: {} },
+  { id: 'i1', name: 'Set Bedah Mayor', category: 'Sets', totalStock: 20, cssdStock: 15, dirtyStock: 0, packingStock: 0, unitStock: {} },
+  { id: 'i2', name: 'Set Bedah Minor', category: 'Sets', totalStock: 30, cssdStock: 25, dirtyStock: 0, packingStock: 0, unitStock: {} },
+  { id: 'i3', name: 'Laringoskop', category: 'Device', totalStock: 15, cssdStock: 10, dirtyStock: 0, packingStock: 0, unitStock: {} },
+  { id: 'i4', name: 'Gunting Bedah (Bengkok)', category: 'Single', totalStock: 50, cssdStock: 40, dirtyStock: 0, packingStock: 0, unitStock: {} },
+  { id: 'i5', name: 'Pinset Anatomis', category: 'Single', totalStock: 50, cssdStock: 45, dirtyStock: 0, packingStock: 0, unitStock: {} },
 ];
 
 const INITIAL_SETS: InstrumentSet[] = [
@@ -74,7 +74,7 @@ export const StorageService = {
     if (user) localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
     else localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
   },
-  
+
   // Reset for demo purposes
   reset: () => {
     localStorage.clear();

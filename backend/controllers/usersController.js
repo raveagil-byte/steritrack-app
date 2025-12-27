@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
+const { ROLES } = require('../constants');
+
 if (!process.env.JWT_SECRET && process.env.NODE_ENV === 'production') {
     console.error('FATAL WARNING: JWT_SECRET is not defined. Using insecure fallback!');
 }
@@ -71,7 +73,7 @@ exports.registerPublic = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Security: Force role limitations if needed (e.g., prevent creating ADMIN via public API)
-        if (role === 'ADMIN') {
+        if (role === ROLES.ADMIN) {
             return res.status(403).json({ error: 'Role ADMIN tidak dapat didaftarkan secara publik.' });
         }
 

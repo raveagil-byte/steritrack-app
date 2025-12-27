@@ -1,4 +1,5 @@
 const db = require('../db');
+const { TRANSACTION_TYPES, TRANSACTION_STATUS, VALIDATION_STATUS, ITEM_TYPES, ASSET_STATUS, UNIT_IDS, LOCATIONS } = require('../constants');
 
 exports.getAllTransactions = async (req, res) => {
     try {
@@ -47,12 +48,12 @@ exports.createTransaction = async (req, res) => {
         let sourceUnit = null;
         let destUnit = null;
 
-        const CSSD_UNIT_ID = 'u-cssd';
+        const CSSD_UNIT_ID = UNIT_IDS.CSSD;
 
-        if (type === 'DISTRIBUTE') {
+        if (type === TRANSACTION_TYPES.DISTRIBUTE) {
             sourceUnit = CSSD_UNIT_ID;
             destUnit = unitId;
-        } else if (type === 'COLLECT') {
+        } else if (type === TRANSACTION_TYPES.COLLECT) {
             sourceUnit = unitId;
             destUnit = CSSD_UNIT_ID;
         } else {
@@ -73,7 +74,7 @@ exports.createTransaction = async (req, res) => {
                 const missing = item.missingCount || 0;
 
                 await connection.query('INSERT INTO transaction_items (transactionId, instrumentId, count, itemType, brokenCount, missingCount) VALUES (?, ?, ?, ?, ?, ?)',
-                    [id, item.instrumentId, item.count, item.itemType || 'SINGLE', broken, missing]);
+                    [id, item.instrumentId, item.count, item.itemType || ITEM_TYPES.SINGLE, broken, missing]);
 
                 // Update stock using new schema
                 await updateInstrumentStock(connection, item.instrumentId, item.count, broken, missing, type, sourceUnit, destUnit);
@@ -90,12 +91,12 @@ exports.createTransaction = async (req, res) => {
                         let newStatus = null;
                         let newLocation = null;
 
-                        if (type === 'DISTRIBUTE') {
-                            newStatus = 'IN_USE'; // or DISTRIBUTED
+                        if (type === TRANSACTION_TYPES.DISTRIBUTE) {
+                            newStatus = ASSET_STATUS.IN_USE; // or DISTRIBUTED
                             newLocation = destUnit;
-                        } else if (type === 'COLLECT') {
-                            newStatus = 'DIRTY';
-                            newLocation = 'CSSD';
+                        } else if (type === TRANSACTION_TYPES.COLLECT) {
+                            newStatus = ASSET_STATUS.DIRTY;
+                            newLocation = LOCATIONS.CSSD;
                         }
                         // If Transaction Type is STERILIZATION (rarely used here directly, usually Batch)
 
@@ -132,12 +133,12 @@ exports.createTransaction = async (req, res) => {
                         let newStatus = null;
                         let newLocation = null;
 
-                        if (type === 'DISTRIBUTE') {
-                            newStatus = 'IN_USE';
+                        if (type === TRANSACTION_TYPES.DISTRIBUTE) {
+                            newStatus = ASSET_STATUS.IN_USE;
                             newLocation = destUnit;
-                        } else if (type === 'COLLECT') {
-                            newStatus = 'DIRTY';
-                            newLocation = 'CSSD';
+                        } else if (type === TRANSACTION_TYPES.COLLECT) {
+                            newStatus = ASSET_STATUS.DIRTY;
+                            newLocation = LOCATIONS.CSSD;
                         }
 
                         if (newStatus) {
@@ -178,7 +179,7 @@ exports.createTransaction = async (req, res) => {
 
 // Helper function to update instrument stock using inventory_snapshots
 async function updateInstrumentStock(connection, instrumentId, count, broken, missing, type, sourceUnit, destUnit) {
-    if (type === 'DISTRIBUTE') {
+    if (type === TRANSACTION_TYPES.DISTRIBUTE) {
         // Decrease Source (CSSD)
         // Update Legacy Field (Backward compatibility)
         await connection.query(
@@ -194,7 +195,9 @@ async function updateInstrumentStock(connection, instrumentId, count, broken, mi
             [instrumentId, destUnit, count, count]
         );
 
-    } else if (type === 'COLLECT') {
+
+
+    } else if (type === TRANSACTION_TYPES.COLLECT) {
         const totalRemoved = count + broken + missing;
 
         // Reduce Source (Unit) Snapshot
@@ -232,7 +235,7 @@ exports.validateTransaction = async (req, res) => {
     const { validatedBy } = req.body;
     try {
         // Update using new column
-        await db.query('UPDATE transactions SET status = "COMPLETED", validated_by_user_id = ? WHERE id = ?', [validatedBy, req.params.id]);
+        await db.query('UPDATE transactions SET status = ?, validated_by_user_id = ? WHERE id = ?', [TRANSACTION_STATUS.COMPLETED, validatedBy, req.params.id]);
         res.json({ message: 'Transaction validated' });
     } catch (err) { res.status(500).json({ error: err.message }); }
 };
@@ -251,7 +254,7 @@ exports.validateSetAvailability = async (req, res) => {
         for (const item of setItems) {
             const required = item.quantity * quantity;
 
-            if (type === 'DISTRIBUTE') {
+            if (type === TRANSACTION_TYPES.DISTRIBUTE) {
                 const [instruments] = await db.query(
                     'SELECT cssdStock FROM instruments WHERE id = ?',
                     [item.instrumentId]
@@ -266,7 +269,7 @@ exports.validateSetAvailability = async (req, res) => {
                         available: instruments[0]?.cssdStock || 0
                     });
                 }
-            } else if (type === 'COLLECT') {
+            } else if (type === TRANSACTION_TYPES.COLLECT) {
                 // Use inventory_snapshots
                 const [unitStock] = await db.query(
                     'SELECT quantity FROM inventory_snapshots WHERE instrumentid = ? AND unitid = ?',
@@ -324,7 +327,7 @@ exports.validateTransactionWithVerification = async (req, res) => {
 
         const transaction = transactions[0];
 
-        if (transaction.status !== 'PENDING') {
+        if (transaction.status !== TRANSACTION_STATUS.PENDING) {
             throw new Error('Transaction is not pending validation');
         }
 
@@ -383,19 +386,19 @@ exports.validateTransactionWithVerification = async (req, res) => {
         }
 
         // 4. Determine validation status
-        const validationStatus = hasDiscrepancy ? 'PARTIAL' : 'VERIFIED';
+        const validationStatus = hasDiscrepancy ? VALIDATION_STATUS.PARTIAL : VALIDATION_STATUS.VERIFIED;
 
         // 5. Update transaction
         // Use new column validated_by_user_id
         await connection.query(
             `UPDATE transactions 
-             SET status = 'COMPLETED', 
+             SET status = ?, 
                  validated_by_user_id = ?, 
                  validatedAt = ?,
                  validationStatus = ?,
                  validationNotes = ?
              WHERE id = ?`,
-            [validatedBy, Date.now(), validationStatus, notes || null, transactionId]
+            [TRANSACTION_STATUS.COMPLETED, validatedBy, Date.now(), validationStatus, notes || null, transactionId]
         );
 
         // 6. Log audit event
