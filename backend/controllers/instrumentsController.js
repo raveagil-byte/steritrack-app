@@ -123,6 +123,45 @@ exports.createInstrument = async (req, res) => {
                 await connection.query('INSERT INTO inventory_snapshots (instrumentId, unitId, quantity) VALUES (?, ?, ?)', [id, unitId, qty]);
             }
         }
+
+        // AUTO-GENERATE ASSETS if Serialized
+        if (is_serialized && totalStock > 0) {
+            const assetValues = [];
+            const mkAsset = (status, location) => {
+                const serial = `SN-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+                // id, instrumentid, serialnumber, status, location, usagecount, createdat, updatedat
+                const assetId = `asset-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
+                return [assetId, id, serial, status, location || 'CSSD', 0, Date.now(), Date.now()];
+            };
+
+            // 1. CSSD Stock (Ready)
+            if (cssdStock > 0) {
+                for (let i = 0; i < cssdStock; i++) assetValues.push(mkAsset('READY', 'CSSD'));
+            }
+
+            // 2. Dirty Stock (Dirty)
+            if (dirtyStock > 0) {
+                for (let i = 0; i < dirtyStock; i++) assetValues.push(mkAsset('DIRTY', 'CSSD')); // Dirty is usually in CSSD receiving
+            }
+
+            // 3. Unit Stock (Distributed)
+            if (unitStock) {
+                for (const [unitId, qty] of Object.entries(unitStock)) {
+                    for (let i = 0; i < qty; i++) assetValues.push(mkAsset('DISTRIBUTED', unitId));
+                }
+            }
+
+            // 4. Any remaining TotalStock that wasn't covered? 
+            // Usually totalStock = cssd + dirty + unit. 
+            // If there's a discrepancy, we might miss some. But let's trust the breakdown.
+
+            if (assetValues.length > 0) {
+                await connection.query(
+                    `INSERT INTO instrument_assets (id, instrumentid, serialnumber, status, location, usagecount, createdat, updatedat) VALUES ?`,
+                    [assetValues]
+                );
+            }
+        }
         await connection.commit();
         res.json({ message: 'Instrument created' });
     } catch (err) {
