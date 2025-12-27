@@ -13,6 +13,7 @@ export const ARScanner: React.FC<Props> = ({ onScan }) => {
         const startScanner = async () => {
             try {
                 // Create instance
+                // formatsToSupport is valid in constructor config, but NOT in start() config
                 const html5QrCode = new Html5Qrcode("reader", {
                     formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE, Html5QrcodeSupportedFormats.DATA_MATRIX],
                     verbose: false
@@ -26,7 +27,7 @@ export const ARScanner: React.FC<Props> = ({ onScan }) => {
                         fps: 10,
                         qrbox: { width: 250, height: 250 },
                         aspectRatio: 1.0,
-                        formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE, Html5QrcodeSupportedFormats.DATA_MATRIX]
+                        // REMOVED formatsToSupport here as it caused TS Error and is invalid in this config object
                     },
                     (decodedText) => {
                         onScan(decodedText);
