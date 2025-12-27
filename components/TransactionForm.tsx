@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Instrument, InstrumentSet, TransactionItem, TransactionSetItem, TransactionType, Unit } from '../types';
 import { useAppContext } from '../context/AppContext';
 import QRScanner from './QRScanner';
-import { Minus, Plus, QrCode, X, Package, Layers } from 'lucide-react';
+import { Minus, Plus, QrCode, X, Package, Layers, Clock } from 'lucide-react';
 import { ApiService } from '../services/apiService';
 import { toast } from 'sonner';
 
@@ -11,7 +11,7 @@ const BTN_PRIMARY_CLASSES = "bg-blue-600 text-white font-semibold py-3 px-6 roun
 interface TransactionFormProps {
     unit: Unit;
     type: TransactionType;
-    onSubmit: (items: TransactionItem[], setItems: TransactionSetItem[], packIds?: string[]) => void;
+    onSubmit: (items: TransactionItem[], setItems: TransactionSetItem[], packIds?: string[], expectedReturnDate?: number | null) => void;
     onCancel: () => void;
 }
 
@@ -320,6 +320,8 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
     };
 
 
+    const [returnDuration, setReturnDuration] = useState(1); // Default 1 day
+
     const handleSubmit = () => {
         // Prepare individual items
         const items: TransactionItem[] = [];
@@ -362,8 +364,14 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
             }
         });
 
+        // Calculate expected return date
+        let expectedReturnDate = null;
+        if (type === TransactionType.DISTRIBUTE) {
+            const now = new Date();
+            expectedReturnDate = now.setDate(now.getDate() + returnDuration);
+        }
 
-        onSubmit(items, setItems, scannedPackIds);
+        onSubmit(items, setItems, scannedPackIds, expectedReturnDate);
     };
 
     const totalItems = Object.values(quantities).reduce((a, b) => a + b, 0) +
@@ -390,6 +398,26 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                 </div>
                 <button onClick={onCancel} className="text-slate-400 hover:text-slate-600"><X size={24} /></button>
             </div>
+
+            {/* Return Date Selector for Distribution */}
+            {type === TransactionType.DISTRIBUTE && (
+                <div className="p-4 bg-orange-50 border-b border-orange-100 flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-orange-800">
+                        <Clock size={18} />
+                        <span className="font-semibold text-sm">Batas Waktu Kembali:</span>
+                    </div>
+                    <select
+                        value={returnDuration}
+                        onChange={(e) => setReturnDuration(Number(e.target.value))}
+                        className="bg-white border border-orange-200 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block p-2 font-bold"
+                    >
+                        <option value={1}>1 Hari (Besok)</option>
+                        <option value={2}>2 Hari</option>
+                        <option value={3}>3 Hari</option>
+                        <option value={7}>1 Minggu</option>
+                    </select>
+                </div>
+            )}
 
             {/* Scan Button */}
             <div className="p-4 bg-white border-b border-slate-100">

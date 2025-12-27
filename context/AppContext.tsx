@@ -34,7 +34,7 @@ interface AppContextType {
 
 
     // Actions (Wrapped mutations)
-    createTransaction: (type: TransactionType, unitId: string, items: TransactionItem[], setItems?: TransactionSetItem[], packIds?: string[]) => Promise<Transaction | null>;
+    createTransaction: (type: TransactionType, unitId: string, items: TransactionItem[], setItems?: TransactionSetItem[], packIds?: string[], expectedReturnDate?: number | null) => Promise<Transaction | null>;
     validateTransaction: (txId: string, validatorName: string) => Promise<boolean>;
     washItems: (items: { instrumentId: string, quantity: number }[]) => Promise<void>;
     sterilizeItems: (items: { instrumentId: string, quantity: number }[], machine: string, status: 'SUCCESS' | 'FAILED') => Promise<any>;
@@ -136,9 +136,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const updateSetStatus = async (id: string, is_active: boolean) => { await appMutations.updateSetStatus.mutateAsync({ id, is_active }); };
     const deleteSet = async (id: string) => { await appMutations.deleteSet.mutateAsync(id); };
 
-    const createTransaction = async (type: TransactionType, unitId: string, items: TransactionItem[], setItems?: TransactionSetItem[], packIds?: string[]) => {
+    const createTransaction = async (type: TransactionType, unitId: string, items: TransactionItem[], setItems?: TransactionSetItem[], packIds?: string[], expectedReturnDate?: number | null) => {
         if (items.length === 0 && (!setItems || setItems.length === 0)) return null;
-        const res = await appMutations.createTransaction.mutateAsync({ type, unitId, items, setItems: setItems || [], packIds: packIds || [] });
+        const res = await appMutations.createTransaction.mutateAsync({ type, unitId, items, setItems: setItems || [], packIds: packIds || [], expectedReturnDate });
         return res;
     };
 

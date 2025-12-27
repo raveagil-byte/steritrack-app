@@ -24,7 +24,7 @@ exports.getAllTransactions = async (req, res) => {
 exports.createTransaction = async (req, res) => {
     // NEW SCHEMA: Accept source_unit_id, destination_unit_id, created_by_user_id
     // Fallback for older frontend: unitId maps to dest/source depending on logic
-    const { id, timestamp, type, status, unitId, items, setItems, qrCode, createdBy, notes } = req.body;
+    const { id, timestamp, type, status, unitId, items, setItems, qrCode, createdBy, notes, expectedReturnDate } = req.body;
 
     // Validate that transaction has items
     const hasItems = (items && items.length > 0) || (setItems && setItems.length > 0);
@@ -41,6 +41,7 @@ exports.createTransaction = async (req, res) => {
 
         // Logic to determine source/dest based on type
         // Assuming 'CSSD' is a special unit ID or handling it logically
+        // If type is DISTRIBUTE, Source=CSSD, Dest=Unit
         // If type is DISTRIBUTE, Source=CSSD, Dest=Unit
         // If type is COLLECT, Source=Unit, Dest=CSSD
 
@@ -61,8 +62,8 @@ exports.createTransaction = async (req, res) => {
 
         // 1. Create transaction record
         await connection.query(
-            'INSERT INTO transactions (id, timestamp, type, status, source_unit_id, destination_unit_id, qrCode, created_by_user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [id, timestamp, type, status, sourceUnit, destUnit, qrCode, createdBy]
+            'INSERT INTO transactions (id, timestamp, type, status, source_unit_id, destination_unit_id, qrCode, created_by_user_id, expectedreturndate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [id, timestamp, type, status, sourceUnit, destUnit, qrCode, createdBy, expectedReturnDate || null]
         );
 
         // 2. Process individual items

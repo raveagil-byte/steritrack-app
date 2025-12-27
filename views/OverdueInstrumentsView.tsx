@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Clock, Package, ChevronDown, ChevronUp } from 'lucide-react';
+import { AlertTriangle, Clock, Package, ChevronDown, ChevronUp, Download } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { ApiService } from '../services/apiService';
 
@@ -52,6 +52,34 @@ const OverdueInstrumentsView = () => {
 
     const totalOverdue = overdueData.reduce((sum, unit) => sum + unit.overdueCount, 0);
 
+    const downloadCSV = () => {
+        if (!overdueData.length) return;
+        const rows = [
+            ["Unit", "Instrumen", "Jumlah", "Tgl Distribusi", "Batas Kembali", "Terlambat (Hari)"]
+        ];
+        overdueData.forEach(unit => {
+            unit.instruments.forEach(inst => {
+                rows.push([
+                    `"${unit.unitName}"`,
+                    `"${inst.instrumentName}"`,
+                    inst.count.toString(),
+                    new Date(inst.distributedAt).toLocaleDateString('id-ID'),
+                    new Date(inst.expectedReturnDate).toLocaleDateString('id-ID'),
+                    inst.daysOverdue.toString()
+                ]);
+            });
+        });
+
+        const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `laporan_overdue_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     if (isLoading) {
         return (
             <div className="flex items-center justify-center h-64">
@@ -67,9 +95,19 @@ const OverdueInstrumentsView = () => {
                     <h2 className="text-3xl font-bold text-slate-800">Instrumen Belum Kembali</h2>
                     <p className="text-slate-500">Monitoring instrumen yang melewati batas waktu pengembalian</p>
                 </div>
-                <div className="bg-orange-100 border border-orange-200 rounded-xl px-4 py-2">
-                    <div className="text-xs text-orange-600 font-medium">Total Overdue</div>
-                    <div className="text-2xl font-bold text-orange-700">{totalOverdue}</div>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={downloadCSV}
+                        disabled={totalOverdue === 0}
+                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition shadow-sm disabled:opacity-50"
+                    >
+                        <Download size={20} />
+                        Export Excel/CSV
+                    </button>
+                    <div className="bg-orange-100 border border-orange-200 rounded-xl px-4 py-2">
+                        <div className="text-xs text-orange-600 font-medium">Total Overdue</div>
+                        <div className="text-2xl font-bold text-orange-700">{totalOverdue}</div>
+                    </div>
                 </div>
             </header>
 

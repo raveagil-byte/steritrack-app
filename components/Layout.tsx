@@ -1,4 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { ApiService } from '../services/apiService';
 import {
     Box,
     ClipboardCheck,
@@ -22,6 +24,15 @@ import { DigitalClock } from './DigitalClock';
 export const Layout = () => {
     const { currentUser, logout } = useAppContext();
     const { theme, toggleTheme } = useTheme();
+
+    const { data: overdueData } = useQuery({
+        queryKey: ['overdue_check'],
+        queryFn: () => ApiService.getRecources<any[]>('overdue'),
+        enabled: !!currentUser && (currentUser.role === Role.ADMIN || currentUser.role === Role.CSSD),
+        refetchInterval: 30000 // 30s
+    });
+
+    const overdueCount = overdueData ? overdueData.reduce((acc: number, unit: any) => acc + unit.totalOverdue, 0) : 0;
 
     if (!currentUser) {
         return <Navigate to="/login" replace />;
@@ -89,7 +100,14 @@ export const Layout = () => {
                     <SidebarBtn icon={<ScrollText />} label="Log Aktivitas" to="/activity" />
 
                     {(currentUser.role === Role.ADMIN || currentUser.role === Role.CSSD) && (
-                        <SidebarBtn icon={<AlertTriangle />} label="Instrumen Belum Kembali" to="/overdue" />
+                        <div className="relative">
+                            <SidebarBtn icon={<AlertTriangle />} label="Instrumen Belum Kembali" to="/overdue" />
+                            {overdueCount > 0 && (
+                                <span className="absolute right-2 top-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">
+                                    {overdueCount}
+                                </span>
+                            )}
+                        </div>
                     )}
 
                     {currentUser.role === Role.ADMIN && (

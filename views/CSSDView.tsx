@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Truck, Trash2, CheckCircle2, Mail, Flame, Package, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
+import { ApiService } from '../services/apiService';
 import { useAppContext } from '../context/AppContext';
 import { LogEntry, Transaction, TransactionItem, TransactionSetItem, TransactionType, Unit } from '../types';
 import QRScanner from '../components/QRScanner';
@@ -21,12 +22,32 @@ const CSSDView = () => {
 
     const pendingCount = requests.filter(r => r.status === 'PENDING').length;
 
-    const handleUnitScan = (code: string) => {
+    const handleUnitScan = async (code: string) => {
         // Trim whitespace just in case
         const cleanCode = code.trim();
         const unit = units.find((u: Unit) => u.qrCode === cleanCode);
 
         if (unit) {
+            // BLOCKING LOGIC: Check for Overdue Instruments
+            if (transactionType === TransactionType.DISTRIBUTE) {
+                try {
+                    const check = await ApiService.checkUnitOverdue(unit.id);
+                    if (check && check.hasOverdue) {
+                        toast.error(`BLOCKED: Unit ${unit.name} memiliki instrumen BELUM KEMBALI (Overdue). Selesaikan pengembalian terlebih dahulu!`, {
+                            duration: 5000,
+                            className: 'bg-red-100 text-red-800 border border-red-200'
+                        });
+                        // Strictly block distribution
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Failed to check overdue", e);
+                    // Optionally warn if offline, but for safety we proceed if check fails? 
+                    // Or block? Let's proceed with warning if check fails to avoid lockout during network issues.
+                    toast.warning("Gagal memperbarui status overdue. Melanjutkan dengan risiko.");
+                }
+            }
+
             setScannedUnit(unit);
             setMode('FORM');
         } else {
@@ -34,9 +55,9 @@ const CSSDView = () => {
         }
     };
 
-    const handleCreateTx = async (items: TransactionItem[], setItems: TransactionSetItem[], packIds?: string[]) => {
+    const handleCreateTx = async (items: TransactionItem[], setItems: TransactionSetItem[], packIds?: string[], expectedReturnDate?: number | null) => {
         if (!scannedUnit) return;
-        const tx = await createTransaction(transactionType, scannedUnit.id, items, setItems, packIds);
+        const tx = await createTransaction(transactionType, scannedUnit.id, items, setItems, packIds, expectedReturnDate);
         if (tx) {
             setGeneratedTx(tx);
             setMode('SUCCESS');
@@ -232,6 +253,11 @@ const CSSDView = () => {
                 <div className="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 mb-8">
                     <QRCodeGenerator value={generatedTx.qrCode} size={256} />
                     <p className="text-center text-xs font-mono mt-4 text-slate-400">{generatedTx.id}</p>
+                </div>
+
+                <div className="mb-8 p-4 bg-blue-50 rounded-lg text-sm text-blue-800">
+                    <p className="font-semibold">Batas Pengembalian:</p>
+                    <p>{generatedTx.expectedReturnDate ? new Date(generatedTx.expectedReturnDate).toLocaleDateString() : 'Tidak ditentukan'}</p>
                 </div>
 
                 <button onClick={reset} className={`max-w-sm w-full ${BTN_PRIMARY_CLASSES}`}>

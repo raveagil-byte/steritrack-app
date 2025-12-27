@@ -208,7 +208,8 @@ export const useAppMutations = () => {
             unitId: string,
             items: { instrumentId: string, count: number }[],
             setItems?: { setId: string, quantity: number }[],
-            packIds?: string[]
+            packIds?: string[],
+            expectedReturnDate?: number | null
         }) => {
             const tx: Transaction = {
                 id: crypto.randomUUID(),
@@ -221,6 +222,7 @@ export const useAppMutations = () => {
                 packIds: data.packIds,
                 qrCode: `TX-${Date.now()}`,
                 createdBy: currentUser?.name || 'System',
+                expectedReturnDate: data.expectedReturnDate || undefined
             };
             await ApiService.createTransaction(tx);
             // Return the transaction object so it can be used in the UI

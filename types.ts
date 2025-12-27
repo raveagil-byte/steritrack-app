@@ -97,6 +97,7 @@ export interface Transaction {
   qrCode: string; // Generated QR for the transaction itself
   createdBy: string; // 'CSSD Staff'
   validatedBy?: string; // 'Nurse X'
+  expectedReturnDate?: number;
 }
 
 export interface LogEntry {
