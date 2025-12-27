@@ -22,6 +22,11 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
     const [discrepancies, setDiscrepancies] = useState<Record<string, { broken: number; missing: number }>>({});
     const [setItemsDiscrepancies, setSetItemsDiscrepancies] = useState<Record<string, { broken: number; missing: number }>>({});
     const [serialNumbers, setSerialNumbers] = useState<Record<string, string[]>>({}); // instrumentId -> [sn1, sn2]
+
+    // NEW: Asset ID Tracking
+    const [selectedAssets, setSelectedAssets] = useState<Record<string, string[]>>({}); // instrumentId -> [assetId1, assetId2]
+    const [assetMap, setAssetMap] = useState<Record<string, any[]>>({}); // Cache of assets per instrument
+
     const [scannedPackIds, setScannedPackIds] = useState<string[]>([]); // Track distinct packs scanned
 
     // UI States for replacing native dialogs
@@ -36,10 +41,13 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
     const availableInstruments = useMemo(() => {
         return instruments.filter((inst: Instrument) => {
             if (!inst.is_active) return false;
+            // Removed tight strict check for 0 stock, we might want to see them but disabled
+            return true;
+        }).filter((inst: Instrument) => {
             if (type === TransactionType.DISTRIBUTE) {
-                return inst.cssdStock > 0;
+                return inst.cssdStock >= 0; // Show even if 0
             } else {
-                return (inst.unitStock[unit.id] || 0) > 0;
+                return (inst.unitStock[unit.id] || 0) >= 0;
             }
         });
     }, [instruments, type, unit.id]);
@@ -54,18 +62,49 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                 const inst = instruments.find(i => i.id === setItem.instrumentId);
                 if (!inst || !inst.is_active) return false;
 
-                const required = setItem.quantity;
-                const available = type === TransactionType.DISTRIBUTE
-                    ? inst.cssdStock
-                    : (inst.unitStock[unit.id] || 0);
-
-                return available >= required;
+                // We just return true to list them, validation happens on quantity add
+                return true;
             });
         });
-    }, [sets, instruments, type, unit.id]);
+    }, [sets, instruments]);
 
-    const addSerialNumber = (instrumentId: string, sn: string, max: number) => {
+    const fetchAssetsIfNeeded = async (instrumentId: string) => {
+        if (!assetMap[instrumentId]) {
+            try {
+                const assets = await ApiService.getAssetsByInstrument(instrumentId);
+                setAssetMap(prev => ({ ...prev, [instrumentId]: assets }));
+                return assets;
+            } catch (e) {
+                console.error(e);
+                toast.error("Gagal memuat data asset");
+                return [];
+            }
+        }
+        return assetMap[instrumentId];
+    };
+
+    const addSerialNumber = async (instrumentId: string, sn: string, max: number) => {
         if (!sn.trim()) return;
+
+        // 1. Fetch real assets
+        const assets = await fetchAssetsIfNeeded(instrumentId);
+
+        // 2. Find asset by SN
+        // Case insensitive? Ideally sensitive.
+        const asset = assets.find((a: any) => a.serialNumber === sn);
+
+        if (!asset) {
+            toast.error(`Serial Number "${sn}" tidak ditemukan di database.`);
+            return;
+        }
+
+        // 3. Optional: Check status
+        if (type === TransactionType.DISTRIBUTE && asset.status !== 'READY') {
+            toast.warning(`Asset "${sn}" statusnya ${asset.status}, bukan READY.`);
+            // Allow proceed? Maybe block strictly? 
+            // return; 
+        }
+
         setSerialNumbers(prev => {
             const currentList = prev[instrumentId] || [];
             if (currentList.includes(sn)) {
@@ -76,6 +115,13 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                 toast.warning("Jumlah melebihi stok tersedia.");
                 return prev;
             }
+
+            // Store ID
+            setSelectedAssets(prevAssets => {
+                const currentIds = prevAssets[instrumentId] || [];
+                return { ...prevAssets, [instrumentId]: [...currentIds, asset.id] };
+            });
+
             const newList = [...currentList, sn];
             // Sync quantity
             setQuantities(q => ({ ...q, [instrumentId]: newList.length }));
@@ -86,7 +132,22 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
     const removeSerialNumber = (instrumentId: string, snToRemove: string) => {
         setSerialNumbers(prev => {
             const currentList = prev[instrumentId] || [];
+            // Remove from list
             const newList = currentList.filter(sn => sn !== snToRemove);
+
+            // Remove ID too
+            // Optimally we assume the asset exists in assetMap because we fetched it to add it
+            const assets = assetMap[instrumentId] || [];
+            const assetToRemove = assets.find((a: any) => a.serialNumber === snToRemove);
+
+            if (assetToRemove) {
+                setSelectedAssets(prevAssets => {
+                    const currentIds = prevAssets[instrumentId] || [];
+                    const newIds = currentIds.filter(id => id !== assetToRemove.id);
+                    return { ...prevAssets, [instrumentId]: newIds };
+                });
+            }
+
             // Sync quantity
             setQuantities(q => ({ ...q, [instrumentId]: newList.length }));
             return { ...prev, [instrumentId]: newList };
@@ -124,13 +185,6 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
 
                 // Check total constraint
                 const currentOk = quantities[id] || 0;
-                const currentBroken = field === 'broken' ? val : (current.broken);
-                const currentMissing = field === 'missing' ? val : (current.missing);
-                const otherDiscrepancy = field === 'broken' ? current.missing : current.broken;
-
-                const total = currentOk + currentBroken + currentMissing + delta; // Estimate new total
-
-                // Actually, let's just check if we can add
                 const actualTotal = currentOk + (discrepancies[id]?.broken || 0) + (discrepancies[id]?.missing || 0);
 
                 if (delta > 0 && actualTotal >= max) return prev;
@@ -146,11 +200,6 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
             });
         }
     };
-
-    // Old updateSetQuantity (keeping for reference if something breaks, but replaced by new one above)
-    // ...
-
-
 
     const handleScan = async (code: string) => {
         // 1. Check if it's a PACK
@@ -196,7 +245,6 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                                 message: `Paket ini ditandai (Booking) untuk unit: "${targetName}".\nSedangkan Anda sedang distribusi ke unit: "${unit.name}".\n\nApakah Anda yakin ingin memberikan paket ini ke ${unit.name}?`,
                                 onConfirm: () => {
                                     setConfirmModal(null);
-                                    // Check FIFO next
                                     checkFifoAndProcess(pack, processPackAddition);
                                 },
                                 onCancel: () => {
@@ -236,7 +284,6 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                     },
                     onCancel: () => {
                         setInputModal(null);
-                        // setIsScanning(false); // Maybe keep scanning open?
                     }
                 });
             } else {
@@ -276,10 +323,7 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
         }
     };
 
-    // Helper for Sets discrepancies (simpler logic: mostly just OK sets, but allowing marking separate broken sets if needed?)
-    // For now, let's keep Set interaction simple or copy the logic if necessary.
-    // User Update: "barang kembali ada yang rusak atau hilang".
-    // Let's implement full discrepancy logic for sets too.
+    // Helper for Sets discrepancies
     const updateSetQuantity = (setId: string, delta: number, field: 'ok' | 'broken' | 'missing', max: number) => {
         if (field === 'ok') {
             setSelectedSets(prev => {
@@ -340,7 +384,8 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                     itemType: 'SINGLE',
                     brokenCount: broken,
                     missingCount: missing,
-                    serialNumbers: serialNumbers[id] || []
+                    serialNumbers: serialNumbers[id] || [],
+                    assetIds: selectedAssets[id] || [] // Submit UUIDs
                 });
             }
         });
@@ -426,7 +471,7 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                     className="w-full flex items-center justify-center gap-2 py-3 bg-blue-50 text-blue-600 rounded-xl font-bold hover:bg-blue-100 transition border border-blue-100"
                 >
                     <QrCode size={20} />
-                    Scan QR Instrumen
+                    Scan QR Astrumen
                 </button>
             </div>
 

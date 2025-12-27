@@ -16,6 +16,14 @@ exports.getAllTransactions = async (req, res) => {
             const [packs] = await db.query('SELECT packId, sp.name, sp.qrCode FROM transaction_packs tp JOIN sterile_packs sp ON tp.packId = sp.id WHERE transactionId = ?', [tx.id]);
             tx.packs = packs;
 
+            // Get involved assets (Serials)
+            const [assets] = await db.query(`
+                SELECT tia.instrumentid, tia.assetid, ia.serialnumber, ia.status
+                FROM transaction_item_assets tia
+                JOIN instrument_assets ia ON tia.assetid = ia.id
+                WHERE tia.transactionid = ?
+            `, [tx.id]);
+            tx.assets = assets;
         }
         res.json(transactions);
     } catch (err) { res.status(500).json({ error: err.message }); }
@@ -39,14 +47,7 @@ exports.createTransaction = async (req, res) => {
         let sourceUnit = null;
         let destUnit = null;
 
-        // Logic to determine source/dest based on type
-        // Assuming 'CSSD' is a special unit ID or handling it logically
-        // If type is DISTRIBUTE, Source=CSSD, Dest=Unit
-        // If type is DISTRIBUTE, Source=CSSD, Dest=Unit
-        // If type is COLLECT, Source=Unit, Dest=CSSD
-
-        // Use a placeholder or config for CSSD Unit ID
-        const CSSD_UNIT_ID = 'u-cssd'; // Ensure this unit exists in DB or handle gracefully
+        const CSSD_UNIT_ID = 'u-cssd';
 
         if (type === 'DISTRIBUTE') {
             sourceUnit = CSSD_UNIT_ID;
@@ -55,13 +56,11 @@ exports.createTransaction = async (req, res) => {
             sourceUnit = unitId;
             destUnit = CSSD_UNIT_ID;
         } else {
-            // Default generic transfer or sterilize
             sourceUnit = unitId;
             destUnit = unitId;
         }
 
         // 1. Create transaction record
-        // Include unitid for backward compatibility and to satisfy NOT NULL constraints
         await connection.query(
             'INSERT INTO transactions (id, timestamp, type, status, source_unit_id, destination_unit_id, qrCode, created_by_user_id, expectedreturndate, unitid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [id, timestamp, type, status, sourceUnit, destUnit, qrCode, createdBy, expectedReturnDate || null, unitId]
@@ -78,6 +77,36 @@ exports.createTransaction = async (req, res) => {
 
                 // Update stock using new schema
                 await updateInstrumentStock(connection, item.instrumentId, item.count, broken, missing, type, sourceUnit, destUnit);
+
+                // --- SERIALIZATION SUPPORT ---
+                if (item.assetIds && Array.isArray(item.assetIds) && item.assetIds.length > 0) {
+                    for (const assetId of item.assetIds) {
+                        await connection.query(
+                            'INSERT INTO transaction_item_assets (transactionid, instrumentid, assetid) VALUES (?, ?, ?)',
+                            [id, item.instrumentId, assetId]
+                        );
+
+                        // Update Asset Status
+                        let newStatus = null;
+                        let newLocation = null;
+
+                        if (type === 'DISTRIBUTE') {
+                            newStatus = 'IN_USE'; // or DISTRIBUTED
+                            newLocation = destUnit;
+                        } else if (type === 'COLLECT') {
+                            newStatus = 'DIRTY';
+                            newLocation = 'CSSD';
+                        }
+                        // If Transaction Type is STERILIZATION (rarely used here directly, usually Batch)
+
+                        if (newStatus) {
+                            await connection.query(
+                                'UPDATE instrument_assets SET status = ?, location = ?, last_transaction_id = ?, updatedat = ? WHERE id = ?',
+                                [newStatus, newLocation, id, Date.now(), assetId]
+                            );
+                        }
+                    }
+                }
             }
         }
 
@@ -91,8 +120,36 @@ exports.createTransaction = async (req, res) => {
                 await connection.query('INSERT INTO transaction_set_items (transactionId, setId, quantity, brokenCount, missingCount) VALUES (?, ?, ?, ?, ?)',
                     [id, setItem.setId, setItem.quantity, brokenSet, missingSet]);
 
+                // --- SERIALIZATION SUPPORT FOR SETS ---
+                if (setItem.assetIds && Array.isArray(setItem.assetIds) && setItem.assetIds.length > 0) {
+                    for (const assetId of setItem.assetIds) {
+                        // Reuse transaction_item_assets, treating setId as instrumentid
+                        await connection.query(
+                            'INSERT INTO transaction_item_assets (transactionid, instrumentid, assetid) VALUES (?, ?, ?)',
+                            [id, setItem.setId, assetId]
+                        );
+
+                        let newStatus = null;
+                        let newLocation = null;
+
+                        if (type === 'DISTRIBUTE') {
+                            newStatus = 'IN_USE';
+                            newLocation = destUnit;
+                        } else if (type === 'COLLECT') {
+                            newStatus = 'DIRTY';
+                            newLocation = 'CSSD';
+                        }
+
+                        if (newStatus) {
+                            await connection.query(
+                                'UPDATE instrument_assets SET status = ?, location = ?, last_transaction_id = ?, updatedat = ? WHERE id = ?',
+                                [newStatus, newLocation, id, Date.now(), assetId]
+                            );
+                        }
+                    }
+                }
+
                 // Get all instruments in this set
-                // NOTE: Should use instrument_set_versions ideally, but falling back to master for now
                 const [instruments] = await connection.query(
                     'SELECT instrumentId, quantity FROM instrument_set_items WHERE setId = ?',
                     [setItem.setId]
@@ -122,12 +179,7 @@ exports.createTransaction = async (req, res) => {
 // Helper function to update instrument stock using inventory_snapshots
 async function updateInstrumentStock(connection, instrumentId, count, broken, missing, type, sourceUnit, destUnit) {
     if (type === 'DISTRIBUTE') {
-        // Decrease Source (CSSD) - Using inventory_snapshots or Instruments table for CSSD master stock??
-        // Old design had cssdStock in instruments table. The migration kept it but we want to move away.
-        // For now, let's update BOTH to be safe or decide on one.
-        // Let's assume CSSD also has an entry in inventory_snapshots with unitId='u-cssd'.
-        // If not, we update the legacy field.
-
+        // Decrease Source (CSSD)
         // Update Legacy Field (Backward compatibility)
         await connection.query(
             'UPDATE instruments SET cssdStock = cssdStock - ? WHERE id = ?',
@@ -135,11 +187,10 @@ async function updateInstrumentStock(connection, instrumentId, count, broken, mi
         );
 
         // Update Snapshot for Destination
-        // Trying likely column names: instrument_id, unit_id (standard for this project's migration style)
         await connection.query(
-            `INSERT INTO inventory_snapshots (instrument_id, unit_id, quantity) 
+            `INSERT INTO inventory_snapshots (instrumentid, unitid, quantity) 
              VALUES (?, ?, ?) 
-             ON CONFLICT (instrument_id, unit_id) DO UPDATE SET quantity = inventory_snapshots.quantity + ?`,
+             ON CONFLICT (instrumentid, unitid) DO UPDATE SET quantity = inventory_snapshots.quantity + ?`,
             [instrumentId, destUnit, count, count]
         );
 
@@ -148,12 +199,11 @@ async function updateInstrumentStock(connection, instrumentId, count, broken, mi
 
         // Reduce Source (Unit) Snapshot
         await connection.query(
-            'UPDATE inventory_snapshots SET quantity = quantity - ? WHERE instrument_id = ? AND unit_id = ?',
+            'UPDATE inventory_snapshots SET quantity = quantity - ? WHERE instrumentid = ? AND unitid = ?',
             [totalRemoved, instrumentId, sourceUnit]
         );
 
         // Increase Dirty/CSSD Stock
-        // Legacy: dirtyStock in instruments table
         if (count > 0) {
             await connection.query(
                 'UPDATE instruments SET dirtyStock = dirtyStock + ? WHERE id = ?',
@@ -219,7 +269,7 @@ exports.validateSetAvailability = async (req, res) => {
             } else if (type === 'COLLECT') {
                 // Use inventory_snapshots
                 const [unitStock] = await db.query(
-                    'SELECT quantity FROM inventory_snapshots WHERE instrumentId = ? AND unitId = ?',
+                    'SELECT quantity FROM inventory_snapshots WHERE instrumentid = ? AND unitid = ?',
                     [item.instrumentId, unitId]
                 );
 

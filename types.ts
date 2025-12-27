@@ -58,6 +58,7 @@ export interface Instrument {
 export interface InstrumentSetItem {
   instrumentId: string;
   quantity: number;
+  assetIds?: string[];
 }
 
 export interface InstrumentSet {
@@ -75,6 +76,7 @@ export interface TransactionItem {
   brokenCount?: number;
   missingCount?: number;
   serialNumbers?: string[];
+  assetIds?: string[]; // UUIDs of specific assets
 }
 
 export interface TransactionSetItem {
@@ -82,6 +84,7 @@ export interface TransactionSetItem {
   quantity: number;
   brokenCount?: number;
   missingCount?: number;
+  assetIds?: string[];
 }
 
 
@@ -98,6 +101,7 @@ export interface Transaction {
   createdBy: string; // 'CSSD Staff'
   validatedBy?: string; // 'Nurse X'
   expectedReturnDate?: number;
+  assets?: any[];
 }
 
 export interface LogEntry {
