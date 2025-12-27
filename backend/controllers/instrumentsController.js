@@ -101,7 +101,11 @@ exports.getUnassignedInstruments = async (req, res) => {
 };
 
 exports.createInstrument = async (req, res) => {
-    const { id, name, category, totalStock, cssdStock, dirtyStock, unitStock, is_serialized, measure_unit_id } = req.body;
+    const { id, name, category, totalStock, cssdStock, dirtyStock, unitStock, is_serialized, isSerialized, measure_unit_id } = req.body;
+
+    // Normalize serialized flag
+    const serializationEnabled = is_serialized || isSerialized || false;
+
     const connection = await db.getConnection();
     try {
         // Check if instrument with same name already exists
@@ -115,7 +119,7 @@ exports.createInstrument = async (req, res) => {
 
         await connection.beginTransaction();
         await connection.query('INSERT INTO instruments (id, name, category, totalStock, cssdStock, dirtyStock, is_serialized, measure_unit_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [id, name, category, totalStock, cssdStock, dirtyStock, is_serialized || false, measure_unit_id || 'mu1']);
+            [id, name, category, totalStock, cssdStock, dirtyStock, serializationEnabled, measure_unit_id || 'mu1']);
 
         if (unitStock) {
             for (const [unitId, qty] of Object.entries(unitStock)) {
@@ -125,7 +129,7 @@ exports.createInstrument = async (req, res) => {
         }
 
         // AUTO-GENERATE ASSETS if Serialized
-        if (is_serialized && totalStock > 0) {
+        if (serializationEnabled && totalStock > 0) {
             const assetValues = [];
             const mkAsset = (status, location) => {
                 const serial = `SN-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
