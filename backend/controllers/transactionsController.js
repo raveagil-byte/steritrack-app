@@ -61,9 +61,10 @@ exports.createTransaction = async (req, res) => {
         }
 
         // 1. Create transaction record
+        // Include unitid for backward compatibility and to satisfy NOT NULL constraints
         await connection.query(
-            'INSERT INTO transactions (id, timestamp, type, status, source_unit_id, destination_unit_id, qrCode, created_by_user_id, expectedreturndate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [id, timestamp, type, status, sourceUnit, destUnit, qrCode, createdBy, expectedReturnDate || null]
+            'INSERT INTO transactions (id, timestamp, type, status, source_unit_id, destination_unit_id, qrCode, created_by_user_id, expectedreturndate, unitid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [id, timestamp, type, status, sourceUnit, destUnit, qrCode, createdBy, expectedReturnDate || null, unitId]
         );
 
         // 2. Process individual items
@@ -134,10 +135,11 @@ async function updateInstrumentStock(connection, instrumentId, count, broken, mi
         );
 
         // Update Snapshot for Destination
+        // Trying likely column names: instrument_id, unit_id (standard for this project's migration style)
         await connection.query(
-            `INSERT INTO inventory_snapshots ("instrumentId", "unitId", quantity) 
+            `INSERT INTO inventory_snapshots (instrument_id, unit_id, quantity) 
              VALUES (?, ?, ?) 
-             ON CONFLICT ("instrumentId", "unitId") DO UPDATE SET quantity = inventory_snapshots.quantity + ?`,
+             ON CONFLICT (instrument_id, unit_id) DO UPDATE SET quantity = inventory_snapshots.quantity + ?`,
             [instrumentId, destUnit, count, count]
         );
 
@@ -146,7 +148,7 @@ async function updateInstrumentStock(connection, instrumentId, count, broken, mi
 
         // Reduce Source (Unit) Snapshot
         await connection.query(
-            'UPDATE inventory_snapshots SET quantity = quantity - ? WHERE instrumentId = ? AND unitId = ?',
+            'UPDATE inventory_snapshots SET quantity = quantity - ? WHERE instrument_id = ? AND unit_id = ?',
             [totalRemoved, instrumentId, sourceUnit]
         );
 

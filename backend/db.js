@@ -116,7 +116,7 @@ const query = async (sql, params) => {
         const result = await pool.query(text, values);
 
         // Map rows back to camelCase
-        const mappedRows = result.rows.map(mapRow);
+        const mappedRows = result.rows ? result.rows.map(mapRow) : [];
 
         // Return [rows, fields] to match mysql2 signature
         return [mappedRows, result.fields];
@@ -132,13 +132,19 @@ const query = async (sql, params) => {
 const getConnection = async () => {
     const client = await pool.connect();
 
+    // Prevent double-wrapping if client is reused from pool and wasn't cleaned up (though we clean up now)
+    if (client._isWrapped) {
+        return client;
+    }
+
     const originalQuery = client.query.bind(client);
+    const originalRelease = client.release.bind(client);
 
     client.query = async (sql, params) => {
         const { text, values } = convertQuery(sql, params);
         try {
             const result = await originalQuery(text, values);
-            const mappedRows = result.rows.map(mapRow);
+            const mappedRows = result.rows ? result.rows.map(mapRow) : [];
             return [mappedRows, result.fields];
         } catch (err) {
             console.error('❌ Client Query Error:', err.message);
@@ -151,6 +157,20 @@ const getConnection = async () => {
     client.commit = async () => await originalQuery('COMMIT');
     client.rollback = async () => await originalQuery('ROLLBACK');
 
+    client.release = () => {
+        // Restore original methods before releasing to pool
+        client.query = originalQuery;
+        client.release = originalRelease;
+        delete client.beginTransaction;
+        delete client.commit;
+        delete client.rollback;
+        delete client._isWrapped;
+
+        // Call original release
+        return originalRelease();
+    };
+
+    client._isWrapped = true;
     return client;
 };
 
