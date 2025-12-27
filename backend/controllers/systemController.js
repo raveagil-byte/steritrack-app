@@ -106,3 +106,21 @@ exports.resetActivityData = async (req, res) => {
         connection.release();
     }
 };
+
+exports.ping = async (req, res) => {
+    // Used by cron-job.org to keep the server handling requests and DB connection alive
+    try {
+        await db.query('SELECT 1');
+        res.json({
+            status: 'ok',
+            message: 'Server is awake and DB is connected',
+            timestamp: new Date().toISOString()
+        });
+    } catch (err) {
+        res.json({
+            status: 'warning',
+            message: 'Server is awake but DB connection failed locally',
+            error: err.message
+        });
+    }
+};
