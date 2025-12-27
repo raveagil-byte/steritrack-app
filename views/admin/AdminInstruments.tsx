@@ -292,9 +292,9 @@ export const AdminInstruments = () => {
                     <div className="w-full">
                         <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Kondisi</label>
                         <select {...register('initialCondition')} className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
-                            <option value="DIRTY">Kotor/Rusak</option>
-                            <option value="CLEAN">Bersih</option>
-                            <option value="STERILE">Steril</option>
+                            <option value="DIRTY">Kotor (Perlu Sterilisasi)</option>
+                            <option value="CLEAN">Bersih (Siap Packing)</option>
+                            <option value="STERILE">Steril (Siap Pakai)</option>
                         </select>
                     </div>
 
@@ -364,6 +364,7 @@ export const AdminInstruments = () => {
                     <thead className="bg-slate-50 border-b">
                         <tr>
                             <th className="p-4 font-semibold text-slate-600">Nama Instrumen</th>
+                            <th className="p-4 font-semibold text-slate-600">QR Master</th>
                             <th className="p-4 font-semibold text-slate-600">Kategori</th>
                             <th className="p-4 font-semibold text-slate-600 text-center">Total</th>
                             <th className="p-4 font-semibold text-slate-600 text-center text-blue-600 bg-blue-50">Dalam Set</th>
@@ -379,11 +380,25 @@ export const AdminInstruments = () => {
                             <tr key={inst.id} className="hover:bg-slate-50 transition-colors">
                                 <td className="p-4 font-medium text-slate-800">
                                     {inst.name}
-                                    {inst.is_serialized && (
+                                    {/* Fallback check for both snake_case (form) and camelCase (API) */}
+                                    {(inst.isSerialized || inst.is_serialized) && (
                                         <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
                                             SN
                                         </span>
                                     )}
+                                </td>
+                                <td className="p-4">
+                                    <button
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(inst.id);
+                                            toast.success(`Kode disalin: ${inst.id}`);
+                                        }}
+                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-md transition-colors text-xs font-medium border border-slate-200 shadow-sm"
+                                        title={`Klik untuk salin: ${inst.id}`}
+                                    >
+                                        <QrCode size={14} />
+                                        <span>Salin Kode</span>
+                                    </button>
                                 </td>
                                 <td className="p-4">
                                     <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-bold">{inst.category}</span>
@@ -419,7 +434,7 @@ export const AdminInstruments = () => {
                                 </td>
                                 <td className="p-4 text-right">
                                     <div className="flex justify-end gap-2">
-                                        {inst.is_serialized && (
+                                        {(inst.isSerialized || inst.is_serialized) && (
                                             <button
                                                 onClick={() => setViewingAssetsInstrument(inst)}
                                                 className="text-slate-400 hover:text-indigo-600 p-2 hover:bg-indigo-50 rounded-full transition-all"
