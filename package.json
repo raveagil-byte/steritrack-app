@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "vite",
-    "server": "node backend/server.js",
+    "server": "nodemon backend/server.js",
     "start": "concurrently \"npm run server\" \"npm run dev\"",
     "build": "vite build",
     "preview": "vite preview"
