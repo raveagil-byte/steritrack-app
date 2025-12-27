@@ -3,6 +3,7 @@ import { Instrument, InstrumentSet, TransactionItem, TransactionSetItem, Transac
 import { useAppContext } from '../context/AppContext';
 import { ApiService } from '../services/apiService';
 import { toast } from 'sonner';
+import { ASSET_STATUS, DISCREPANCY_TYPES, ITEM_TYPES, TRANSACTION_TYPES } from '../constants';
 
 interface UseTransactionLogicProps {
     unit: Unit;
@@ -44,7 +45,7 @@ export const useTransactionLogic = ({ unit, type, onSubmit, onClose }: UseTransa
             if (!inst.is_active) return false;
             return true;
         }).filter((inst: Instrument) => {
-            if (type === TransactionType.DISTRIBUTE) {
+            if (type === TRANSACTION_TYPES.DISTRIBUTE) {
                 return inst.cssdStock >= 0;
             } else {
                 return (inst.unitStock[unit.id] || 0) >= 0;
@@ -97,7 +98,7 @@ export const useTransactionLogic = ({ unit, type, onSubmit, onClose }: UseTransa
             return;
         }
 
-        if (type === TransactionType.DISTRIBUTE && asset.status !== 'READY') {
+        if (type === TRANSACTION_TYPES.DISTRIBUTE && asset.status !== ASSET_STATUS.READY) {
             toast.warning(`Asset "${sn}" statusnya ${asset.status}, bukan READY.`);
         }
 
@@ -146,11 +147,11 @@ export const useTransactionLogic = ({ unit, type, onSubmit, onClose }: UseTransa
 
     const updateQuantity = (id: string, delta: number, field: 'ok' | 'broken' | 'missing', max: number) => {
         const inst = instruments.find(i => i.id === id);
-        if (inst?.is_serialized && field === 'ok') {
+        if (inst?.is_serialized && field === DISCREPANCY_TYPES.OK) {
             return;
         }
 
-        if (field === 'ok') {
+        if (field === DISCREPANCY_TYPES.OK) {
             setQuantities(prev => {
                 const current = prev[id] || 0;
                 const currentBroken = discrepancies[id]?.broken || 0;
@@ -189,7 +190,7 @@ export const useTransactionLogic = ({ unit, type, onSubmit, onClose }: UseTransa
     };
 
     const updateSetQuantity = (setId: string, delta: number, field: 'ok' | 'broken' | 'missing', max: number) => {
-        if (field === 'ok') {
+        if (field === DISCREPANCY_TYPES.OK) {
             setSelectedSets(prev => {
                 const current = prev[setId] || 0;
                 const currentBroken = setItemsDiscrepancies[setId]?.broken || 0;
@@ -261,10 +262,10 @@ export const useTransactionLogic = ({ unit, type, onSubmit, onClose }: UseTransa
                         pack.items.forEach((pItem: any) => {
                             const inst = instruments.find(i => i.id === pItem.instrumentId);
                             if (inst) {
-                                const max = type === TransactionType.DISTRIBUTE ? inst.cssdStock : (inst.unitStock[unit.id] || 0);
+                                const max = type === TRANSACTION_TYPES.DISTRIBUTE ? inst.cssdStock : (inst.unitStock[unit.id] || 0);
                                 const current = quantities[inst.id] || 0;
                                 if (current + pItem.quantity <= max) {
-                                    updateQuantity(inst.id, pItem.quantity, 'ok', max);
+                                    updateQuantity(inst.id, pItem.quantity, DISCREPANCY_TYPES.OK, max);
                                     addedCount++;
                                 }
                             }
@@ -277,7 +278,7 @@ export const useTransactionLogic = ({ unit, type, onSubmit, onClose }: UseTransa
                         }
                     };
 
-                    if (pack.targetUnitId && type === TransactionType.DISTRIBUTE) {
+                    if (pack.targetUnitId && type === TRANSACTION_TYPES.DISTRIBUTE) {
                         if (pack.targetUnitId !== unit.id) {
                             const targetUnit = units.find(u => u.id === pack.targetUnitId);
                             const targetName = targetUnit ? targetUnit.name : 'Unit Lain';
@@ -308,9 +309,9 @@ export const useTransactionLogic = ({ unit, type, onSubmit, onClose }: UseTransa
 
         const inst = instruments.find((i: Instrument) => i.id === code);
         if (inst) {
-            const max = type === TransactionType.DISTRIBUTE ? inst.cssdStock : (inst.unitStock[unit.id] || 0);
+            const max = type === TRANSACTION_TYPES.DISTRIBUTE ? inst.cssdStock : (inst.unitStock[unit.id] || 0);
             if (max <= 0) {
-                toast.error(type === TransactionType.DISTRIBUTE ? "Item habis di CSSD" : "Item tidak ditemukan di unit ini");
+                toast.error(type === TRANSACTION_TYPES.DISTRIBUTE ? "Item habis di CSSD" : "Item tidak ditemukan di unit ini");
                 return;
             }
 
@@ -329,7 +330,7 @@ export const useTransactionLogic = ({ unit, type, onSubmit, onClose }: UseTransa
                     }
                 });
             } else {
-                updateQuantity(inst.id, 1, 'ok', max);
+                updateQuantity(inst.id, 1, DISCREPANCY_TYPES.OK, max);
                 setIsScanning(false);
             }
         } else {
@@ -356,7 +357,7 @@ export const useTransactionLogic = ({ unit, type, onSubmit, onClose }: UseTransa
                 items.push({
                     instrumentId: id,
                     count,
-                    itemType: 'SINGLE',
+                    itemType: ITEM_TYPES.SINGLE,
                     brokenCount: broken,
                     missingCount: missing,
                     serialNumbers: serialNumbers[id] || [],
@@ -384,7 +385,7 @@ export const useTransactionLogic = ({ unit, type, onSubmit, onClose }: UseTransa
         });
 
         let expectedReturnDate = null;
-        if (type === TransactionType.DISTRIBUTE) {
+        if (type === TRANSACTION_TYPES.DISTRIBUTE) {
             const now = new Date();
             expectedReturnDate = now.setDate(now.getDate() + returnDuration);
         }

@@ -3,8 +3,7 @@ import { Instrument, InstrumentSet, TransactionItem, TransactionSetItem, Transac
 import QRScanner from './QRScanner';
 import { Minus, Plus, QrCode, X, Package, Layers, Clock } from 'lucide-react';
 import { useTransactionLogic } from '../hooks/useTransactionLogic';
-
-const BTN_PRIMARY_CLASSES = "bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2";
+import { BUTTON_CLASSES, DISCREPANCY_TYPES, TRANSACTION_TYPES, VIEW_MODES } from '../constants';
 
 interface TransactionFormProps {
     unit: Unit;
@@ -18,7 +17,7 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
     const logic = useTransactionLogic({ unit, type, onSubmit, onClose: onCancel });
 
     // UI Local State (View logic only)
-    const [viewMode, setViewMode] = useState<'SINGLE' | 'SET'>('SINGLE');
+    const [viewMode, setViewMode] = useState<keyof typeof VIEW_MODES>(VIEW_MODES.SINGLE);
 
     return (
         <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col h-[calc(100vh-6rem)] md:h-auto">
@@ -33,14 +32,14 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
             {/* Header */}
             <div className="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center sticky top-0 z-10">
                 <div>
-                    <h3 className="font-bold text-lg">{type === TransactionType.DISTRIBUTE ? 'Kirim Item Steril' : 'Ambil Item Kotor'}</h3>
+                    <h3 className="font-bold text-lg">{type === TRANSACTION_TYPES.DISTRIBUTE ? 'Kirim Item Steril' : 'Ambil Item Kotor'}</h3>
                     <p className="text-sm text-slate-500">Target: <span className="font-medium text-slate-900">{unit.name}</span></p>
                 </div>
                 <button onClick={onCancel} className="text-slate-400 hover:text-slate-600"><X size={24} /></button>
             </div>
 
             {/* Return Date Selector */}
-            {type === TransactionType.DISTRIBUTE && (
+            {type === TRANSACTION_TYPES.DISTRIBUTE && (
                 <div className="p-4 bg-orange-50 border-b border-orange-100 flex items-center justify-between">
                     <div className="flex items-center gap-2 text-orange-800">
                         <Clock size={18} />
@@ -74,15 +73,15 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
             <div className="p-4 bg-white border-b border-slate-100">
                 <div className="flex gap-2">
                     <button
-                        onClick={() => setViewMode('SINGLE')}
-                        className={`flex-1 py-2 px-4 rounded-lg font-medium transition flex items-center justify-center gap-2 ${viewMode === 'SINGLE' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                        onClick={() => setViewMode(VIEW_MODES.SINGLE)}
+                        className={`flex-1 py-2 px-4 rounded-lg font-medium transition flex items-center justify-center gap-2 ${viewMode === VIEW_MODES.SINGLE ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                     >
                         <Package size={18} />
                         Item Satuan
                     </button>
                     <button
-                        onClick={() => setViewMode('SET')}
-                        className={`flex-1 py-2 px-4 rounded-lg font-medium transition flex items-center justify-center gap-2 ${viewMode === 'SET' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                        onClick={() => setViewMode(VIEW_MODES.SET)}
+                        className={`flex-1 py-2 px-4 rounded-lg font-medium transition flex items-center justify-center gap-2 ${viewMode === VIEW_MODES.SET ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                     >
                         <Layers size={18} />
                         Set Instrumen
@@ -92,7 +91,7 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
 
             {/* Items List */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                {viewMode === 'SINGLE' ? (
+                {viewMode === VIEW_MODES.SINGLE ? (
                     logic.availableInstruments.length === 0 ? (
                         <div className="text-center py-10 text-slate-400">
                             <Package className="mx-auto mb-2 text-slate-300" size={32} />
@@ -100,7 +99,7 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                         </div>
                     ) : (
                         logic.availableInstruments.map((inst: Instrument) => {
-                            const max = type === TransactionType.DISTRIBUTE ? inst.cssdStock : (inst.unitStock[unit.id] || 0);
+                            const max = type === TRANSACTION_TYPES.DISTRIBUTE ? inst.cssdStock : (inst.unitStock[unit.id] || 0);
                             const current = logic.quantities[inst.id] || 0;
                             return (
                                 <div key={inst.id} className={`p-4 rounded-xl border transition-all ${current > 0 || (logic.discrepancies[inst.id]?.broken || 0) > 0 || (logic.discrepancies[inst.id]?.missing || 0) > 0 ? 'border-blue-500 bg-blue-50' : 'border-slate-100 hover:border-slate-300'}`}>
@@ -131,9 +130,9 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                                                 </button>
                                             ) : (
                                                 <>
-                                                    <button onClick={() => logic.updateQuantity(inst.id, -1, 'ok', max)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-50" disabled={current === 0}><Minus size={16} /></button>
+                                                    <button onClick={() => logic.updateQuantity(inst.id, -1, DISCREPANCY_TYPES.OK, max)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-50" disabled={current === 0}><Minus size={16} /></button>
                                                     <span className="w-8 text-center font-bold text-lg">{current}</span>
-                                                    <button onClick={() => logic.updateQuantity(inst.id, 1, 'ok', max)} className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50" disabled={current + (logic.discrepancies[inst.id]?.broken || 0) + (logic.discrepancies[inst.id]?.missing || 0) >= max}><Plus size={16} /></button>
+                                                    <button onClick={() => logic.updateQuantity(inst.id, 1, DISCREPANCY_TYPES.OK, max)} className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50" disabled={current + (logic.discrepancies[inst.id]?.broken || 0) + (logic.discrepancies[inst.id]?.missing || 0) >= max}><Plus size={16} /></button>
                                                 </>
                                             )}
                                         </div>
@@ -152,24 +151,24 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                                     )}
 
                                     {/* Discrepancies (COLLECT ONLY) */}
-                                    {type === TransactionType.COLLECT && (
+                                    {type === TRANSACTION_TYPES.COLLECT && (
                                         <div className="grid grid-cols-2 gap-4 mt-3 pt-3 border-t border-blue-100">
                                             {/* BROKEN */}
                                             <div className="flex items-center justify-between bg-white/50 p-2 rounded-lg">
                                                 <span className="text-xs font-bold text-orange-600">Rusak</span>
                                                 <div className="flex items-center gap-2">
-                                                    <button onClick={() => logic.updateQuantity(inst.id, -1, 'broken', max)} disabled={(logic.discrepancies[inst.id]?.broken || 0) === 0} className="w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center hover:bg-orange-200 disabled:opacity-50"><Minus size={12} /></button>
+                                                    <button onClick={() => logic.updateQuantity(inst.id, -1, DISCREPANCY_TYPES.BROKEN, max)} disabled={(logic.discrepancies[inst.id]?.broken || 0) === 0} className="w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center hover:bg-orange-200 disabled:opacity-50"><Minus size={12} /></button>
                                                     <span className="w-4 text-center text-sm font-bold">{logic.discrepancies[inst.id]?.broken || 0}</span>
-                                                    <button onClick={() => logic.updateQuantity(inst.id, 1, 'broken', max)} disabled={current + (logic.discrepancies[inst.id]?.broken || 0) + (logic.discrepancies[inst.id]?.missing || 0) >= max} className="w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center hover:bg-orange-200 disabled:opacity-50"><Plus size={12} /></button>
+                                                    <button onClick={() => logic.updateQuantity(inst.id, 1, DISCREPANCY_TYPES.BROKEN, max)} disabled={current + (logic.discrepancies[inst.id]?.broken || 0) + (logic.discrepancies[inst.id]?.missing || 0) >= max} className="w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center hover:bg-orange-200 disabled:opacity-50"><Plus size={12} /></button>
                                                 </div>
                                             </div>
                                             {/* MISSING */}
                                             <div className="flex items-center justify-between bg-white/50 p-2 rounded-lg">
                                                 <span className="text-xs font-bold text-red-600">Hilang</span>
                                                 <div className="flex items-center gap-2">
-                                                    <button onClick={() => logic.updateQuantity(inst.id, -1, 'missing', max)} disabled={(logic.discrepancies[inst.id]?.missing || 0) === 0} className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 disabled:opacity-50"><Minus size={12} /></button>
+                                                    <button onClick={() => logic.updateQuantity(inst.id, -1, DISCREPANCY_TYPES.MISSING, max)} disabled={(logic.discrepancies[inst.id]?.missing || 0) === 0} className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 disabled:opacity-50"><Minus size={12} /></button>
                                                     <span className="w-4 text-center text-sm font-bold">{logic.discrepancies[inst.id]?.missing || 0}</span>
-                                                    <button onClick={() => logic.updateQuantity(inst.id, 1, 'missing', max)} disabled={current + (logic.discrepancies[inst.id]?.broken || 0) + (logic.discrepancies[inst.id]?.missing || 0) >= max} className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 disabled:opacity-50"><Plus size={12} /></button>
+                                                    <button onClick={() => logic.updateQuantity(inst.id, 1, DISCREPANCY_TYPES.MISSING, max)} disabled={current + (logic.discrepancies[inst.id]?.broken || 0) + (logic.discrepancies[inst.id]?.missing || 0) >= max} className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 disabled:opacity-50"><Plus size={12} /></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -196,7 +195,7 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                                 // Or better, just use logic.availableInstruments logic inside loop? 
                                 // Actually logic.availableInstruments is filtered by type/unit. So if found there, use it.
                                 if (inst) {
-                                    const available = type === TransactionType.DISTRIBUTE ? inst.cssdStock : (inst.unitStock[unit.id] || 0);
+                                    const available = type === TRANSACTION_TYPES.DISTRIBUTE ? inst.cssdStock : (inst.unitStock[unit.id] || 0);
                                     const possibleSets = Math.floor(available / item.quantity);
                                     maxSets = Math.min(maxSets, possibleSets);
                                 } else {
@@ -215,9 +214,9 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                                             <p className="text-xs text-green-600 font-medium mt-1">Tersedia: {maxSets} set</p>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => logic.updateSetQuantity(set.id, -1, 'ok', maxSets)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-slate-200 hover:bg-slate-100 disabled:opacity-50" disabled={current === 0}><Minus size={16} /></button>
+                                            <button onClick={() => logic.updateSetQuantity(set.id, -1, DISCREPANCY_TYPES.OK, maxSets)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-slate-200 hover:bg-slate-100 disabled:opacity-50" disabled={current === 0}><Minus size={16} /></button>
                                             <span className="w-8 text-center font-bold text-lg">{current}</span>
-                                            <button onClick={() => logic.updateSetQuantity(set.id, 1, 'ok', maxSets)} className="w-8 h-8 flex items-center justify-center rounded-full bg-green-600 text-white hover:bg-green-700 disabled:opacity-50" disabled={current >= maxSets}><Plus size={16} /></button>
+                                            <button onClick={() => logic.updateSetQuantity(set.id, 1, DISCREPANCY_TYPES.OK, maxSets)} className="w-8 h-8 flex items-center justify-center rounded-full bg-green-600 text-white hover:bg-green-700 disabled:opacity-50" disabled={current >= maxSets}><Plus size={16} /></button>
                                         </div>
                                     </div>
                                     {/* Set Breakdown */}
@@ -244,9 +243,9 @@ const TransactionForm = ({ unit, type, onSubmit, onCancel }: TransactionFormProp
                 <button
                     onClick={logic.submitTransaction}
                     disabled={logic.totalItems === 0}
-                    className={`w-full ${BTN_PRIMARY_CLASSES} disabled:opacity-50 disabled:cursor-not-allowed`}
+                    className={`w-full ${BUTTON_CLASSES.PRIMARY} disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                    {type === TransactionType.DISTRIBUTE ? 'Kirim & Buat QR' : 'Ambil & Buat QR'}
+                    {type === TRANSACTION_TYPES.DISTRIBUTE ? 'Kirim & Buat QR' : 'Ambil & Buat QR'}
                     {logic.totalItems > 0 && ` (${logic.totalItems} item)`}
                 </button>
             </div>
