@@ -5,6 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ApiService } from '../services/apiService';
+import { WHATSAPP_GROUP_LINK } from '../constants';
 
 const ProfileView = () => {
     const { currentUser, updateCurrentUser, logout } = useAppContext();
@@ -220,7 +221,7 @@ const ProfileView = () => {
 
                         <button
                             type="button"
-                            onClick={() => window.open('https://chat.whatsapp.com/Dbb6Zgp1OdvEdLOkvMo8Db', '_blank')}
+                            onClick={() => window.open(WHATSAPP_GROUP_LINK, '_blank')}
                             className="flex items-center justify-between px-4 py-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900/50 rounded-xl hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors group md:col-span-2"
                         >
                             <span className="text-green-700 dark:text-green-400 font-medium flex items-center gap-2">

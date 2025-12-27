@@ -11,6 +11,7 @@ import { ValidationForm } from './nurse/ValidationForm';
 import { NurseReturn } from './nurse/NurseReturn';
 import { NurseUsage } from './nurse/NurseUsage';
 import { StockOpname } from './nurse/StockOpname';
+import { ROLES } from '../constants';
 
 const BTN_PRIMARY_CLASSES = "bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2";
 
@@ -186,7 +187,7 @@ const NurseView = () => {
                 )}
 
                 {/* Admin / No Unit Selector - Unchanged */}
-                {(!currentUser?.unitId || currentUser.role === 'ADMIN') && (
+                {(!currentUser?.unitId || currentUser.role === ROLES.ADMIN) && (
                     <div className="w-full max-w-xs">
                         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Pilih Unit (Mode Admin)</label>
                         <select value={selectedUnitId} onChange={(e) => setSelectedUnitId(e.target.value)} className="w-full p-2 rounded-lg border border-slate-300 bg-white font-semibold">

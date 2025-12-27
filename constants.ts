@@ -69,3 +69,5 @@ export const BUTTON_CLASSES = {
     DANGER: "bg-red-600 text-white hover:bg-red-700",
     SUCCESS: "bg-green-600 text-white hover:bg-green-700"
 } as const;
+
+export const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/Dbb6Zgp1OdvEdLOkvMo8Db';

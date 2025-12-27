@@ -81,12 +81,12 @@ export const RequestInbox = () => {
                     const unitName = units.find(u => u.id === req.unitId)?.name || 'Unit Tidak Dikenal';
 
                     return (
-                        <div key={req.id} className={`bg-white rounded-xl p-5 border shadow-sm transition-all ${req.status === 'PENDING' ? 'border-blue-100 shadow-blue-50' : 'border-slate-200'}`}>
+                        <div key={req.id} className={`bg-white rounded-xl p-5 border shadow-sm transition-all ${req.status === RequestStatus.PENDING ? 'border-blue-100 shadow-blue-50' : 'border-slate-200'}`}>
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4 border-b border-slate-100 pb-4">
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${req.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
-                                            req.status === 'APPROVED' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${req.status === RequestStatus.PENDING ? 'bg-yellow-100 text-yellow-700' :
+                                            req.status === RequestStatus.APPROVED ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                                             }`}>
                                             {req.status}
                                         </span>
@@ -96,7 +96,7 @@ export const RequestInbox = () => {
                                     <p className="text-sm text-slate-500">Oleh: <span className="font-medium text-slate-700">{req.requestedBy}</span></p>
                                 </div>
 
-                                {req.status === 'PENDING' && (
+                                {req.status === RequestStatus.PENDING && (
                                     <div className="flex gap-2 w-full md:w-auto">
                                         <button
                                             onClick={() => handleReject(req.id)}

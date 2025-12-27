@@ -7,6 +7,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { ApiService } from '../services/apiService';
 import { toast } from 'sonner';
+import { ROLES } from '../constants';
 
 const BTN_PRIMARY_CLASSES = "bg-blue-600/90 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-2xl shadow-[0_8px_16px_rgba(37,99,235,0.2)] hover:shadow-[0_12px_24px_rgba(37,99,235,0.3)] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm";
 
@@ -14,7 +15,7 @@ const registerSchema = z.object({
     username: z.string().min(3, "Username minimal 3 karakter").regex(/^[a-zA-Z0-9_]+$/, "Hanya huruf, angka, dan underscore"),
     password: z.string().min(6, "Password minimal 6 karakter"),
     name: z.string().min(3, "Nama lengkap wajib diisi"),
-    role: z.enum(['CSSD', 'NURSE']),
+    role: z.enum([ROLES.CSSD, ROLES.NURSE]),
     unitId: z.string().optional()
 });
 
@@ -45,7 +46,7 @@ const RegisterView = () => {
     const { register, handleSubmit, watch, formState: { errors }, setError } = useForm<RegisterFormInputs>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
-            role: 'NURSE'
+            role: ROLES.NURSE
         }
     });
 
@@ -219,8 +220,8 @@ const RegisterView = () => {
                                         {...register('role')}
                                         className="w-full pl-10 pr-4 py-2 bg-white/20 border border-white/30 rounded-2xl focus:bg-white/40 focus:ring-2 focus:ring-blue-300/40 outline-none text-slate-900 shadow-[inset_1px_1px_4px_rgba(0,0,0,0.05)] backdrop-blur-sm transition-all appearance-none cursor-pointer text-sm"
                                     >
-                                        <option value="NURSE" className="text-slate-800">Perawat (Nurse)</option>
-                                        <option value="CSSD" className="text-slate-800">Staf CSSD</option>
+                                        <option value={ROLES.NURSE} className="text-slate-800">Perawat (Nurse)</option>
+                                        <option value={ROLES.CSSD} className="text-slate-800">Staf CSSD</option>
                                     </select>
                                     {/* Custom arrow for select */}
                                     <div className="absolute right-4 top-3.5 pointer-events-none border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-blue-700/60"></div>
@@ -228,7 +229,7 @@ const RegisterView = () => {
                             </div>
 
                             {/* Unit Selector */}
-                            {selectedRole === 'NURSE' && (
+                            {selectedRole === ROLES.NURSE && (
                                 <div className="group animate-in fade-in slide-in-from-top-2">
                                     <div className="relative transform transition-all duration-300 hover:scale-[1.01]">
                                         <Building2 size={16} className="absolute left-4 top-3 text-blue-700/80 z-10" />
