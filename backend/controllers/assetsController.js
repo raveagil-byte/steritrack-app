@@ -83,3 +83,52 @@ exports.updateAsset = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+exports.batchGenerate = async (req, res) => {
+    const { instrumentId, prefix, count, startFrom } = req.body;
+    const connection = await db.getConnection();
+
+    try {
+        await connection.beginTransaction();
+        const start = startFrom || 1;
+
+        let generatedCount = 0;
+        for (let i = 0; i < count; i++) {
+            const num = start + i;
+            const paddedNum = num.toString().padStart(3, '0');
+            const serialNumber = `${prefix}-${paddedNum}`;
+            const id = `AST-${require('uuid').v4()}`;
+            const createdAt = Date.now();
+
+            // Check existence logic could be here, but let's rely on DB constraint or ignore dupes
+            // Using INSERT IGNORE or ON CONFLICT DO NOTHING
+
+            await connection.query(
+                `INSERT INTO instrument_assets (id, instrumentid, serialnumber, status, location, createdat)
+                 VALUES (?, ?, ?, 'READY', 'CSSD', ?)
+                 ON CONFLICT (instrumentid, serialnumber) DO NOTHING`,
+                [id, instrumentId, serialNumber, createdAt]
+            );
+            generatedCount++;
+        }
+
+        // Note: Total Stock Update logic is complex here because we don't know how many actually inserted vs ignored.
+        // But for safe-keeping, we should COUNT the actual assets now.
+
+        // Recalculate total stock for this instrument based on asset count
+        /*
+        const [rows] = await connection.query('SELECT COUNT(*) as cnt FROM instrument_assets WHERE instrumentid = ?', [instrumentId]);
+        const realCount = rows[0].cnt;
+        await connection.query('UPDATE instruments SET totalStock = ? WHERE id = ?', [realCount, instrumentId]);
+        */
+
+        await connection.commit();
+        res.json({ message: `Batch generation processed for ${count} items.` });
+
+    } catch (err) {
+        await connection.rollback();
+        res.status(500).json({ error: err.message });
+    } finally {
+        connection.release();
+    }
+};

@@ -12,6 +12,14 @@ const InventoryView = () => {
     const totalDirty = instruments.reduce((acc: number, curr: Instrument) => acc + curr.dirtyStock, 0);
 
     const canSterilize = currentUser?.role === Role.ADMIN || currentUser?.role === Role.CSSD;
+    const isNurse = currentUser?.role === Role.NURSE;
+
+    // Default to Nurse's unit if applicable
+    React.useEffect(() => {
+        if (isNurse && currentUser?.unitId) {
+            setSelectedUnitId(currentUser.unitId);
+        }
+    }, [isNurse, currentUser?.unitId]);
 
     // Filter instruments based on selected unit
     const filteredInstruments = useMemo(() => {
@@ -69,13 +77,19 @@ const InventoryView = () => {
                             onChange={(e) => setSelectedUnitId(e.target.value)}
                             className="pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-sm font-medium min-w-[200px]"
                         >
-                            <option value="ALL">Semua Lokasi</option>
+                            {/* Admin/CSSD can see Aggregate view */}
+                            {!isNurse && <option value="ALL">Semua Lokasi</option>}
+
                             <option value="CSSD">CSSD (Steril)</option>
-                            {units.filter(u => u.is_active).map(unit => (
-                                <option key={unit.id} value={unit.id}>
-                                    {unit.name}
-                                </option>
-                            ))}
+
+                            {units
+                                .filter(u => u.is_active)
+                                .filter(u => !isNurse || u.id === currentUser?.unitId) // Nurses only see their own unit
+                                .map(unit => (
+                                    <option key={unit.id} value={unit.id}>
+                                        {unit.name}
+                                    </option>
+                                ))}
                         </select>
                     </div>
 
@@ -130,7 +144,7 @@ const InventoryView = () => {
                                 {selectedUnitId === 'ALL' && (
                                     <>
                                         <th className="p-4 text-center">Di CSSD (Steril)</th>
-                                        <th className="p-4 text-center">Di CSSD (Kotor)</th>
+                                        {!isNurse && <th className="p-4 text-center">Di CSSD (Kotor)</th>}
                                         <th className="p-4 text-right">Terdistribusi (Di Unit)</th>
                                     </>
                                 )}
@@ -138,7 +152,10 @@ const InventoryView = () => {
                                     <th className="p-4 text-center">Stok Steril</th>
                                 )}
                                 {selectedUnitId !== 'ALL' && selectedUnitId !== 'CSSD' && (
-                                    <th className="p-4 text-center">Stok di Unit</th>
+                                    <>
+                                        <th className="p-4 text-center">Stok di Unit</th>
+                                        <th className="p-4 text-center text-slate-400 font-normal text-xs">Tersedia di Pusat</th>
+                                    </>
                                 )}
                                 <th className="p-4 w-8"></th>
                             </tr>
@@ -187,9 +204,11 @@ const InventoryView = () => {
                                                             {inst.cssdStock}
                                                         </span>
                                                     </td>
-                                                    <td className="p-4 text-center text-slate-600">
-                                                        {inst.dirtyStock > 0 ? <span className="text-orange-500 font-bold">{inst.dirtyStock}</span> : '-'}
-                                                    </td>
+                                                    {!isNurse && (
+                                                        <td className="p-4 text-center text-slate-600">
+                                                            {inst.dirtyStock > 0 ? <span className="text-orange-500 font-bold">{inst.dirtyStock}</span> : '-'}
+                                                        </td>
+                                                    )}
                                                     <td className="p-4 text-right">
                                                         {totalInUnits > 0 ? (
                                                             <span className="font-semibold text-slate-700 bg-slate-100 px-2 py-1 rounded">
@@ -211,11 +230,18 @@ const InventoryView = () => {
                                             )}
 
                                             {selectedUnitId !== 'ALL' && selectedUnitId !== 'CSSD' && (
-                                                <td className="p-4 text-center">
-                                                    <span className="inline-block px-4 py-2 rounded-full font-bold text-lg bg-blue-100 text-blue-600">
-                                                        {currentUnitStock}
-                                                    </span>
-                                                </td>
+                                                <>
+                                                    <td className="p-4 text-center">
+                                                        <span className="inline-block px-4 py-2 rounded-full font-bold text-lg bg-blue-100 text-blue-600">
+                                                            {currentUnitStock}
+                                                        </span>
+                                                    </td>
+                                                    <td className="p-4 text-center">
+                                                        <span className="text-xs text-slate-400 font-medium">
+                                                            {inst.cssdStock} unit
+                                                        </span>
+                                                    </td>
+                                                </>
                                             )}
 
                                             <td className="p-4 text-slate-400">

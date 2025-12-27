@@ -116,8 +116,10 @@ app.use('/api/instruments', verifyToken, instrumentsRoutes);
 app.use('/api/sets', verifyToken, setsRoutes);
 app.use('/api/audit', verifyToken, require('./routes/auditRoutes'));
 app.use('/api/transactions', verifyToken, transactionsRoutes);
+const checkRole = require('./middleware/roleMiddleware');
+
 app.use('/api/requests', verifyToken, require('./routes/requestsRoutes'));
-app.use('/api/sterilization', verifyToken, require('./routes/sterilizationRoutes'));
+app.use('/api/sterilization', verifyToken, checkRole(['ADMIN', 'CSSD']), require('./routes/sterilizationRoutes'));
 app.use('/api/analytics', verifyToken, require('./routes/analyticsRoutes'));
 app.use('/api/logs', verifyToken, logsRoutes);
 app.use('/api/audit-logs', verifyToken, auditLogsRoutes);

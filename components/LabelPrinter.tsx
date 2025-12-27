@@ -28,27 +28,35 @@ export const LabelPrinter = ({ labels, onClose }: LabelPrinterProps) => {
         printWindow.document.write('<html><head><title>Print Labels</title>');
         printWindow.document.write('<style>');
         printWindow.document.write(`
-            @page { size: auto; margin: 0mm; }
-            body { font-family: sans-serif; margin: 0; padding: 20px; }
-            .label-page { display: flex; flex-wrap: wrap; gap: 10px; }
+            @page { size: 50mm 30mm; margin: 0; }
+            body { 
+                font-family: 'Arial', sans-serif; 
+                margin: 0; 
+                padding: 0; 
+            }
+            .label-page { 
+                display: flex; 
+                flex-wrap: wrap; 
+                gap: 0; 
+            }
             .label-container {
                 width: 50mm;
                 height: 30mm;
-                border: 1px dashed #ccc;
                 padding: 2mm;
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                page-break-inside: avoid;
-                font-size: 10px;
+                page-break-after: always; /* Ensure 1 label per page/cut */
+                overflow: hidden;
             }
-            .qr-code { width: 18mm; height: 18mm; flex-shrink: 0; margin-right: 2mm; }
-            .info { flex-grow: 1; overflow: hidden; }
-            .title { font-weight: bold; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-            .meta { font-size: 8px; margin-top: 1px; color: #333; }
-            @media print {
-                .label-container { border: none; outline: 1px dotted #ccc; } /* Optional outline for ease of cutting */
+            .qr-code { width: 14mm; height: 14mm; flex-shrink: 0; margin-right: 2mm; }
+            .info { flex-grow: 1; overflow: hidden; line-height: 1.1; }
+            .title { font-weight: bold; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+            .meta { font-size: 8px; color: #000; }
+            .meta div { white-space: nowrap; }
+            @media screen {
+                .label-container { margin: 5px; border: 1px dotted #ccc; }
             }
         `);
         printWindow.document.write('</style></head><body>');

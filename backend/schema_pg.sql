@@ -62,6 +62,21 @@ CREATE TABLE IF NOT EXISTS instruments (
     is_serialized BOOLEAN DEFAULT FALSE
 );
 
+-- 5b. Individual Instrument Assets (Serialized)
+CREATE TABLE IF NOT EXISTS instrument_assets (
+    id VARCHAR(50) PRIMARY KEY,
+    instrumentid VARCHAR(50) NOT NULL,
+    serialnumber VARCHAR(100) NOT NULL,
+    status VARCHAR(20) DEFAULT 'READY', -- READY, IN_USE, DIRTY, CSSD, BROKEN
+    location VARCHAR(50) DEFAULT 'CSSD',
+    notes TEXT,
+    usagecount INTEGER DEFAULT 0,
+    createdat BIGINT,
+    updatedat BIGINT,
+    FOREIGN KEY (instrumentid) REFERENCES instruments(id) ON DELETE CASCADE,
+    UNIQUE(instrumentid, serialnumber)
+);
+
 -- 6. Instrument Categories / Sets
 CREATE TABLE IF NOT EXISTS instrument_sets (
     id VARCHAR(50) PRIMARY KEY,

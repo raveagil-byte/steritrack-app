@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Package, Droplets, Flame, ArrowRight, CheckCircle2, RotateCcw } from 'lucide-react';
+import { Package, Droplets, Flame, ArrowRight, CheckCircle2, RotateCcw, QrCode } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { Instrument } from '../../types';
 import { toast } from 'sonner';
 import { LabelPrinter } from '../../components/LabelPrinter';
+import QRScanner from '../../components/QRScanner';
 
 export const SterilizationView = () => {
     const { instruments, washItems, sterilizeItems } = useAppContext();
@@ -13,6 +14,7 @@ export const SterilizationView = () => {
     const [machine, setMachine] = useState<string>('Autoclave 1');
     const [cycleStatus, setCycleStatus] = useState<'SUCCESS' | 'FAILED'>('SUCCESS');
     const [generatedLabels, setGeneratedLabels] = useState<any[]>([]);
+    const [isScanning, setIsScanning] = useState(false);
 
     // Filter instruments based on step
     const availableItems = useMemo(() => {
@@ -46,6 +48,26 @@ export const SterilizationView = () => {
 
     const handleClearSelection = () => {
         setSelectedItems({});
+    };
+
+    const handleArMatch = (code: string) => {
+        const inst = instruments.find(i => i.id === code);
+        if (!inst) return null;
+
+        const max = step === 'DECONTAMINATION' ? inst.dirtyStock : inst.packingStock;
+
+        if (max <= 0) {
+            return { title: inst.name, status: 'Stok Kosong/Salah Tahap', color: 'red' };
+        }
+
+        // Add 1 to selection
+        const current = selectedItems[inst.id] || 0;
+        if (current < max) {
+            handleQuantityChange(inst.id, 1, max);
+            return { title: inst.name, status: `Ditambahkan (${current + 1}/${max})`, color: 'green' };
+        } else {
+            return { title: inst.name, status: 'Maksimum Tercapai', color: 'orange' };
+        }
     };
 
     const handleSubmit = async () => {
@@ -136,7 +158,14 @@ export const SterilizationView = () => {
                         <h3 className="font-bold text-slate-700 uppercase tracking-wider text-sm">
                             {step === 'DECONTAMINATION' ? 'Daftar Item Kotor (Dirty Stock)' : 'Siap Steril (Packing Stock)'}
                         </h3>
-                        <div className="space-x-2">
+                        <div className="flex items-center space-x-2">
+                            <button
+                                onClick={() => setIsScanning(true)}
+                                className="flex items-center gap-1 text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors"
+                            >
+                                <QrCode size={14} /> Scan AR
+                            </button>
+                            <span className="text-slate-300">|</span>
                             <button onClick={handleSelectAll} className="text-xs font-bold text-blue-600 hover:text-blue-700">Pilih Semua</button>
                             <span className="text-slate-300">|</span>
                             <button onClick={handleClearSelection} className="text-xs font-bold text-slate-400 hover:text-slate-600">Reset</button>
@@ -243,6 +272,16 @@ export const SterilizationView = () => {
                 <LabelPrinter
                     labels={generatedLabels}
                     onClose={() => setGeneratedLabels([])}
+                />
+            )}
+
+            {isScanning && (
+                <QRScanner
+                    title={`Scan AR - ${step === 'DECONTAMINATION' ? 'Dekontaminasi' : 'Sterilisasi'}`}
+                    onScan={() => { }} // Not used in AR Mode
+                    onClose={() => setIsScanning(false)}
+                    arMode={true}
+                    onArMatch={handleArMatch}
                 />
             )}
         </div>

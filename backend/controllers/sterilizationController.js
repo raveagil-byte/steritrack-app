@@ -118,8 +118,10 @@ exports.washItems = async (req, res) => {
             }
         }
 
-        await connection.query('INSERT INTO logs (id, timestamp, message, type) VALUES (UUID(), ?, ?, ?)',
-            [Date.now(), `Pencucian: ${items.length} item (Termasuk ${assetsToUpdate.length} aset serial) dicuci oleh ${operator}`, 'INFO']);
+        // Use client-side UUID generation instead of DB function to ensure compatibility
+        const { v4: uuidv4 } = require('uuid');
+        await connection.query('INSERT INTO logs (id, timestamp, message, type) VALUES (?, ?, ?, ?)',
+            [uuidv4(), Date.now(), `Pencucian: ${items.length} item (Termasuk ${assetsToUpdate.length} aset serial) dicuci oleh ${operator}`, 'INFO']);
 
         await connection.commit();
         res.json({ message: 'Pencucian selesai.', assetsUpdated: assetsToUpdate.length });
@@ -214,17 +216,17 @@ exports.sterilizeItems = async (req, res) => {
                 if (status === 'FAILED') {
                     // Return to Dirty
                     query = 'UPDATE instruments SET packingStock = packingStock - CASE id ';
-                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
+                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ?::integer '; params.push(mId, aggregatedUpdates[mId]); });
                     query += 'END, dirtyStock = dirtyStock + CASE id ';
-                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
+                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ?::integer '; params.push(mId, aggregatedUpdates[mId]); });
                     query += 'END WHERE id = ANY(?)';
                     params.push(chunkIds);
                 } else {
                     // Move to CSSD
                     query = 'UPDATE instruments SET packingStock = packingStock - CASE id ';
-                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
+                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ?::integer '; params.push(mId, aggregatedUpdates[mId]); });
                     query += 'END, cssdStock = cssdStock + CASE id ';
-                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
+                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ?::integer '; params.push(mId, aggregatedUpdates[mId]); });
                     query += 'END WHERE id = ANY(?)';
                     params.push(chunkIds);
                 }
@@ -250,8 +252,10 @@ exports.sterilizeItems = async (req, res) => {
             ? `Sterilisasi Batch ${batchId} GAGAL (Mesin: ${machine}). Item dikembalikan ke pencucian.`
             : `Sterilisasi Batch ${batchId} SUKSES (Mesin: ${machine}). Item siap di CSSD.`;
 
-        await connection.query('INSERT INTO logs (id, timestamp, message, type) VALUES (UUID(), ?, ?, ?)',
-            [Date.now(), logMsg, status === 'FAILED' ? 'WARNING' : 'SUCCESS']);
+        // Use client-side UUID generation for logs as well
+        const { v4: uuidv4 } = require('uuid');
+        await connection.query('INSERT INTO logs (id, timestamp, message, type) VALUES (?, ?, ?, ?)',
+            [uuidv4(), Date.now(), logMsg, status === 'FAILED' ? 'WARNING' : 'SUCCESS']);
 
         await connection.commit();
         res.json({ message: 'Proses sterilisasi tercatat.', batchId, status: batchStatus, expiryDate });

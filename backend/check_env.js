@@ -12,6 +12,7 @@ if (fs.existsSync(localEnv)) {
     console.log("Loading backed/.env");
     const conf = dotenv.parse(fs.readFileSync(localEnv));
     console.log("DB_NAME:", conf.DB_NAME);
+    console.log("DB_HOST:", conf.DB_HOST);
 }
 if (fs.existsSync(envPath)) {
     console.log("Loading .env.local");
