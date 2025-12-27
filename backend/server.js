@@ -127,6 +127,7 @@ app.use('/api/ai', verifyToken, require('./routes/aiRoutes'));
 app.use('/api/assets', verifyToken, require('./routes/assetsRoutes'));
 app.use('/api/packs', verifyToken, require('./routes/packsRoutes'));
 app.use('/api/usage', verifyToken, require('./routes/usageRoutes'));
+app.use('/api/overdue', verifyToken, require('./routes/overdueRoutes'));
 // Public setup route for easy migration
 app.use('/api/setup', require('./routes/setupRoutes'));
 

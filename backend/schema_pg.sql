@@ -160,6 +160,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     validatedat BIGINT, -- validatedAt
     validationstatus VARCHAR(20), -- validationStatus
     validationnotes TEXT, -- validationNotes
+    expectedreturndate BIGINT, -- expectedReturnDate (for DISTRIBUTE type)
     FOREIGN KEY (unitid) REFERENCES units(id)
 );
 

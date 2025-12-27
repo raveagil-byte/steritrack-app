@@ -10,7 +10,8 @@ import {
     Moon,
     Sun,
     ScrollText,
-    User
+    User,
+    AlertTriangle
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useTheme } from '../context/ThemeContext';
@@ -86,6 +87,10 @@ export const Layout = () => {
                     <SidebarBtn icon={<ClipboardCheck />} label="Inventaris" to="/inventory" />
 
                     <SidebarBtn icon={<ScrollText />} label="Log Aktivitas" to="/activity" />
+
+                    {(currentUser.role === Role.ADMIN || currentUser.role === Role.CSSD) && (
+                        <SidebarBtn icon={<AlertTriangle />} label="Instrumen Belum Kembali" to="/overdue" />
+                    )}
 
                     {currentUser.role === Role.ADMIN && (
                         <>

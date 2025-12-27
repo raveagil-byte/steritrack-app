@@ -16,6 +16,7 @@ import { Layout } from './components/Layout';
 import { Role } from './types';
 import { Toaster } from './components/ui/Toaster';
 import UnauthorizedView from './views/UnauthorizedView';
+import OverdueInstrumentsView from './views/OverdueInstrumentsView';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ roles, children }: { roles?: Role[], children: React.ReactNode }) => {
@@ -63,6 +64,12 @@ const AppRoutes = () => {
         <Route path="/analytics" element={<AnalyticsView />} />
 
         <Route path="/activity" element={<ActivityLogView />} />
+
+        <Route path="/overdue" element={
+          <ProtectedRoute roles={[Role.ADMIN, Role.CSSD]}>
+            <OverdueInstrumentsView />
+          </ProtectedRoute>
+        } />
 
         <Route path="/profile" element={<ProfileView />} />
       </Route>
