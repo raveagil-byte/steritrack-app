@@ -5,10 +5,12 @@ import { ApiService } from '../../services/apiService';
 import { useAppContext } from '../../context/AppContext';
 import { useConfirmation } from '../../context/ConfirmationContext';
 import { ARView } from '../ar/ARView'; // Import AR View
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 
 export const PackingStation = () => {
     const { instruments, sets, units, currentUser } = useAppContext();
+    const queryClient = useQueryClient();
     const { showAlert } = useConfirmation();
     const [searchTerm, setSearchTerm] = useState('');
     const [packType, setPackType] = useState<'SINGLE_ITEMS' | 'SET' | 'MIXED'>('SINGLE_ITEMS');
@@ -167,6 +169,15 @@ export const PackingStation = () => {
         }
     };
 
+
+    // Query for recent packs
+    const { data: recentPacks = [] } = useQuery({
+        queryKey: ['packs', 'recent'],
+        queryFn: ApiService.getPacks,
+        // In a real app, we might want to filter by date or limit count on backend
+        select: (data) => data.sort((a, b) => b.createdAt - a.createdAt).slice(0, 5)
+    });
+
     return (
         <div className="flex flex-col gap-6 h-[calc(100vh-8rem)]">
             {/* TOGGLE AR MODE */}
@@ -189,61 +200,94 @@ export const PackingStation = () => {
             <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${showAR ? 'h-1/2' : 'h-full'}`}>
 
                 {/* LEFT: Selection Area */}
-                <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
-                    <div className="p-4 border-b border-slate-100 bg-slate-50">
-                        <h3 className="font-bold text-lg mb-2">Pilih Item untuk Dipacking</h3>
-                        <div className="relative">
-                            <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
-                            <input
-                                type="text"
-                                placeholder="Cari instrumen atau set..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"
-                            />
+                <div className="flex flex-col gap-4">
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col overflow-hidden h-2/3">
+                        <div className="p-4 border-b border-slate-100 bg-slate-50">
+                            <h3 className="font-bold text-lg mb-2">Pilih Item untuk Dipacking</h3>
+                            <div className="relative">
+                                <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
+                                <input
+                                    type="text"
+                                    placeholder="Cari instrumen atau set..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div className="flex gap-2 mt-3 text-sm">
+                                <button
+                                    onClick={() => setPackType('SINGLE_ITEMS')}
+                                    className={`px-3 py-1.5 rounded-full ${packType === 'SINGLE_ITEMS' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'}`}
+                                >
+                                    Instrumen Satuan
+                                </button>
+                                <button
+                                    onClick={() => setPackType('SET')}
+                                    className={`px-3 py-1.5 rounded-full ${packType === 'SET' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'}`}
+                                >
+                                    Instrument Set
+                                </button>
+                            </div>
                         </div>
-                        <div className="flex gap-2 mt-3 text-sm">
-                            <button
-                                onClick={() => setPackType('SINGLE_ITEMS')}
-                                className={`px-3 py-1.5 rounded-full ${packType === 'SINGLE_ITEMS' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'}`}
-                            >
-                                Instrumen Satuan
-                            </button>
-                            <button
-                                onClick={() => setPackType('SET')}
-                                className={`px-3 py-1.5 rounded-full ${packType === 'SET' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'}`}
-                            >
-                                Instrument Set
-                            </button>
+
+                        <div className="flex-1 overflow-y-auto p-2 space-y-2">
+                            {packType === 'SINGLE_ITEMS' ? (
+                                availableInstruments.length === 0 ? (
+                                    <p className="text-center text-slate-400 mt-10">Tidak ada instrumen di area packing</p>
+                                ) : (
+                                    availableInstruments.map(inst => (
+                                        <div key={inst.id} onClick={() => handleAddItem(inst, 'SINGLE')} className="p-3 border border-slate-100 rounded-lg hover:bg-blue-50 cursor-pointer flex justify-between items-center group">
+                                            <div>
+                                                <div className="font-semibold text-slate-800">{inst.name}</div>
+                                                <div className="text-xs text-slate-500">Stok Packing: {inst.packingStock}</div>
+                                            </div>
+                                            <Plus className="text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" size={20} />
+                                        </div>
+                                    ))
+                                )
+                            ) : (
+                                availableSets.map(set => (
+                                    <div key={set.id} onClick={() => handleAddItem(set, 'SET')} className="p-3 border border-slate-100 rounded-lg hover:bg-purple-50 cursor-pointer flex justify-between items-center group">
+                                        <div>
+                                            <div className="font-semibold text-slate-800">{set.name}</div>
+                                            <div className="text-xs text-slate-500">{set.items.length} jenis items</div>
+                                        </div>
+                                        <Plus className="text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" size={20} />
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto p-2 space-y-2">
-                        {packType === 'SINGLE_ITEMS' ? (
-                            availableInstruments.length === 0 ? (
-                                <p className="text-center text-slate-400 mt-10">Tidak ada instrumen di area packing</p>
-                            ) : (
-                                availableInstruments.map(inst => (
-                                    <div key={inst.id} onClick={() => handleAddItem(inst, 'SINGLE')} className="p-3 border border-slate-100 rounded-lg hover:bg-blue-50 cursor-pointer flex justify-between items-center group">
-                                        <div>
-                                            <div className="font-semibold text-slate-800">{inst.name}</div>
-                                            <div className="text-xs text-slate-500">Stok Packing: {inst.packingStock}</div>
-                                        </div>
-                                        <Plus className="text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" size={20} />
-                                    </div>
-                                ))
-                            )
-                        ) : (
-                            availableSets.map(set => (
-                                <div key={set.id} onClick={() => handleAddItem(set, 'SET')} className="p-3 border border-slate-100 rounded-lg hover:bg-purple-50 cursor-pointer flex justify-between items-center group">
+                    {/* RECENT HISTORY SECTION */}
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex-1 flex flex-col overflow-hidden">
+                        <div className="p-3 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                            <h3 className="font-bold text-slate-700">Riwayat Packing Terakhir</h3>
+                            <button onClick={() => queryClient.invalidateQueries({ queryKey: ['packs'] })} className="text-xs text-blue-600 hover:text-blue-800">Refresh</button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-2 space-y-2">
+                            {recentPacks.map(pack => (
+                                <div key={pack.id} className="p-3 border rounded-lg bg-slate-50 flex justify-between items-center">
                                     <div>
-                                        <div className="font-semibold text-slate-800">{set.name}</div>
-                                        <div className="text-xs text-slate-500">{set.items.length} jenis items</div>
+                                        <div className="font-bold text-slate-800 text-sm">{pack.name}</div>
+                                        <div className="text-xs text-slate-500">
+                                            {new Date(pack.createdAt).toLocaleTimeString()} • Oleh: {pack.packedBy} • {pack.qrCode}
+                                        </div>
+                                        {pack.targetUnitId && (
+                                            <div className="text-xs font-bold text-indigo-600 mt-1">
+                                                Booking: {units.find(u => u.id === pack.targetUnitId)?.name || pack.targetUnitId}
+                                            </div>
+                                        )}
                                     </div>
-                                    <Plus className="text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" size={20} />
+                                    <div className="text-right">
+                                        <span className={`px-2 py-1 rounded text-xs font-bold ${pack.status === 'STERILIZED' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                                            {pack.status === 'STERILIZED' ? 'STERIL' : 'PACKED'}
+                                        </span>
+                                    </div>
                                 </div>
-                            ))
-                        )}
+                            ))}
+                            {recentPacks.length === 0 && <p className="text-center text-slate-400 text-sm mt-4">Belum ada riwayat packing.</p>}
+                        </div>
                     </div>
                 </div>
 
