@@ -10,7 +10,6 @@ const chunkArray = (array, size) => {
 };
 
 // Process 1: Wash/Decontaminate (Dirty -> Packing)
-// Process 1: Wash/Decontaminate (Dirty -> Packing)
 exports.washItems = async (req, res) => {
     const { items, operator } = req.body;
     const connection = await db.getConnection();
@@ -23,7 +22,7 @@ exports.washItems = async (req, res) => {
 
         // Check for Assets
         // Note: In Postgres/MySQL, we need to handle case sensitivity if needed, but assuming exact match
-        const [assets] = await connection.query('SELECT id, instrumentid, status FROM instrument_assets WHERE id IN (?)', [allIds]);
+        const [assets] = await connection.query('SELECT id, instrumentid, status FROM instrument_assets WHERE id = ANY(?)', [allIds]);
 
         const assetMap = {};
         assets.forEach(a => { assetMap[a.id] = a; });
@@ -55,7 +54,7 @@ exports.washItems = async (req, res) => {
         // --- UPDATE 1: ASSETS STATUS ---
         if (assetsToUpdate.length > 0) {
             await connection.query(
-                "UPDATE instrument_assets SET status = 'PACKING', updatedat = ? WHERE id IN (?)",
+                "UPDATE instrument_assets SET status = 'PACKING', updatedat = ? WHERE id = ANY(?)",
                 [Date.now(), assetsToUpdate]
             );
         }
@@ -76,7 +75,7 @@ exports.washItems = async (req, res) => {
 
             for (const chunkIds of masterChunks) {
                 // 1. Check Stock
-                const [stocks] = await connection.query('SELECT id, dirtyStock FROM instruments WHERE id IN (?)', [chunkIds]);
+                const [stocks] = await connection.query('SELECT id, dirtyStock FROM instruments WHERE id = ANY(?)', [chunkIds]);
                 const stockMap = stocks.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.dirtyStock }), {});
 
                 for (const mId of chunkIds) {
@@ -112,7 +111,7 @@ exports.washItems = async (req, res) => {
                     params.push(mId, aggregatedUpdates[mId]);
                 });
 
-                query += 'END WHERE id IN (?)';
+                query += 'END WHERE id = ANY(?)';
                 params.push(chunkIds);
 
                 await connection.query(query, params);
@@ -154,7 +153,7 @@ exports.sterilizeItems = async (req, res) => {
 
         // Separate Assets vs Master
         const allIds = items.map(i => i.instrumentId);
-        const [assets] = await connection.query('SELECT id, instrumentid, status FROM instrument_assets WHERE id IN (?)', [allIds]);
+        const [assets] = await connection.query('SELECT id, instrumentid, status FROM instrument_assets WHERE id = ANY(?)', [allIds]);
 
         const assetMap = {};
         assets.forEach(a => { assetMap[a.id] = a; });
@@ -178,7 +177,7 @@ exports.sterilizeItems = async (req, res) => {
             // Note: Schema says 'READY' is default. Often 'STERILE' or 'READY' implies CSSD stock.
 
             await connection.query(
-                "UPDATE instrument_assets SET status = ?, updatedat = ? WHERE id IN (?)",
+                "UPDATE instrument_assets SET status = ?, updatedat = ? WHERE id = ANY(?)",
                 [newStatus, Date.now(), assetsToUpdate]
             );
         }
@@ -197,7 +196,7 @@ exports.sterilizeItems = async (req, res) => {
 
             for (const chunkIds of chunks) {
                 // 1. Check Packing Stock
-                const [stocks] = await connection.query('SELECT id, packingStock FROM instruments WHERE id IN (?)', [chunkIds]);
+                const [stocks] = await connection.query('SELECT id, packingStock FROM instruments WHERE id = ANY(?)', [chunkIds]);
                 const stockMap = stocks.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.packingStock }), {});
 
                 for (const mId of chunkIds) {
@@ -218,7 +217,7 @@ exports.sterilizeItems = async (req, res) => {
                     chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
                     query += 'END, dirtyStock = dirtyStock + CASE id ';
                     chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
-                    query += 'END WHERE id IN (?)';
+                    query += 'END WHERE id = ANY(?)';
                     params.push(chunkIds);
                 } else {
                     // Move to CSSD
@@ -226,7 +225,7 @@ exports.sterilizeItems = async (req, res) => {
                     chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
                     query += 'END, cssdStock = cssdStock + CASE id ';
                     chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
-                    query += 'END WHERE id IN (?)';
+                    query += 'END WHERE id = ANY(?)';
                     params.push(chunkIds);
                 }
 
@@ -237,10 +236,13 @@ exports.sterilizeItems = async (req, res) => {
         // 3. Insert Batch Items (Keep original IDs for traceability - even if Asset ID)
         // Note: Batch Items table is generic, can store Asset ID or Master ID
         if (items.length > 0) {
-            const batchItemsValues = items.map(item => [batchId, item.instrumentId, item.quantity]);
+            // FIX: Manual expansion for bulk insert
+            const valuesPlaceholders = items.map(() => '(?, ?, ?)').join(', ');
+            const flatParams = items.flatMap(item => [batchId, item.instrumentId, item.quantity]);
+
             await connection.query(
-                'INSERT INTO sterilization_batch_items (batchId, itemId, quantity) VALUES ?',
-                [batchItemsValues]
+                `INSERT INTO sterilization_batch_items (batchId, itemId, quantity) VALUES ${valuesPlaceholders}`,
+                flatParams
             );
         }
 
