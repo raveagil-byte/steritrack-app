@@ -348,11 +348,15 @@ export const PackingStation = () => {
                                     </h4>
                                     <p className="text-xs text-slate-500 mt-1">ID: {lastPack.id}</p>
                                 </div>
-                                <button className="text-slate-400 hover:text-slate-600">
+                                <button
+                                    onClick={() => window.print()}
+                                    className="text-slate-400 hover:text-blue-600 p-1 hover:bg-blue-50 rounded"
+                                    title="Cetak Label"
+                                >
                                     <Printer size={20} />
                                 </button>
                             </div>
-                            <div className="bg-white p-4 border-2 border-black rounded-lg text-center font-mono relative overflow-hidden">
+                            <div id="printable-label" className="bg-white p-4 border-2 border-black rounded-lg text-center font-mono relative overflow-hidden">
                                 {lastPack.targetUnitId && (
                                     <div className="absolute top-0 right-0 bg-black text-white text-xs px-2 py-1 font-bold">
                                         Book: {lastPack.targetUnitId === 'u1' ? 'IGD' : lastPack.targetUnitId === 'u2' ? 'OK' : 'ICU'}
