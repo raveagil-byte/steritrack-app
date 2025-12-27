@@ -10,6 +10,7 @@ const chunkArray = (array, size) => {
 };
 
 // Process 1: Wash/Decontaminate (Dirty -> Packing)
+// Process 1: Wash/Decontaminate (Dirty -> Packing)
 exports.washItems = async (req, res) => {
     const { items, operator } = req.body;
     const connection = await db.getConnection();
@@ -17,51 +18,112 @@ exports.washItems = async (req, res) => {
     try {
         await connection.beginTransaction();
 
-        // Process in chunks of 50 to avoid query size limits
-        const chunks = chunkArray(items, 50);
+        // Separate IDs to check if they are Assets or Master
+        const allIds = items.map(i => i.instrumentId);
 
-        for (const chunk of chunks) {
-            const ids = chunk.map(i => i.instrumentId);
+        // Check for Assets
+        // Note: In Postgres/MySQL, we need to handle case sensitivity if needed, but assuming exact match
+        const [assets] = await connection.query('SELECT id, instrumentid, status FROM instrument_assets WHERE id IN (?)', [allIds]);
 
-            // 1. Bulk Check Stock
-            const [stocks] = await connection.query('SELECT id, dirtyStock FROM instruments WHERE id IN (?)', [ids]);
-            const stockMap = stocks.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.dirtyStock }), {});
+        const assetMap = {};
+        assets.forEach(a => { assetMap[a.id] = a; });
 
-            for (const item of chunk) {
-                if ((stockMap[item.instrumentId] || 0) < item.quantity) {
-                    throw new Error(`Stok kotor tidak cukup untuk item ID ${item.instrumentId}`);
-                }
+        const masterItemsToUpdate = []; // { id, quantity }
+        const assetsToUpdate = [];      // IDs
+
+        for (const item of items) {
+            if (assetMap[item.instrumentId]) {
+                // It is an ASSET
+                // Logic: 
+                // 1. Asset Status Update (DIRTY -> PACKING)
+                // 2. Master Stock Update (Dirty -> Packing)
+                const asset = assetMap[item.instrumentId];
+
+                // Optional: Check current status?
+                // if (asset.status !== 'DIRTY' && asset.status !== 'USED') { ... }
+
+                assetsToUpdate.push(item.instrumentId);
+
+                // Add to Master Counter
+                masterItemsToUpdate.push({ instrumentId: asset.instrumentid, quantity: item.quantity }); // usually 1
+            } else {
+                // It is likely a MASTER Item (legacy/bulk)
+                masterItemsToUpdate.push(item);
             }
+        }
 
-            // 2. Bulk Update
-            let query = 'UPDATE instruments SET dirtyStock = dirtyStock - CASE id ';
-            const params = [];
+        // --- UPDATE 1: ASSETS STATUS ---
+        if (assetsToUpdate.length > 0) {
+            await connection.query(
+                "UPDATE instrument_assets SET status = 'PACKING', updatedat = ? WHERE id IN (?)",
+                [Date.now(), assetsToUpdate]
+            );
+        }
 
-            // Build DirtyStock CASE
-            chunk.forEach(item => {
-                query += 'WHEN ? THEN ? ';
-                params.push(item.instrumentId, item.quantity);
-            });
+        // --- UPDATE 2: MASTER STOCK COUNTERS (Aggregated) ---
+        // We aggregate the updates to avoid multiple updates to same row
+        const aggregatedUpdates = {};
+        masterItemsToUpdate.forEach(item => {
+            if (!aggregatedUpdates[item.instrumentId]) aggregatedUpdates[item.instrumentId] = 0;
+            aggregatedUpdates[item.instrumentId] += item.quantity;
+        });
 
-            query += 'END, packingStock = packingStock + CASE id ';
+        const uniqueMasterIds = Object.keys(aggregatedUpdates);
 
-            // Build PackingStock CASE
-            chunk.forEach(item => {
-                query += 'WHEN ? THEN ? ';
-                params.push(item.instrumentId, item.quantity);
-            });
+        if (uniqueMasterIds.length > 0) {
+            // Process in chunks of 50
+            const masterChunks = chunkArray(uniqueMasterIds, 50);
 
-            query += 'END WHERE id IN (?)';
-            params.push(ids);
+            for (const chunkIds of masterChunks) {
+                // 1. Check Stock
+                const [stocks] = await connection.query('SELECT id, dirtyStock FROM instruments WHERE id IN (?)', [chunkIds]);
+                const stockMap = stocks.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.dirtyStock }), {});
 
-            await connection.query(query, params);
+                for (const mId of chunkIds) {
+                    const requiredQty = aggregatedUpdates[mId];
+                    // If stockMap[mId] is undefined, it means the Master ID doesn't exist.
+                    // If it's undefined, let's treat it as 0
+                    const available = stockMap[mId] || 0;
+
+                    if (available < requiredQty) {
+                        // Allow force wash if it's an Asset? 
+                        // If we scanned a real Asset, it physically exists. The 'dirtyStock' counter might be out of sync.
+                        // Ideally we should TRUST the Asset Scan and auto-correct or ignore the counter limit.
+                        // BUT explicitly for Master (Bulk) requests, we must enforce limit.
+
+                        // Decision: For this fix, strictly enforce. But give better error.
+                        throw new Error(`Stok kotor tidak cukup untuk Master Item ID ${mId} (Butuh: ${requiredQty}, Ada: ${available})`);
+                    }
+                }
+
+                // 2. Update Stock
+                let query = 'UPDATE instruments SET dirtyStock = dirtyStock - CASE id ';
+                const params = [];
+
+                chunkIds.forEach(mId => {
+                    query += 'WHEN ? THEN ? ';
+                    params.push(mId, aggregatedUpdates[mId]);
+                });
+
+                query += 'END, packingStock = packingStock + CASE id ';
+
+                chunkIds.forEach(mId => {
+                    query += 'WHEN ? THEN ? ';
+                    params.push(mId, aggregatedUpdates[mId]);
+                });
+
+                query += 'END WHERE id IN (?)';
+                params.push(chunkIds);
+
+                await connection.query(query, params);
+            }
         }
 
         await connection.query('INSERT INTO logs (id, timestamp, message, type) VALUES (UUID(), ?, ?, ?)',
-            [Date.now(), `Pencucian: ${items.length} jenis item dicuci oleh ${operator}`, 'INFO']);
+            [Date.now(), `Pencucian: ${items.length} item (Termasuk ${assetsToUpdate.length} aset serial) dicuci oleh ${operator}`, 'INFO']);
 
         await connection.commit();
-        res.json({ message: 'Pencucian selesai.' });
+        res.json({ message: 'Pencucian selesai.', assetsUpdated: assetsToUpdate.length });
     } catch (err) {
         await connection.rollback();
         console.error('Wash Error:', err);
@@ -71,6 +133,7 @@ exports.washItems = async (req, res) => {
     }
 };
 
+// Process 2: Sterilize (Packing -> CSSD/Sterile OR Dirty if Failed)
 // Process 2: Sterilize (Packing -> CSSD/Sterile OR Dirty if Failed)
 exports.sterilizeItems = async (req, res) => {
     const { items, operator, machine, status } = req.body; // status: 'SUCCESS' | 'FAILED'
@@ -89,48 +152,92 @@ exports.sterilizeItems = async (req, res) => {
             [batchId, Date.now(), operator, batchStatus, machine || 'Autoclave 1', Date.now(), Date.now()]
         );
 
-        // Process in chunks
-        const chunks = chunkArray(items, 50);
+        // Separate Assets vs Master
+        const allIds = items.map(i => i.instrumentId);
+        const [assets] = await connection.query('SELECT id, instrumentid, status FROM instrument_assets WHERE id IN (?)', [allIds]);
 
-        for (const chunk of chunks) {
-            const ids = chunk.map(i => i.instrumentId);
+        const assetMap = {};
+        assets.forEach(a => { assetMap[a.id] = a; });
 
-            // 1. Bulk Check Stock
-            const [stocks] = await connection.query('SELECT id, packingStock FROM instruments WHERE id IN (?)', [ids]);
-            const stockMap = stocks.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.packingStock }), {});
+        const masterItemsToUpdate = [];
+        const assetsToUpdate = [];
 
-            for (const item of chunk) {
-                if ((stockMap[item.instrumentId] || 0) < item.quantity) {
-                    throw new Error(`Stok packing tidak cukup untuk item ID ${item.instrumentId}`);
-                }
-            }
-
-            // 2. Bulk Update Logic
-            let query = '';
-            const params = [];
-
-            if (status === 'FAILED') {
-                // Return to Dirty
-                query = 'UPDATE instruments SET packingStock = packingStock - CASE id ';
-                chunk.forEach(item => { query += 'WHEN ? THEN ? '; params.push(item.instrumentId, item.quantity); });
-                query += 'END, dirtyStock = dirtyStock + CASE id ';
-                chunk.forEach(item => { query += 'WHEN ? THEN ? '; params.push(item.instrumentId, item.quantity); });
-                query += 'END WHERE id IN (?)';
-                params.push(ids);
+        for (const item of items) {
+            if (assetMap[item.instrumentId]) {
+                const asset = assetMap[item.instrumentId];
+                assetsToUpdate.push(item.instrumentId);
+                masterItemsToUpdate.push({ instrumentId: asset.instrumentid, quantity: item.quantity });
             } else {
-                // Move to CSSD
-                query = 'UPDATE instruments SET packingStock = packingStock - CASE id ';
-                chunk.forEach(item => { query += 'WHEN ? THEN ? '; params.push(item.instrumentId, item.quantity); });
-                query += 'END, cssdStock = cssdStock + CASE id ';
-                chunk.forEach(item => { query += 'WHEN ? THEN ? '; params.push(item.instrumentId, item.quantity); });
-                query += 'END WHERE id IN (?)';
-                params.push(ids);
+                masterItemsToUpdate.push(item);
             }
+        }
 
-            await connection.query(query, params);
+        // --- UPDATE 1: ASSETS STATUS ---
+        if (assetsToUpdate.length > 0) {
+            const newStatus = status === 'FAILED' ? 'DIRTY' : 'READY'; // READY = Sterile/In CSSD
+            // Note: Schema says 'READY' is default. Often 'STERILE' or 'READY' implies CSSD stock.
 
-            // 3. Bulk Insert Batch Items
-            const batchItemsValues = chunk.map(item => [batchId, item.instrumentId, item.quantity]);
+            await connection.query(
+                "UPDATE instrument_assets SET status = ?, updatedat = ? WHERE id IN (?)",
+                [newStatus, Date.now(), assetsToUpdate]
+            );
+        }
+
+        // --- UPDATE 2: MASTER STOCK COUNTERS ---
+        const aggregatedUpdates = {};
+        masterItemsToUpdate.forEach(item => {
+            if (!aggregatedUpdates[item.instrumentId]) aggregatedUpdates[item.instrumentId] = 0;
+            aggregatedUpdates[item.instrumentId] += item.quantity;
+        });
+
+        const uniqueMasterIds = Object.keys(aggregatedUpdates);
+
+        if (uniqueMasterIds.length > 0) {
+            const chunks = chunkArray(uniqueMasterIds, 50);
+
+            for (const chunkIds of chunks) {
+                // 1. Check Packing Stock
+                const [stocks] = await connection.query('SELECT id, packingStock FROM instruments WHERE id IN (?)', [chunkIds]);
+                const stockMap = stocks.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.packingStock }), {});
+
+                for (const mId of chunkIds) {
+                    const requiredQty = aggregatedUpdates[mId];
+                    const available = stockMap[mId] || 0;
+                    if (available < requiredQty) {
+                        throw new Error(`Stok packing tidak cukup untuk Master Item ID ${mId} (Butuh: ${requiredQty}, Ada: ${available})`);
+                    }
+                }
+
+                // 2. Update Stock
+                let query = '';
+                const params = [];
+
+                if (status === 'FAILED') {
+                    // Return to Dirty
+                    query = 'UPDATE instruments SET packingStock = packingStock - CASE id ';
+                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
+                    query += 'END, dirtyStock = dirtyStock + CASE id ';
+                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
+                    query += 'END WHERE id IN (?)';
+                    params.push(chunkIds);
+                } else {
+                    // Move to CSSD
+                    query = 'UPDATE instruments SET packingStock = packingStock - CASE id ';
+                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
+                    query += 'END, cssdStock = cssdStock + CASE id ';
+                    chunkIds.forEach(mId => { query += 'WHEN ? THEN ? '; params.push(mId, aggregatedUpdates[mId]); });
+                    query += 'END WHERE id IN (?)';
+                    params.push(chunkIds);
+                }
+
+                await connection.query(query, params);
+            }
+        }
+
+        // 3. Insert Batch Items (Keep original IDs for traceability - even if Asset ID)
+        // Note: Batch Items table is generic, can store Asset ID or Master ID
+        if (items.length > 0) {
+            const batchItemsValues = items.map(item => [batchId, item.instrumentId, item.quantity]);
             await connection.query(
                 'INSERT INTO sterilization_batch_items (batchId, itemId, quantity) VALUES ?',
                 [batchItemsValues]
