@@ -100,14 +100,14 @@ exports.washItems = async (req, res) => {
                 const params = [];
 
                 chunkIds.forEach(mId => {
-                    query += 'WHEN ? THEN ? ';
+                    query += 'WHEN ? THEN ?::integer ';
                     params.push(mId, aggregatedUpdates[mId]);
                 });
 
                 query += 'END, packingStock = packingStock + CASE id ';
 
                 chunkIds.forEach(mId => {
-                    query += 'WHEN ? THEN ? ';
+                    query += 'WHEN ? THEN ?::integer ';
                     params.push(mId, aggregatedUpdates[mId]);
                 });
 
